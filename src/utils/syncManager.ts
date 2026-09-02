@@ -185,8 +185,20 @@ class RealtimeSyncManager {
   private async seedInitialFirestoreData() {
     if (!db) return;
     try {
+      // Try to get data from local server API first if available, else initialData
+      let masterData: any = null;
+      try {
+        const resp = await fetch(`/api/data?t=${Date.now()}`);
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json && json.data && json.data.products && json.data.products.length > 0) {
+            masterData = json.data;
+          }
+        }
+      } catch (e) {}
+
       const storeDocRef = doc(db, 'store', 'current');
-      const seedData = {
+      const seedData = masterData || {
         company: initialCompanyInfo,
         products: initialProducts,
         shippingMethods: initialShippingMethods,
@@ -196,16 +208,16 @@ class RealtimeSyncManager {
         legalDocuments: initialLegalDocuments,
         orders: initialOrders,
         adminUsers: initialAdminUsers,
-        version: 1,
+        version: 112,
         updatedAt: new Date().toISOString(),
       };
       await setDoc(storeDocRef, sanitizeForFirestore(seedData), { merge: true });
       this.isFirestoreConnected = true;
       this.isConnected = true;
-      this.currentVersion = 1;
+      this.currentVersion = seedData.version || 112;
       this.lastSyncTime = Date.now();
       this.notifyStatus();
-      console.log('[Firestore] Successfully seeded initial master data to Firebase Firestore!');
+      console.log('[Firestore] Successfully seeded master data to Firebase Firestore!');
     } catch (err) {
       console.warn('[Firestore] Seeding failed:', err);
     }

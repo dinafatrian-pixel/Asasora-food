@@ -13,36 +13,34 @@ import {
 
 export const initialCompanyInfo: CompanyInfo = {
   name: 'PT. ASASORA BIO HEALTHORA',
-  tagline: '"PRODUK TERSERTIFIKASI HALAL BPJPH"',
-  description:
-    'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.',
+  tagline: '"TRADISI RASA INOVASI SELERA"',
+  description: 'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.',
   badgeText: 'Food & Catering Partner',
   halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
   halalNumber: 'ID3611000000000',
   halalAgency: 'BPJPH Kemenag RI',
-  logoUrl: '/logo-asasora.png',
-  halalLogoUrl:
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Halal_Indonesia.svg/512px-Halal_Indonesia.svg.png',
+  logoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329882/asasora/mnswxa7jmq7nzsr0h7fk.png',
+  halalLogoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329899/asasora/cz2l79okyiljtn321uzr.jpg',
   heroTitlePrefix: 'PT. ASASORA',
-  heroTitleHighlight: '',
+  heroTitleHighlight: 'BIOHEALTHORA',
   heroSubtitle:
     'Penyedia resmi Food Service higienis bersertifikasi Halal BPJPH, aneka katering nasi kotak, prasmanan, dan makanan olahan siap saji terpercaya se-Jabodetabek.',
   heroValueProps: [
     { title: '100% Halal Resmi', subtitle: 'Bahan Baku Terjamin' },
-    { title: 'Sertifikat Dinkes', subtitle: 'Sanitasi Jasaboga' },
     { title: 'Cek Ongkir Otomatis', subtitle: 'Armada Khusus Box' },
   ],
   address:
     'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 RT 004 RW 06 Kel. Buaran Indah Kec. Tangerang Kota Tangerang Banten',
-  email: 'healthoraplus@gmail.com',
+  email: 'customerservice@asasorafood.com',
   phone: '+62 852-7100-0900',
   whatsapp: '6285271000900',
   website: 'www.asasorfood.com',
-  operationalHours: 'Senin - Minggu (06.00 - 21.00 WIB)',
-  operationalDays: 'Senin - Minggu (Setiap Hari)',
-  operationalTime: '06.00 - 21.00 WIB',
+  operationalHours: 'Senin -Sabtu  (09.00 - 18.00 WIB)',
+  operationalDays: 'Senin - Sabt u (Setiap Hari Kerja)',
+  operationalTime: '09.00 - 18.00 WIB',
   deliveryHours: '06.00 - 20.00 WIB',
-  operationalNote: 'Menerima pesanan katering & nasi boks setiap hari. Khusus pengiriman subuh/pagi hari, disarankan konfirmasi H-1.',
+  operationalNote:
+    'Menerima pesanan katering & nasi boks setiap hari.Tersedia di E-Catalog Inaproc, disarankan konfirmasi H-1.',
   bankAccount: {
     bankName: 'BCA (Bank Central Asia)',
     accountNumber: '4971531139',
@@ -52,6 +50,9 @@ export const initialCompanyInfo: CompanyInfo = {
     holder: 'Dina Fatrian',
   },
   bcaAccount: {
+    bankName: 'BCA (Bank Central Asia)',
+    accountNumber: '4971531139',
+    accountHolder: 'Dina Fatrian',
     bank: 'BCA (Bank Central Asia)',
     number: '4971531139',
     holder: 'Dina Fatrian',
@@ -76,113 +77,112 @@ export const initialCompanyInfo: CompanyInfo = {
     autoOptimize: true,
     enabled: true,
   },
+  googleAnalyticsId: '',
+  googleAnalyticsEnabled: true,
 };
 
 export const initialProducts: Product[] = [
   {
     id: 'prod-1',
-    name: 'Nasi Kotak Sehat Premium (Menu Halal Seimbang)',
+    name: 'Nasi Kotak Premium',
     category: 'catering & event',
-    price: 35000,
+    price: 45000,
     unit: 'porsi / box',
     description:
-      'Nasi organik/merah, ayam bakar rempah madu, tumis brokoli wortel jamur, tahu sutra panggang, sambal bajak rendah minyak, dan buah segar potong.',
+      'Nasi putih\nOlahan daging\nOlahan ayam\nOlahan kentang\nOlahan sayur\nSambal\nKerupuk\nAir Mineral',
     image:
-      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334142/asasora/cnhxbbj4rdjqrnpmwuwr.png',
     badge: 'Best Seller Halal',
     isPopular: true,
-    minOrder: 5,
+    minOrder: 10,
     stock: 100,
   },
   {
     id: 'prod-2',
-    name: 'Nasi Tumpeng Mini Nusantara Asasora',
+    name: 'Nasi Kotak Ekonomis',
     category: 'catering & event',
-    price: 45000,
+    price: 25000,
     unit: 'pax',
-    description:
-      'Tumpeng mini eksklusif dengan nasi kuning gurih alami kunyit, empal suwir balado, telur balado mini, perkedel kentang lembut, urap sayur segar, dan sambal goreng.',
+    description: 'Nasi putih, olahan ayam, olahan kentang, olahan sayur, sambal, kerupuk',
     image:
-      'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334401/asasora/x6fcjhjbv28ffrxdvqph.png',
     badge: 'Favorit Event',
     isPopular: true,
-    minOrder: 10,
+    minOrder: 20,
     stock: 50,
   },
   {
     id: 'prod-3',
-    name: 'Paket Prasmanan Corporate & Gathering',
+    name: 'Paket Nasi Daun Jeruk " NaSemangkuk"',
     category: 'catering & event',
-    price: 65000,
+    price: 20000,
     unit: 'porsi',
-    description:
-      'Layanan prasmanan lengkap dengan staf berseragam higienis, 5 pilihan menu utama, aneka sayuran organik, sop sehat, dessert puding buah, dan infused water.',
+    description: 'Nasi Daun Jeruk, Olahan Ayam, Sambal, Lalapan.',
     image:
-      'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334529/asasora/fcsol8bqvn7if05nukga.png',
     badge: 'Layanan Korporat',
-    isPopular: false,
-    minOrder: 30,
+    isPopular: true,
+    minOrder: 20,
     stock: 200,
   },
   {
     id: 'prod-nmk-1',
-    name: 'Nasemangkuk Ayam Bakar Madu (Rice Bowl Spesial)',
-    category: 'Produk Siap Santap',
-    price: 28000,
-    unit: 'bowl',
-    description:
-      'Ricebowl higienis: Nasi pulen wangi, suwiran ayam bakar bumbu madu gurih, telur mata sapi setengah matang, buncis crispy, dan sambal bawang Asasora.',
+    name: 'Nasi Bento "NaSemangkuk"',
+    category: 'catering & event',
+    price: 35000,
+    unit: 'Bento',
+    description: 'Nasi putih, olahan ayam/ikan pilet, olahan telur, olahan sayur, sambal',
     image:
-      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334686/asasora/xzwssxab3gxt16stowaq.png',
     badge: 'Fresh Daily',
     isPopular: true,
-    minOrder: 1,
+    minOrder: 20,
     stock: 25,
   },
   {
     id: 'prod-nmk-2',
-    name: 'Nasemangkuk Beef Teriyaki Sehat (Rice Bowl)',
-    category: 'Produk Siap Santap',
-    price: 34000,
-    unit: 'bowl',
+    name: 'Tumpeng "Nasemangkuk"',
+    category: 'catering & event',
+    price: 750000,
+    unit: 'paket',
     description:
-      'Ricebowl daging sapi iris tipis lembut dengan saus teriyaki racikan rendah sodium, tumis brokoli wortel segar, wijen sangrai, dan telur onsen.',
+      'Nasi kuning, olahan ayam, olahan telur, olahan tahu/tempe. bihun/mie goreng,olahan kentang, olahan sayur,sambal',
     image:
-      'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
-    badge: 'Best Rice Bowl',
-    isPopular: true,
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334937/asasora/ojlgbld8adn5ld1nvld6.png',
+    badge: 'satu porsi @25',
+    isPopular: false,
     minOrder: 1,
     stock: 20,
   },
   {
     id: 'prod-4',
-    name: 'Healthy Nutrition & Diet Seimbang Box',
-    category: 'Produk Siap Santap',
-    price: 42000,
-    unit: 'box',
+    name: 'Nasi Liwet Tampah "NaSemankuk"',
+    category: 'catering & event',
+    price: 750000,
+    unit: 'paket',
     description:
-      'Menu sehat rendah sodium, rendah minyak, kaya serat & protein seimbang yang dirancang untuk asupan gizi harian optimal dan kebugaran tubuh.',
+      'Nasi Liwet, olahan ayam, olahan telur, oncom, ikan asin, olahan jengkol, olahan tahu&tempe, sambal, lalapan , kerupuk',
     image:
-      'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80',
-    badge: 'Nutrisi Sehat',
-    isPopular: false,
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335167/asasora/ggtcek25egtmw2xwa3cf.png',
+    badge: 'Paket @25 porsi',
+    isPopular: true,
     minOrder: 1,
     stock: 40,
   },
   {
-    id: 'prod-5',
-    name: 'Snack Box Sehat Tradisional & Modern',
-    category: 'Snak dan cemilan',
-    price: 22000,
-    unit: 'box',
+    id: 'prod-1788335918404',
+    name: 'Paru Sapi Balado " Asasora"',
+    category: 'Produk Siap Santap',
+    price: 40000,
+    unit: 'Pcs',
     description:
-      'Isi 3 macam kue higienis (Lemper ayam bakar, fruit tartlet rendah gula, pastel isi sayur ayam) + air mineral botol 330ml.',
+      'Nikmati paru sapi goreng balado yang gurih, renyah, dan kaya rasa pedas khas Nusantara. Hadir dalam kemasan siap saji, praktis dan ekonomis, cukup dipanaskan sebelum disajikan. Tahan hingga 11 bulan pada suhu ruang, cocok untuk stok lauk di rumah maupun dibawa bepergian.',
     image:
-      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
-    badge: 'Snack Event',
-    isPopular: false,
-    minOrder: 15,
-    stock: 60,
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335914/asasora/bdkhax7wror6ws4nmjii.jpg',
+    badge: 'Makana Siap Santap',
+    isPopular: true,
+    minOrder: 1,
+    stock: 100,
   },
 ];
 
@@ -341,59 +341,77 @@ export const initialShippingMethods: ShippingMethod[] = [
 export const initialReviews: Review[] = [
   {
     id: 'rev-1',
-    name: 'Hj. Siti Rahmawati',
+    name: 'Hani Hanifah',
     company: 'PT. Surya Perkasa Mandiri',
-    role: 'PT. Surya Perkasa Mandiri',
+    role: 'Manajer Klinik KSB',
     rating: 5,
-    comment:
-      'Pemesanan 150 nasi box untuk acara sertifikasi kantor kami sangat memuaskan. Makanan datang hangat, higienis, rasa lezat dan sertifikat halalnya membuat kami tenang!',
+    comment: 'Nasi daun jeruknya endul banged jadi mau lagi',
     date: '24 Agustus 2026',
-    verified: true,
-  },
-  {
-    id: 'rev-2',
-    name: 'dr. Hendra Pratama, Sp.PD',
-    company: 'Panitia Seminar Nasional Tangerang',
-    role: 'Panitia Seminar Nasional',
-    rating: 5,
-    comment:
-      'Paket prasmanan dan healthy nutrition box untuk seminar kami sangat berkesan. Menu rendah gula & garam tapi tetap gurih lezat. Pelayanan staf saji sangat profesional.',
-    date: '20 Agustus 2026',
-    verified: true,
-  },
-  {
-    id: 'rev-3',
-    name: 'Agus Setiawan',
-    company: 'Yayasan Bina Umat Tangerang',
-    role: 'Yayasan Bina Umat Tangerang',
-    rating: 5,
-    comment:
-      'Tumpeng mini dan snack box untuk milad yayasan penataannya sangat cantik. Semua tamu memuji kelezatan ayam dan sambal gorengnya. Terima kasih Asasora!',
-    date: '18 Agustus 2026',
-    verified: true,
-  },
-  {
-    id: 'rev-4',
-    name: 'Dewi Lestari, S.Farm',
-    company: 'PT. Kimia Farma Trading',
-    role: 'PT. Kimia Farma Trading',
-    rating: 5,
-    comment:
-      'Layanan catering harian karyawan sangat higienis dan variatif. Ongkos kirim terhitung otomatis dan tepat waktu setiap jam makan siang.',
-    date: '15 Agustus 2026',
     verified: true,
   },
 ];
 
 export const initialClients: ClientPartner[] = [
-  { id: 'c-1', name: 'Dinas Koperasi & UMKM Kota Tangerang', type: 'Instansi Pemerintah', logo: '🏛️' },
-  { id: 'c-2', name: 'PT. Indofood Sukses Makmur Tbk', type: 'Korporat Mitra', logo: '🏢' },
-  { id: 'c-3', name: 'PT. Telekomunikasi Indonesia (Telkom)', type: 'BUMN Mitra', logo: '📶' },
-  { id: 'c-4', name: 'PT. Angkasa Pura Solusi', type: 'BUMN / Layanan Publik', logo: '✈️' },
-  { id: 'c-5', name: 'Universitas Muhammadiyah Tangerang', type: 'Institusi Pendidikan', logo: '🎓' },
-  { id: 'c-6', name: 'PT. Bank Central Asia Tbk (BCA)', type: 'Perbankan & Finansial', logo: '🏦' },
-  { id: 'c-7', name: 'Yayasan Dompet Dhuafa', type: 'Lembaga Sosial & Kemanusiaan', logo: '🤝' },
-  { id: 'c-8', name: 'PT. Mayora Indah Tbk Group', type: 'Industri Makanan', logo: '🏭' },
+  {
+    id: 'c-1',
+    name: 'PT. PRATAMA ABADI INDUSTRI',
+    type: 'Mitra catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330493/asasora/qhyj0jwod200zqzxfgtj.webp',
+  },
+  {
+    id: 'c-2',
+    name: 'PT. Mamafuji Grup',
+    type: 'Korporat Mitra Catering',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330532/asasora/pi8akvqvqxhdlikbnnef.jpg',
+  },
+  {
+    id: 'c-3',
+    name: 'Adda Rasa KJD Resto',
+    type: 'Mitra Kerjasama Resto',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330582/asasora/lwcl4cnv5rgq3zopdpah.jpg',
+  },
+  {
+    id: 'c-4',
+    name: 'RS. Bethsaida',
+    type: 'Mitra Catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330639/asasora/nqpv48camqoxl27yht01.jpg',
+  },
+  {
+    id: 'c-5',
+    name: 'Klinik KSB',
+    type: 'Mitra Catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330679/asasora/hbtau1q5mmriqjymhmot.png',
+  },
+  {
+    id: 'c-6',
+    name: 'PT. Cipta Teknik Berjaya',
+    type: 'Mitra Catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330948/asasora/jpwjck5oyidkhiv0vkft.jpg',
+  },
+  {
+    id: 'c-7',
+    name: 'Kandank Jurang Doank',
+    type: 'Mitra kerja sama Outlet',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330997/asasora/koqkhcvv2kvfk9odqsru.jpg',
+  },
+  {
+    id: 'c-8',
+    name: 'BKHI',
+    type: 'Mitra Catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788331035/asasora/cxpwiblsvruyl8s90bkd.jpg',
+  },
+  {
+    id: 'c-1788331089595',
+    name: 'Kementrian UMKM RI',
+    type: 'Mitra Catering Evetn',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788331066/asasora/uurkw8knpcpc71exlps6.png',
+  },
+  {
+    id: 'c-1788331124541',
+    name: 'RS. Bunda Margonda',
+    type: 'Mitra Catering Event',
+    logo: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788331101/asasora/qusoiptioyxdvyxwtkta.jpg',
+  },
 ];
 
 export const initialGallery: GalleryItem[] = [
@@ -413,22 +431,10 @@ export const initialGallery: GalleryItem[] = [
     title: 'Penyiapan Nasi Box Sehat Halal',
     category: 'event',
     image:
-      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330336/asasora/rv9u7lc7wlpennvjnt0g.png',
     imageUrl:
       'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-    caption:
-      'Porsi seimbang dengan bahan pangan lokal organik yang diawasi ketat sebelum proses packing.',
-  },
-  {
-    id: 'gal-3',
-    title: 'Pengemasan Higienis Makanan Olahan Frozen',
-    category: 'olahan',
-    image:
-      'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
-    imageUrl:
-      'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
-    caption:
-      'Pengemasan vakum steril kedap udara untuk produk frozen food dan lauk siap saji tahan lama.',
+    caption: 'Porsi seimbang dengan bahan pangan lokal  yang diawasi ketat sebelum proses packing.',
   },
   {
     id: 'gal-4',
@@ -438,30 +444,17 @@ export const initialGallery: GalleryItem[] = [
       'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
     imageUrl:
       'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
-    caption:
-      'Pelayanan katering profesional untuk acara instansi BUMN dan perusahaan multinasional.',
-  },
-  {
-    id: 'gal-5',
-    title: 'Penyajian Aneka Minuman Segar & Jus Alami',
-    category: 'olahan',
-    image:
-      'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80',
-    imageUrl:
-      'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80',
-    caption:
-      'Pembuatan aneka minuman higienis berbahan buah segar dan rempah alami pilihan.',
+    caption: 'Pelayanan katering profesional untuk acara instansi BUMN dan perusahaan multinasional.',
   },
   {
     id: 'gal-6',
     title: 'Audit & Sertifikasi Halal BPJPH',
     category: 'sertifikasi',
     image:
-      'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788330222/asasora/brppw3knihlripyrbfnk.png',
     imageUrl:
       'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
-    caption:
-      'Verifikasi kepatuhan sistem jaminan produk halal secara menyeluruh dari hulu ke hilir.',
+    caption: 'Verifikasi kepatuhan sistem jaminan produk halal secara menyeluruh dari hulu ke hilir.',
   },
 ];
 
@@ -476,7 +469,7 @@ export const initialLegalDocuments: LegalDocument[] = [
     validUntil: 'Berlaku Selamanya (Sesuai Regulasi)',
     status: 'TERVERIFIKASI RESMI',
     image:
-      'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788331221/asasora/ifon5tr26xvzkolq8ckc.jpg',
     previewUrl:
       'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
   },
@@ -490,37 +483,57 @@ export const initialLegalDocuments: LegalDocument[] = [
     validUntil: 'Aktif & Sah',
     status: 'TERDAFTAR RESMI',
     image:
-      'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788331259/asasora/psmdvi78sigk5lf0af04.png',
     previewUrl:
       'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'leg-3',
-    title: 'Sertifikat Laik Higiene Sanitasi Jasaboga',
-    docNumber: '440/1182/Dinkes-SK/2024',
-    issuer: 'Dinas Kesehatan Pemerintah Kota Tangerang',
-    description:
-      'Standar kelayakan kebersihan sarana dapur, pengolahan air bersih, peralatan, dan penjamah makanan tersertifikasi higienis.',
+    title: 'Sertifikat Pelatihan Penyelia Halal',
+    docNumber: '001/LPPJPH-UAG/IHT/Batch-27/VIII/2026',
+    issuer: 'Dinas Perindustrian & Perdagangan Kota Tangerang',
+    description: 'Penyelia Halal',
     validUntil: 'Aktif Berkelanjutan',
-    status: 'LULUS UJI LABORATORIUM',
+    status: 'LULUS',
     image:
-      'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788333485/asasora/wp0hrqqmvtniftykq4f2.png',
     previewUrl:
       'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'leg-4',
-    title: 'Sertifikat Standar Pengolahan Pangan Industri Rumah Tangga (SPP-PIRT)',
-    docNumber: 'P-IRT 2063671010892-28',
+    title: 'Sertifikat Penyuluhan Keamanan Pangan (SPP-PIRT)',
+    docNumber: '3671/0011/IV/2026/DINKES',
     issuer: 'Dinas Kesehatan & PTSP Pemerintah Kota Tangerang',
-    description:
-      'Izin edar jaminan keamanan mutu untuk produk makanan olahan kemasan, lauk siap saji, dan aneka minuman botol.',
+    description: 'Sertifat Penyuluhan  keamanan pangan .',
     validUntil: 'Aktif & Terdaftar',
-    status: 'TERDAFTAR RESMI P-IRT',
+    status: 'TERDAFTAR RESMI',
     image:
-      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788333421/asasora/wmq3ywpfmpwkl3gnillw.png',
     previewUrl:
       'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'leg-1788332238354',
+    title: 'izin Edar Produk Pangan Olahan Industri Rumah Tangaga',
+    docNumber: '2305260084676000004',
+    issuer: 'Pemerintah Republik Indonesia',
+    description: 'PM-UMKU',
+    validUntil: 'Berlaku Selamanya',
+    status: 'TERVERIFIKASI RESMI',
+    image:
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788332236/asasora/lrarsjakjn4lunifgrz6.png',
+  },
+  {
+    id: 'leg-1788332404645',
+    title: 'SK Menkumham',
+    docNumber: 'AHU-A007025.AH.01.031.Tahun 2026',
+    issuer: 'KemenKum Ham AHU Online',
+    description: 'SK Menkumham PT. Asasora Bio Healthora',
+    validUntil: 'Berlaku Selamanya',
+    status: 'TERVERIFIKASI RESMI',
+    image:
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788332403/asasora/ab4jgepohebl7k4w5ihq.png',
   },
 ];
 
@@ -530,13 +543,13 @@ export const initialAdminUsers: AdminUser[] = [
   {
     id: 'user-1',
     username: 'admin',
-    password: 'admin',
+    password: 'asasora2025',
     name: 'Administrator Utama',
     role: 'Super Admin',
     email: 'admin@asasora.com',
     isActive: true,
     createdAt: '2025-01-01T08:00:00.000Z',
-    lastLogin: '2025-01-01T08:30:00.000Z',
+    lastLogin: '2026-09-02T10:09:59.011Z',
   },
   {
     id: 'user-2',
@@ -561,5 +574,3 @@ export const initialAdminUsers: AdminUser[] = [
     lastLogin: '2025-01-15T09:30:00.000Z',
   },
 ];
-
-

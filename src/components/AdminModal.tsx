@@ -585,19 +585,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   <span>Masuk Panel Administrator</span>
                 </button>
 
-                {/* Quick 1-Click Login Card for Ease of Access */}
-                <div className="pt-2 border-t border-gray-200 text-center space-y-2">
+                {/* Security Note & Support Info */}
+                <div className="pt-2 border-t border-gray-200 text-center">
                   <p className="text-[11px] text-gray-500 font-medium">
-                    Kredensial Default: <strong className="text-emerald-800 font-mono">admin</strong> / Password: <strong className="text-emerald-800 font-mono">admin</strong>
+                    Area terbatas khusus staf pengelola resmi PT. ASASORA BIO HEALTHORA.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickLogin('admin', 'admin')}
-                    className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#F3C623]" />
-                    <span>⚡ Klik untuk Masuk Instan (admin / admin)</span>
-                  </button>
                 </div>
               </form>
             </div>

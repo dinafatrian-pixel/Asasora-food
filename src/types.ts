@@ -187,11 +187,7 @@ export interface CompanyInfo {
   deliveryHours?: string;
   operationalNote?: string;
   bankAccount: BankAccountInfo;
-  bcaAccount?: {
-    bank: string;
-    number: string;
-    holder: string;
-  };
+  bcaAccount?: BankAccountInfo;
   warehouse: WarehouseLocationInfo;
   warehouseLocation?: {
     name: string;

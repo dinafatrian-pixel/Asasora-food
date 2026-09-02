@@ -48,30 +48,6 @@ export default function App() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // If description still has the old longer text, sync to requested text
-        if (
-          parsed.description &&
-          parsed.description.includes('Solusi terpadu lini Food Service berkualitas tinggi')
-        ) {
-          parsed.description = 'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.';
-        }
-        if (parsed.heroValueProps && Array.isArray(parsed.heroValueProps)) {
-          parsed.heroValueProps = parsed.heroValueProps.filter(
-            (p: any) =>
-              !p.title?.toLowerCase().includes('sterilisasi') &&
-              !p.subtitle?.toLowerCase().includes('alat medis') &&
-              !p.title?.toLowerCase().includes('alat medis')
-          );
-        }
-        if (parsed.heroTitleHighlight === 'BIO HEALTHORA') {
-          parsed.heroTitleHighlight = '';
-        }
-        if (!parsed.logoUrl || parsed.logoUrl.includes('lh3.googleusercontent.com')) {
-          parsed.logoUrl = '/logo-asasora.png';
-        }
-        if (!parsed.website || parsed.website.includes('asasora.com')) {
-          parsed.website = 'www.asasorfood.com';
-        }
         return { ...initialCompanyInfo, ...parsed };
       } catch (e) {
         return initialCompanyInfo;
@@ -85,24 +61,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: Product[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed
-            .filter(
-              (p) =>
-                p.category !== 'medis' &&
-                !['prod-6', 'prod-7', 'prod-8'].includes(p.id) &&
-                !p.name.toLowerCase().includes('rental bed') &&
-                !p.name.toLowerCase().includes('rental tabung') &&
-                !p.name.toLowerCase().includes('rental kursi roda')
-            )
-            .map((p) => {
-              let cat = p.category;
-              if (cat === 'catering' || cat === 'paket') cat = 'catering & event';
-              else if (cat === 'olahan') cat = 'Produk Siap Santap';
-              else if (cat === 'minuman' || cat === 'snack') cat = 'Snak dan cemilan';
-              return { ...p, category: cat };
-            });
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialProducts;
@@ -116,14 +76,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: ShippingMethod[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (s) =>
-              s.id !== 'toko-medis' &&
-              !s.name.toLowerCase().includes('alat medis') &&
-              !s.name.toLowerCase().includes('bed & oksigen')
-          );
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialShippingMethods;
@@ -137,9 +91,7 @@ export default function App() {
     if (saved) {
       try {
         const parsed: CartItem[] = JSON.parse(saved);
-        // Clean out default dummy item 'cart-1'
-        const cleaned = parsed.filter((item) => item.id !== 'cart-1');
-        return cleaned;
+        return parsed;
       } catch (e) {
         return [];
       }
@@ -152,13 +104,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: Review[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (r) =>
-              !r.company?.toLowerCase().includes('simposium medis') &&
-              !r.comment.toLowerCase().includes('simposium dokter')
-          );
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialReviews;
@@ -172,16 +119,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: ClientPartner[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (c) =>
-              c.id !== 'c-3' &&
-              c.id !== 'c-6' &&
-              !c.name.toLowerCase().includes('rsud') &&
-              !c.name.toLowerCase().includes('klinik') &&
-              !c.type.toLowerCase().includes('kesehatan')
-          );
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialClients;
@@ -195,19 +134,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: GalleryItem[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (g) =>
-              g.category !== 'medis' &&
-              g.id !== 'gal-3' &&
-              g.id !== 'gal-5' &&
-              !g.title.toLowerCase().includes('bed pasien') &&
-              !g.title.toLowerCase().includes('tabung oksigen') &&
-              !g.title.toLowerCase().includes('alat medis') &&
-              !g.caption.toLowerCase().includes('disinfektan medis') &&
-              !g.caption.toLowerCase().includes('oksigen')
-          );
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialGallery;
@@ -221,16 +149,8 @@ export default function App() {
     if (saved) {
       try {
         const parsed: LegalDocument[] = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (d) =>
-              d.id !== 'leg-4' &&
-              !d.title.toLowerCase().includes('alat kesehatan') &&
-              !d.title.toLowerCase().includes('idak') &&
-              !d.description.toLowerCase().includes('alat kesehatan') &&
-              !d.description.toLowerCase().includes('homecare')
-          );
-          return cleaned;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       } catch (e) {
         return initialLegalDocuments;
