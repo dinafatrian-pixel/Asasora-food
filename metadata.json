@@ -1,0 +1,10 @@
+{
+  "name": "PT. ASASORA BIO HEALTHORA",
+  "description": "Portal resmi Food Health Partner PT. ASASORA BIO HEALTHORA: Katalog Katering Halal BPJPH, Makanan Olahan Siap Santap, Snack & Cemilan, Formulir Pesanan & Cek Ongkir Otomatis, dan Invoice Resmi.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
