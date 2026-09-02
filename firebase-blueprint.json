@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Store": {
+      "title": "Store",
+      "description": "Master store data including company info, products, orders, shipping, gallery, legal documents, reviews, analytics, and admin users",
+      "properties": {
+        "company": { "type": "object", "description": "Company profile details" },
+        "products": { "type": "array", "description": "List of food and catering products" },
+        "shippingMethods": { "type": "array", "description": "List of shipping options" },
+        "reviews": { "type": "array", "description": "Customer reviews and testimonials" },
+        "clients": { "type": "array", "description": "Corporate clients and partner list" },
+        "gallery": { "type": "array", "description": "Gallery images and captions" },
+        "legalDocuments": { "type": "array", "description": "Legal certificates and Halal documentation" },
+        "orders": { "type": "array", "description": "Customer orders history" },
+        "adminUsers": { "type": "array", "description": "Admin user profiles" },
+        "analytics": { "type": "object", "description": "Traffic and order analytics" },
+        "version": { "type": "number", "description": "Data revision number" },
+        "updatedAt": { "type": "string", "description": "Timestamp of last modification" }
+      }
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Individual customer order documents",
+      "properties": {
+        "id": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "customerAddress": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "shippingMethod": { "type": "string" },
+        "shippingFee": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "store/current": {
+      "entity": "Store",
+      "description": "Master store document synced in real-time across all clients"
+    },
+    "orders/{orderId}": {
+      "entity": "Order",
+      "description": "Individual order records"
+    }
+  }
+}

@@ -80,6 +80,7 @@ interface AdminModalProps {
   adminUsers?: AdminUser[];
   syncStatus?: {
     connected: boolean;
+    firestoreConnected?: boolean;
     lastSyncTime: number | null;
     isSyncing: boolean;
     version: number;
@@ -436,7 +437,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             {syncStatus && (
               <div
                 className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold border ${
-                  syncStatus.connected
+                  syncStatus.firestoreConnected
+                    ? 'bg-emerald-950/60 text-emerald-200 border-emerald-400/40 shadow-xs'
+                    : syncStatus.connected
                     ? 'bg-emerald-950/40 text-emerald-100 border-emerald-400/30'
                     : 'bg-amber-950/40 text-amber-100 border-amber-400/30'
                 }`}
@@ -450,12 +453,14 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       : 'bg-amber-400'
                   }`}
                 />
-                <span>
+                <span className="flex items-center gap-1">
                   {syncStatus.isSyncing
-                    ? 'Menyinkronkan...'
+                    ? 'Menyinkronkan Cloud...'
+                    : syncStatus.firestoreConnected
+                    ? `Cloud DB Online (v${syncStatus.version})`
                     : syncStatus.connected
-                    ? `Live Sync (v${syncStatus.version})`
-                    : 'Lokal (Menghubungkan...)'}
+                    ? `Live Realtime (v${syncStatus.version})`
+                    : 'Menghubungkan...'}
                 </span>
                 {onManualSync && (
                   <button
@@ -463,7 +468,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                     onClick={onManualSync}
                     disabled={syncStatus.isSyncing}
                     className="ml-1 text-[10px] bg-white/20 hover:bg-white/30 text-white px-1.5 py-0.5 rounded cursor-pointer transition disabled:opacity-50"
-                    title="Sinkronkan data dengan server secara manual"
+                    title="Sinkronkan data dengan Cloud Firestore secara manual"
                   >
                     Sync
                   </button>

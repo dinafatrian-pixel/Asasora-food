@@ -271,6 +271,7 @@ export default function App() {
   // Real-time synchronization state
   const [syncStatus, setSyncStatus] = useState({
     connected: false,
+    firestoreConnected: false,
     lastSyncTime: null as number | null,
     isSyncing: false,
     version: 1,
