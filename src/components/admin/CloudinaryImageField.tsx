@@ -76,9 +76,9 @@ export const CloudinaryImageField: React.FC<CloudinaryImageFieldProps> = ({
       return;
     }
 
-    // Size limit check (10MB for standard Cloudinary unsigned upload)
-    if (file.size > 10 * 1024 * 1024) {
-      setErrorMsg('Ukuran file maksimal adalah 10MB.');
+    // Size limit check (15MB max)
+    if (file.size > 15 * 1024 * 1024) {
+      setErrorMsg('Ukuran file maksimal adalah 15MB.');
       return;
     }
 
@@ -86,29 +86,36 @@ export const CloudinaryImageField: React.FC<CloudinaryImageFieldProps> = ({
     setErrorMsg(null);
     setSuccessMsg(null);
     setUploadProgress(
-      `Mengunggah "${file.name}" ke akun Cloudinary (${cloudConfig.cloudName || 'CDN'})...`
+      `Memproses "${file.name}"...`
     );
 
     try {
       const currentConfig = getSavedCloudConfig();
-      const result = await uploadToCloudinary(file, currentConfig);
+      const result = await uploadToCloudinary(file, currentConfig, true);
 
       if (result.success && result.url) {
         onChange(result.url);
-        setSuccessMsg(`Foto berhasil masuk ke Cloudinary: ${cloudConfig.cloudName}`);
-        if (onNotify) {
-          onNotify(`☁️ Foto "${file.name}" berhasil diunggah ke akun Cloudinary!`);
+        if (result.isLocalFallback) {
+          setSuccessMsg(`Foto berhasil dimuat & siap disimpan (Mode Cadangan Data Gambar).`);
+          if (onNotify) {
+            onNotify(`📸 Foto "${file.name}" siap disimpan!`);
+          }
+        } else {
+          setSuccessMsg(`Foto berhasil diunggah ke Cloudinary CDN (${cloudConfig.cloudName}).`);
+          if (onNotify) {
+            onNotify(`☁️ Foto "${file.name}" berhasil diunggah ke Cloudinary!`);
+          }
         }
-        setTimeout(() => setSuccessMsg(null), 4000);
+        setTimeout(() => setSuccessMsg(null), 4500);
       } else {
-        const error = result.error || 'Gagal mengunggah foto ke Cloudinary.';
+        const error = result.error || 'Gagal memproses foto.';
         setErrorMsg(error);
         if (onNotify) {
-          onNotify(`⚠️ Gagal upload: ${error}`);
+          onNotify(`⚠️ Peringatan foto: ${error}`);
         }
       }
     } catch (err: any) {
-      const msg = err.message || 'Terjadi kesalahan jaringan saat mengunggah gambar.';
+      const msg = err.message || 'Terjadi kesalahan saat memproses gambar.';
       setErrorMsg(msg);
     } finally {
       setIsUploading(false);
@@ -203,14 +210,19 @@ export const CloudinaryImageField: React.FC<CloudinaryImageFieldProps> = ({
               <Cloud className="w-3 h-3 text-sky-500" />
               <span>Tersimpan di Cloudinary ({cloudConfig.cloudName || 'CDN'})</span>
             </span>
+          ) : value?.startsWith('data:') ? (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span>Foto Dimuat &amp; Siap Disimpan</span>
+            </span>
           ) : value ? (
             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-300">
               <ImageIcon className="w-3 h-3 text-amber-500" />
-              <span>URL Eksternal</span>
+              <span>URL Gambar</span>
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 text-[10px] text-gray-400">
-              Target Cloudinary: <strong>{cloudConfig.cloudName || 'Belum diatur'}</strong>
+              Penyimpanan: <strong>{cloudConfig.cloudName ? `Cloudinary (${cloudConfig.cloudName})` : 'Otomatis'}</strong>
             </span>
           )}
 

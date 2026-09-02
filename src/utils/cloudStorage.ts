@@ -82,16 +82,87 @@ export interface UploadResult {
 }
 
 /**
+ * Helper to compress image file to lightweight WebP/JPEG Data URL using HTML5 Canvas
+ */
+export async function compressImageFile(
+  file: File | Blob,
+  maxWidth = 1200,
+  maxHeight = 1200,
+  quality = 0.82
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // If it's a PDF, we cannot compress via canvas, return standard Data URL
+    if ('type' in file && file.type === 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(e.target?.result as string);
+          return;
+        }
+
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        // Prefer image/webp if supported, fallback to image/jpeg
+        try {
+          const webpData = canvas.toDataURL('image/webp', quality);
+          if (webpData.startsWith('data:image/webp')) {
+            resolve(webpData);
+            return;
+          }
+        } catch (err) {
+          // ignore
+        }
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => {
+        resolve(e.target?.result as string);
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
  * Directly uploads a File, Blob, or Base64 Data URI to Cloudinary via REST API (Unsigned Upload)
+ * Automatically falls back to compressed local data URL if Cloudinary preset is unconfigured or signed
  */
 export async function uploadToCloudinary(
   fileOrBase64: File | Blob | string,
-  customConfig?: Partial<CloudStorageConfig>
+  customConfig?: Partial<CloudStorageConfig>,
+  enableAutoFallback = true
 ): Promise<UploadResult> {
   const config = { ...getSavedCloudConfig(), ...(customConfig || {}) };
 
-  // If already a remote Cloudinary URL, return as-is
-  if (typeof fileOrBase64 === 'string' && isCloudinaryUrl(fileOrBase64)) {
+  // If already a remote Cloudinary URL or remote HTTPS URL, return as-is
+  if (typeof fileOrBase64 === 'string' && (isCloudinaryUrl(fileOrBase64) || fileOrBase64.startsWith('http://') || fileOrBase64.startsWith('https://'))) {
     return {
       success: true,
       url: fileOrBase64,
@@ -99,11 +170,31 @@ export async function uploadToCloudinary(
     };
   }
 
+  // Pre-generate compressed fallback data url in case Cloudinary fails or is disabled
+  const getFallbackData = async (): Promise<string> => {
+    if (typeof fileOrBase64 === 'string') {
+      return fileOrBase64;
+    }
+    try {
+      return await compressImageFile(fileOrBase64, 1200, 1200, 0.82);
+    } catch (e) {
+      return await fileToDataUrl(fileOrBase64);
+    }
+  };
+
   // Validate Cloudinary configuration
   const cleanCloudName = (config.cloudName || '').trim();
   const cleanUploadPreset = (config.uploadPreset || '').trim();
 
   if (!config.enabled) {
+    if (enableAutoFallback) {
+      const fallbackUrl = await getFallbackData();
+      return {
+        success: true,
+        url: fallbackUrl,
+        isLocalFallback: true,
+      };
+    }
     return {
       success: false,
       url: '',
@@ -112,20 +203,20 @@ export async function uploadToCloudinary(
     };
   }
 
-  if (!cleanCloudName) {
+  if (!cleanCloudName || !cleanUploadPreset) {
+    if (enableAutoFallback) {
+      const fallbackUrl = await getFallbackData();
+      return {
+        success: true,
+        url: fallbackUrl,
+        isLocalFallback: true,
+        error: 'Cloud Name atau Upload Preset Cloudinary belum diatur. Foto dialihkan ke penyimpanan gambar lokal dan siap disimpan.',
+      };
+    }
     return {
       success: false,
       url: '',
-      error: 'Cloud Name akun Cloudinary belum diisi. Silakan atur di Tab Cloudinary Media.',
-      isLocalFallback: false,
-    };
-  }
-
-  if (!cleanUploadPreset) {
-    return {
-      success: false,
-      url: '',
-      error: 'Upload Preset (Unsigned) belum diisi. Silakan atur Upload Preset di Tab Cloudinary Media.',
+      error: 'Cloud Name dan Upload Preset (Unsigned) harus diisi di Pengaturan Cloudinary.',
       isLocalFallback: false,
     };
   }
@@ -155,15 +246,39 @@ export async function uploadToCloudinary(
       let userError = rawError;
 
       // Provide clear actionable Indonesian explanation for common Cloudinary errors
-      if (rawError.toLowerCase().includes('upload preset must be specified') || rawError.toLowerCase().includes('preset not found')) {
-        userError = `Upload Preset "${cleanUploadPreset}" tidak ditemukan di Cloudinary (${cleanCloudName}). Pastikan Anda sudah membuat Upload Preset bertipe "Unsigned" di Settings Cloudinary > Upload.`;
-      } else if (rawError.toLowerCase().includes('invalid cloud_name') || rawError.toLowerCase().includes('cloud name')) {
+      if (
+        rawError.toLowerCase().includes('unknown api key') ||
+        rawError.toLowerCase().includes('must supply api_key')
+      ) {
+        userError = `Cloudinary menolak upload karena preset "${cleanUploadPreset}" bukan tipe "Unsigned" atau Cloud Name "${cleanCloudName}" tidak cocok.`;
+      } else if (
+        rawError.toLowerCase().includes('upload preset must be specified') ||
+        rawError.toLowerCase().includes('preset not found')
+      ) {
+        userError = `Upload Preset "${cleanUploadPreset}" tidak ditemukan di Cloudinary (${cleanCloudName}). Pastikan Anda membuat Preset bertipe "Unsigned" di Settings Cloudinary > Upload.`;
+      } else if (
+        rawError.toLowerCase().includes('invalid cloud_name') ||
+        rawError.toLowerCase().includes('cloud name')
+      ) {
         userError = `Cloud Name "${cleanCloudName}" tidak valid di Cloudinary. Silakan cek Cloud Name di Dashboard Cloudinary Anda.`;
-      } else if (rawError.toLowerCase().includes('unsigned upload not enabled') || rawError.toLowerCase().includes('mode is signed')) {
+      } else if (
+        rawError.toLowerCase().includes('unsigned upload not enabled') ||
+        rawError.toLowerCase().includes('mode is signed')
+      ) {
         userError = `Preset "${cleanUploadPreset}" bertipe Signed. Ubah Signing Mode menjadi "Unsigned" di Settings Cloudinary Anda.`;
       }
 
-      console.warn('Cloudinary upload error:', userError);
+      console.warn('Cloudinary upload warning:', userError);
+
+      if (enableAutoFallback) {
+        const fallbackUrl = await getFallbackData();
+        return {
+          success: true,
+          url: fallbackUrl,
+          isLocalFallback: true,
+          error: `${userError} Foto dialihkan ke penyimpanan gambar otomatis agar tetap bisa disimpan langsung.`,
+        };
+      }
 
       return {
         success: false,
@@ -188,8 +303,18 @@ export async function uploadToCloudinary(
     };
   } catch (err: any) {
     const errorMsg =
-      err.message || 'Koneksi jaringan ke Cloudinary terputus. Pastikan koneksi internet stabil.';
-    console.error('Cloudinary network exception:', err);
+      err.message || 'Koneksi jaringan ke Cloudinary terputus.';
+    console.warn('Cloudinary network exception, switching to local fallback:', err);
+
+    if (enableAutoFallback) {
+      const fallbackUrl = await getFallbackData();
+      return {
+        success: true,
+        url: fallbackUrl,
+        isLocalFallback: true,
+        error: `Koneksi Cloudinary offline (${errorMsg}). Foto dialihkan ke penyimpanan gambar otomatis dan siap disimpan.`,
+      };
+    }
 
     return {
       success: false,
