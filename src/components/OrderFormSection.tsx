@@ -32,6 +32,7 @@ import {
   Layers,
   Tag,
   Eye,
+  ArrowLeft,
 } from 'lucide-react';
 import { CartItem, CompanyInfo, Order, Product, ShippingMethod } from '../types';
 import {
@@ -42,6 +43,7 @@ import {
   STANDARD_COURIERS,
   WAREHOUSE_ORIGIN,
   QUICK_LOCATION_PRESETS,
+  resolveAddressToCoordinates,
 } from '../utils/distance';
 import {
   buildRawInvoiceText,
@@ -152,6 +154,20 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
   const [selectedCourierId, setSelectedCourierId] = useState<string>('gojek-motor');
   const [formError, setFormError] = useState<string | null>(null);
   const [createdOrder, setCreatedOrder] = useState<Order | null>(null);
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState<boolean>(false);
+
+  // Smooth scroll and focus helper for form validation
+  const scrollToElement = (elementId: string) => {
+    setTimeout(() => {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          el.focus();
+        }
+      }
+    }, 60);
+  };
 
   // Hitung Ongkir Calculation State
   const [isCalculatingOngkir, setIsCalculatingOngkir] = useState<boolean>(false);
@@ -293,6 +309,31 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
     const dist = calculateDistanceKm(originWarehouse.lat, originWarehouse.lng, lat, lng);
     setDistanceKm(dist);
 
+    // Live update couriers with new distance
+    const rates = STANDARD_COURIERS.map((method) => {
+      const tariff = calculateCourierTariff(method.id, dist);
+      return {
+        ...method,
+        calculatedFare: tariff.fare,
+        isAvailable: tariff.isAvailable,
+      };
+    });
+
+    const matched =
+      rates.find((c) => c.id === selectedCourierId && c.isAvailable) ||
+      rates.find((c) => c.isAvailable) ||
+      rates[0];
+    if (matched && matched.id !== selectedCourierId) {
+      setSelectedCourierId(matched.id);
+    }
+
+    setOngkirFeedback({
+      distance: dist,
+      fare: matched ? matched.calculatedFare : 0,
+      courierName: matched ? matched.name : 'Kurir Reguler',
+      timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+    });
+
     if (dist > 40) {
       setLocationStatus(
         lang === 'en'
@@ -353,7 +394,7 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
     updateCoordinatesAndDistance(lat, lng, shortName);
   };
 
-  // GPS Location Handler
+  // GPS Location Handler: locks GPS and automatically calculates live shipping
   const handleUseMyLocation = () => {
     setLocationStatus(
       lang === 'en' ? 'Detecting device GPS coordinates...' : 'Mendeteksi koordinat GPS perangkat Anda...'
@@ -373,28 +414,46 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         updateCoordinatesAndDistance(lat, lng, 'Lokasi GPS Perangkat');
+        const dist = calculateDistanceKm(originWarehouse.lat, originWarehouse.lng, lat, lng);
+        setDistanceKm(dist);
+
+        // Auto-recalculate couriers with the new GPS distance
+        const rates = STANDARD_COURIERS.map((method) => {
+          const tariff = calculateCourierTariff(method.id, dist);
+          return {
+            ...method,
+            calculatedFare: tariff.fare,
+            isAvailable: tariff.isAvailable,
+          };
+        });
+
+        const matched =
+          rates.find((c) => c.id === selectedCourierId && c.isAvailable) ||
+          rates.find((c) => c.isAvailable) ||
+          rates[0];
+        if (matched && matched.id !== selectedCourierId) {
+          setSelectedCourierId(matched.id);
+        }
+
+        setOngkirFeedback({
+          distance: dist,
+          fare: matched ? matched.calculatedFare : 0,
+          courierName: matched ? matched.name : 'Kurir Reguler',
+          timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+        });
+
         setLocationStatus(
           lang === 'en'
-            ? `✅ GPS locked! Calculated distance: ${calculateDistanceKm(
-                originWarehouse.lat,
-                originWarehouse.lng,
-                lat,
-                lng
-              )} km from Tangerang Hub.`
-            : `✅ GPS berhasil terkunci! Jarak terhitung: ${calculateDistanceKm(
-                originWarehouse.lat,
-                originWarehouse.lng,
-                lat,
-                lng
-              )} km dari Gudang Asasora.`
+            ? `✅ GPS locked! Calculated distance: ${dist} km (${matched?.name || 'Kurir'})`
+            : `✅ GPS terkunci! Jarak terhitung: ${dist} Km • Rp ${(matched ? matched.calculatedFare : 0).toLocaleString('id-ID')} (${matched?.name || 'Kurir'})`
         );
       },
       (error) => {
         console.warn('GPS error:', error.message);
         setLocationStatus(
           lang === 'en'
-            ? 'GPS access unavailable or permission denied. Using manual coordinates.'
-            : 'Izin GPS ditolak atau tidak tersedia. Silakan masukkan koordinat / pilih preset.'
+            ? 'GPS access unavailable or permission denied. Please enter your address above.'
+            : 'Izin GPS ditolak atau tidak tersedia. Silakan ketik alamat pengiriman di atas untuk cek ongkir.'
         );
       },
       { timeout: 8000, enableHighAccuracy: true }
@@ -408,7 +467,7 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
       ...method,
       calculatedFare: tariffInfo.fare,
       isAvailable: tariffInfo.isAvailable,
-      statusText: tariffInfo.statusText || method.description,
+      statusText: tariffInfo.statusText,
     };
   });
 
@@ -436,35 +495,34 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
     setFormError(null);
 
     try {
-      // If user typed an address query and hasn't chosen a result, try geocoding first
-      if (searchQuery.trim().length >= 3) {
-        try {
-          const searchUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            searchQuery + ', Indonesia'
-          )}&limit=1&addressdetails=1`;
-          const resp = await fetch(searchUrl, { headers: { 'Accept-Language': 'id,en' } });
-          if (resp.ok) {
-            const data: GeocodingSearchResult[] = await resp.json();
-            if (data && data.length > 0) {
-              const lat = parseFloat(data[0].lat);
-              const lng = parseFloat(data[0].lon);
-              const shortName = data[0].display_name.split(',').slice(0, 3).join(',');
-              setDestLat(lat);
-              setDestLng(lng);
-              setDestLocationName(shortName);
-              if (!address) setAddress(data[0].display_name);
-            }
-          }
-        } catch (err) {
-          console.warn('Auto-geocoding fallback:', err);
-        }
+      // Prioritize the address entered by consumer or the search box query
+      const queryToSearch = (searchQuery.trim() || address.trim());
+
+      if (!queryToSearch || queryToSearch.length < 2) {
+        setLocationStatus(
+          lang === 'en'
+            ? '⚠️ Please enter your delivery destination address in Step 1 or search box.'
+            : '⚠️ Mohon masukkan alamat tujuan pengiriman di Langkah 1 atau kolom pencarian.'
+        );
+        return;
       }
 
+      // Geocode using robust knowledge base + resilient online OSM geocoding
+      const resolved = await resolveAddressToCoordinates(queryToSearch, destLat, destLng);
+      const currentLat = resolved.lat;
+      const currentLng = resolved.lng;
+
+      setDestLat(currentLat);
+      setDestLng(currentLng);
+      setDestLocationName(resolved.locationName);
+      if (!searchQuery) setSearchQuery(resolved.locationName);
+      if (!address) setAddress(resolved.locationName);
+
       // Calculate distance from Tangerang Origin Warehouse
-      const dist = calculateDistanceKm(originWarehouse.lat, originWarehouse.lng, destLat, destLng);
+      const dist = calculateDistanceKm(originWarehouse.lat, originWarehouse.lng, currentLat, currentLng);
       setDistanceKm(dist);
 
-      // Check couriers
+      // Recalculate courier rates for all 7 courier methods
       const rates = STANDARD_COURIERS.map((method) => {
         const tariff = calculateCourierTariff(method.id, dist);
         return {
@@ -493,24 +551,26 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
       if (dist > 40) {
         setLocationStatus(
           lang === 'en'
-            ? `📍 Distance (${dist} km) exceeds 40 km standard instant limit. Out-of-town catering handled via WhatsApp.`
-            : `📍 Jarak ${dist} Km melebihi batas 40 km kurir instan. Pengiriman luar kota dilayani via WhatsApp admin.`
+            ? `📍 Jarak ${dist} Km melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
+            : `📍 Jarak ${dist} Km ke ${resolved.locationName} melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
         );
       } else {
         setLocationStatus(
           lang === 'en'
-            ? `✅ Shipping calculated: ${dist} km • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
-            : `✅ Ongkir berhasil dihitung: ${dist} Km • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
+            ? `✅ Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
+            : `✅ Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
         );
       }
+    } catch (err) {
+      console.error('Error calculating shipping rate:', err);
     } finally {
       setTimeout(() => {
         setIsCalculatingOngkir(false);
-      }, 350);
+      }, 300);
     }
   };
 
-  // Handle Order Creation with Rigorous Code Hardening
+  // Handle Order Creation with Rigorous Code Hardening & Instant Feedback
   const handleCreateOrder = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setFormError(null);
@@ -518,166 +578,192 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
     // 1. Sanitize & validate customer name (XSS prevention)
     const sanitizedName = sanitizeString(customerName);
     if (!sanitizedName || sanitizedName.length < 2) {
-      setFormError(
-        lang === 'en'
-          ? 'Please enter a valid Full Name (min. 2 characters).'
-          : 'Mohon masukkan Nama Lengkap yang valid (minimal 2 karakter).'
-      );
+      const msg = lang === 'en'
+        ? 'Please enter a valid Full Name (min. 2 characters).'
+        : 'Mohon masukkan Nama Lengkap yang valid (minimal 2 karakter).';
+      setFormError(msg);
+      scrollToElement('input-customer-name');
       return;
     }
 
     // 2. Validate phone number (digits only, 9-15 digits)
     const phoneCheck = validatePhoneNumber(whatsapp, lang);
     if (!phoneCheck.isValid) {
-      setFormError(
-        phoneCheck.errorMessage ||
-          (lang === 'en'
-            ? 'Phone number must only contain digits and be at least 9 digits.'
-            : 'Nomor telepon hanya boleh angka dan minimal 9 digit.')
-      );
+      const msg = phoneCheck.errorMessage ||
+        (lang === 'en'
+          ? 'Phone number must only contain digits and be at least 9 digits.'
+          : 'Nomor WhatsApp / telepon wajib diisi minimal 9 digit angka.');
+      setFormError(msg);
+      scrollToElement('input-whatsapp');
       return;
     }
 
     // 3. Sanitize & validate email (if provided)
     const emailResult = sanitizeEmail(customerEmail);
     if (customerEmail.trim() && !emailResult.isValid) {
-      setFormError(
-        lang === 'en'
-          ? 'Invalid email format. Please check your email address.'
-          : 'Format email tidak valid. Mohon periksa kembali penulisan email Anda.'
-      );
+      const msg = lang === 'en'
+        ? 'Invalid email format. Please check your email address.'
+        : 'Format email tidak valid. Mohon periksa kembali penulisan email Anda.';
+      setFormError(msg);
+      scrollToElement('input-email');
       return;
     }
 
     // 4. Sanitize & validate address (XSS prevention)
     const sanitizedAddress = sanitizeAddress(address);
     if (!sanitizedAddress || sanitizedAddress.length < 5) {
-      setFormError(
-        lang === 'en'
-          ? 'Please enter a complete delivery address (min. 5 characters).'
-          : 'Mohon masukkan Alamat Kirim Lengkap yang valid (minimal 5 karakter).'
-      );
+      const msg = lang === 'en'
+        ? 'Please enter a complete delivery address (min. 5 characters).'
+        : 'Mohon masukkan Alamat Kirim Lengkap yang valid (minimal 5 karakter).';
+      setFormError(msg);
+      scrollToElement('input-address');
       return;
     }
 
     // 5. Validate Cart Items
     if (cartItems.length === 0) {
-      setFormError(
-        lang === 'en'
-          ? 'Your cart is empty. Please select products first.'
-          : 'Keranjang belanja masih kosong. Silakan tambahkan produk terlebih dahulu.'
-      );
+      const msg = lang === 'en'
+        ? 'Your cart is empty. Please select dishes in Step 2 first.'
+        : 'Keranjang belanja masih kosong! Silakan pilih minimal 1 menu katering pada Langkah 2.';
+      setFormError(msg);
+      setShowCatalogMenuPicker(true);
+      scrollToElement('section-keranjang');
       return;
     }
 
-    // 6. Real-time Stock Validation for all items (specifically Nasemangkuk Ricebowl & Ready-to-eat)
+    // 6. Real-time Stock Validation for all items
     for (const item of cartStockAnalysis) {
       if (item.isOutOfStock) {
-        setFormError(
-          lang === 'en'
-            ? `Menu "${item.name}" is currently OUT OF STOCK. Please remove it from your cart.`
-            : `Menu "${item.name}" saat ini SEDANG HABIS. Mohon hapus dari keranjang Anda.`
-        );
+        const msg = lang === 'en'
+          ? `Menu "${item.name}" is currently OUT OF STOCK. Please remove it from your cart.`
+          : `Menu "${item.name}" saat ini SEDANG HABIS. Mohon hapus dari keranjang Anda.`;
+        setFormError(msg);
+        scrollToElement('section-keranjang');
         return;
       }
       if (item.isExceeded) {
-        setFormError(
-          lang === 'en'
-            ? `Stock for "${item.name}" is insufficient. Available stock: ${item.availableStock} portions (in cart: ${item.quantity}). Please adjust quantity.`
-            : `Stok menu "${item.name}" tidak mencukupi. Tersedia: ${item.availableStock} porsi (dalam keranjang: ${item.quantity}). Silakan sesuaikan jumlah.`
-        );
+        const msg = lang === 'en'
+          ? `Stock for "${item.name}" is insufficient. Available stock: ${item.availableStock} portions (in cart: ${item.quantity}).`
+          : `Stok menu "${item.name}" tidak mencukupi. Tersedia: ${item.availableStock} porsi (dalam keranjang: ${item.quantity}). Silakan sesuaikan jumlah.`;
+        setFormError(msg);
+        scrollToElement('section-keranjang');
         return;
       }
     }
 
-    // 7. Validate Courier
-    if (!activeCourier || (!activeCourier.isAvailable && !isOver40Km)) {
-      setFormError(
-        lang === 'en'
-          ? 'Selected courier is not available for this delivery distance. Please choose another option.'
-          : 'Kurir yang dipilih tidak tersedia untuk jarak pengiriman ini. Silakan pilih kurir yang tersedia.'
-      );
-      return;
+    // 7. Validate Courier & Auto-Fallback to best available courier
+    let effectiveCourier = activeCourier;
+    if (!effectiveCourier || (!effectiveCourier.isAvailable && !isOver40Km)) {
+      const fallback = couriersWithRates.find((c) => c.isAvailable) || couriersWithRates[0];
+      if (fallback) {
+        effectiveCourier = fallback;
+        setSelectedCourierId(fallback.id);
+      } else if (!isOver40Km) {
+        setFormError(
+          lang === 'en'
+            ? 'Selected courier is not available for this distance. Please choose another courier in Step 4.'
+            : 'Kurir yang dipilih tidak tersedia untuk jarak pengiriman ini. Silakan pilih kurir yang tersedia pada Langkah 4.'
+        );
+        scrollToElement('section-kurir');
+        return;
+      }
     }
 
-    const now = new Date();
-    const invoiceNumber = generateInvoiceNumber(now);
-    const uniqueCode = generateUniquePaymentCode();
-    const orderId = generateOrderId();
-    const paymentCode = `ASR-${uniqueCode}`;
+    setIsSubmittingOrder(true);
 
-    const dueDateObj = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const transactionDateStr = formatIndonesianDateTime(now);
-    const dueDateStr = `${formatIndonesianDateTime(dueDateObj)} (24 Jam)`;
+    try {
+      const now = new Date();
+      const invoiceNumber = generateInvoiceNumber(now);
+      const uniqueCode = generateUniquePaymentCode();
+      const orderId = generateOrderId();
+      const paymentCode = `ASR-${uniqueCode}`;
 
-    const totalTagihanAkumulatif = subtotal + shippingCost + uniqueCode;
-    const finalEmail =
-      emailResult.email ||
-      `${sanitizedName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'customer'}@email.com`;
+      const dueDateObj = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      const transactionDateStr = formatIndonesianDateTime(now);
+      const dueDateStr = `${formatIndonesianDateTime(dueDateObj)} (24 Jam)`;
 
-    const rawInvoiceText = buildRawInvoiceText(
-      {
+      const chosenFare = effectiveCourier ? effectiveCourier.calculatedFare : (shippingCost || 0);
+      const chosenCourierName = effectiveCourier ? effectiveCourier.name : 'Kurir Toko / Asasora Express';
+      const chosenEst = effectiveCourier?.estTime || effectiveCourier?.estimatedTime || '30 - 60 Menit';
+
+      const totalTagihanAkumulatif = subtotal + chosenFare + uniqueCode;
+      const finalEmail =
+        emailResult.email ||
+        `${sanitizedName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'customer'}@email.com`;
+
+      const rawInvoiceText = buildRawInvoiceText(
+        {
+          id: orderId,
+          customerName: sanitizedName,
+          whatsapp: phoneCheck.cleanNumber,
+          email: finalEmail,
+          address: sanitizedAddress,
+          items: [...cartItems],
+          subtotal,
+          shippingCost: chosenFare,
+          shippingMethodName: `${chosenCourierName} (${distanceKm} km)`,
+          distanceKm,
+        },
+        company,
+        {
+          invoiceNumber,
+          transactionDateStr,
+          dueDateStr,
+          uniqueCode,
+          subtotal,
+          shippingCost: chosenFare,
+          totalWithCode: totalTagihanAkumulatif,
+          customerEmail: finalEmail,
+          shippingMethodDetail: `${chosenCourierName} - ${distanceKm} km (Est: ${chosenEst})`,
+        }
+      );
+
+      const newOrder: Order = {
         id: orderId,
+        invoiceNumber,
+        date: now.toISOString(),
+        dueDate: dueDateStr,
         customerName: sanitizedName,
         whatsapp: phoneCheck.cleanNumber,
         email: finalEmail,
         address: sanitizedAddress,
+        customerLat: destLat,
+        customerLng: destLng,
         items: [...cartItems],
         subtotal,
-        shippingCost,
-        shippingMethodName: `${activeCourier.name} (${distanceKm} km)`,
+        shippingMethodName: chosenCourierName,
+        shippingCost: chosenFare,
+        shippingFee: chosenFare,
         distanceKm,
-      },
-      company,
-      {
-        invoiceNumber,
-        transactionDateStr,
-        dueDateStr,
         uniqueCode,
-        subtotal,
-        shippingCost,
-        totalWithCode: totalTagihanAkumulatif,
-        customerEmail: finalEmail,
-        shippingMethodDetail: `${activeCourier.name} - ${distanceKm} km (Est: ${
-          activeCourier.estTime || activeCourier.estimatedTime
-        })`,
-      }
-    );
+        totalAmount: totalTagihanAkumulatif,
+        rawInvoiceText,
+        paymentCode,
+        paymentMethod: 'Transfer Bank BCA',
+        status: 'Menunggu Pembayaran',
+      };
 
-    const newOrder: Order = {
-      id: orderId,
-      invoiceNumber,
-      date: now.toISOString(),
-      dueDate: dueDateStr,
-      customerName: sanitizedName,
-      whatsapp: phoneCheck.cleanNumber,
-      email: finalEmail,
-      address: sanitizedAddress,
-      customerLat: destLat,
-      customerLng: destLng,
-      items: [...cartItems],
-      subtotal,
-      shippingMethodName: activeCourier.name,
-      shippingCost,
-      shippingFee: shippingCost,
-      distanceKm,
-      uniqueCode,
-      totalAmount: totalTagihanAkumulatif,
-      rawInvoiceText,
-      paymentCode,
-      paymentMethod: 'Transfer Bank BCA',
-      status: 'Menunggu Pembayaran',
-    };
+      setCreatedOrder(newOrder);
+      onOrderCreated(newOrder);
+      setFormError(null);
 
-    setCreatedOrder(newOrder);
-    onOrderCreated(newOrder);
-
-    setTimeout(() => {
-      const invoiceEl = document.getElementById('checkout-invoice-panel');
-      if (invoiceEl) {
-        invoiceEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 150);
+      // Scroll modal body smoothly to top so customer views the official invoice immediately
+      setTimeout(() => {
+        const modalBody = document.getElementById('order-form-modal-body');
+        if (modalBody) {
+          modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        const invoiceEl = document.getElementById('checkout-invoice-panel');
+        if (invoiceEl) {
+          invoiceEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 80);
+    } catch (err) {
+      console.error('Failed to create order / generate invoice:', err);
+      setFormError('Terjadi kendala saat menerbitkan invoice resmi. Silakan coba kembali.');
+    } finally {
+      setIsSubmittingOrder(false);
+    }
   };
 
   // WhatsApp Link for Out of Town Delivery (> 40 km)
@@ -741,133 +827,201 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
         </div>
 
         {/* Scrollable Form Content */}
-        <div className="p-5 sm:p-8 overflow-y-auto space-y-6">
-          {/* Header Subtitle Banner */}
-          <div className="text-center pb-2 border-b border-gray-100">
-            <span className="bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40 inline-flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-yellow-800" />
-              {t('order.tag', 'Formulir Pesanan Resmi')}
-            </span>
-            <h4 className="text-xl sm:text-2xl font-black text-[#2E6F40] mt-2">
-              {t('order.title', 'Keranjang Belanja & Otomatisasi Kurir')}
-            </h4>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-xl mx-auto leading-relaxed">
-              {t(
-                'order.subtitle',
-                'Pilih menu katering, tentukan titik lokasi koordinat, pilih armada kurir (Gojek / Grab / Lalamove / Toko), lalu buat order untuk mendapatkan Invoice Resmi otomatis.'
-              )}
-            </p>
-          </div>
-
-          {formError && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-xs sm:text-sm flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); handleCreateOrder(); }}>
-            {/* 1. INFORMASI PELANGGAN */}
-            <div className="space-y-4 border-b border-gray-100 pb-8">
-              <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
-                <UserCheck className="w-5 h-5 mr-2 text-[#4A9E60]" />
-                <span>{t('order.step1', '1. Informasi Pelanggan')}</span>
-              </h4>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
-                    <span>
-                      {t('order.name', 'Nama Lengkap')} <span className="text-red-500">*</span>
-                    </span>
-                    <span className="text-[10px] text-gray-400 font-semibold">XSS Sanitized</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder={t('order.name_placeholder', 'Contoh: Budi Santoso')}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
-                    <span>
-                      {t('order.phone', 'Nomor WhatsApp / Telepon')} <span className="text-red-500">*</span>
-                    </span>
-                    {phoneValidation && (
-                      <span
-                        className={`text-[10px] font-black px-2 py-0.5 rounded-md ${
-                          phoneValidation.isValid
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                            : 'bg-amber-100 text-amber-900 border border-amber-300'
-                        }`}
-                      >
-                        {phoneValidation.isValid
-                          ? `✓ Valid (${phoneValidation.cleanNumber.length} digit)`
-                          : `Min. 9 digit (${whatsapp.replace(/\D/g, '').length}/9)`}
+        <div id="order-form-modal-body" className="p-5 sm:p-8 overflow-y-auto space-y-6">
+          {createdOrder ? (
+            /* DEDICATED INVOICE RESMI SCREEN */
+            <div className="space-y-6 animate-in fade-in duration-300" id="checkout-invoice-panel">
+              {/* Congratulatory Top Card */}
+              <div className="bg-gradient-to-r from-emerald-950 via-[#2E6F40] to-emerald-800 text-white p-5 sm:p-6 rounded-2xl shadow-lg border border-emerald-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0 shadow-inner">
+                    <CheckCircle2 className="w-7 h-7 text-[#F3C623]" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-2xs">
+                        ✓ Invoice Resmi Berhasil Diterbitkan
                       </span>
-                    )}
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={whatsapp}
-                    onChange={(e) => handlePhoneInputChange(e.target.value)}
-                    placeholder={t('order.phone_placeholder', 'Contoh: 081234567890 (Hanya Angka)')}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:outline-none text-sm bg-white shadow-2xs font-mono ${
-                      whatsapp && phoneValidation && !phoneValidation.isValid
-                        ? 'border-amber-400 focus:ring-amber-500'
-                        : 'border-gray-200 focus:ring-[#2E6F40]'
-                    }`}
-                  />
-                  <p className="text-[10px] text-gray-500 mt-1">
-                    {lang === 'en'
-                      ? 'Only numbers accepted (min. 9 digits). Used for instant delivery WhatsApp notification.'
-                      : 'Hanya angka yang diterima (min. 9 digit). Digunakan untuk konfirmasi pesanan & kurir via WhatsApp.'}
-                  </p>
+                      <span className="text-xs text-emerald-200 font-mono font-bold">
+                        {createdOrder.invoiceNumber || createdOrder.id}
+                      </span>
+                    </div>
+                    <h4 className="text-lg sm:text-xl font-black text-white mt-1">
+                      Pesanan Anda Siap &amp; Menunggu Pembayaran
+                    </h4>
+                    <p className="text-xs text-emerald-100/90 leading-relaxed">
+                      Lakukan transfer sesuai total nominal ke Rekening BCA di bawah ini atau unduh berkas PDF resmi.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCreatedOrder(null);
+                      setFormError(null);
+                    }}
+                    className="w-full sm:w-auto bg-white/15 hover:bg-white/25 text-white text-xs font-black px-4 py-2.5 rounded-xl border border-white/30 transition cursor-pointer active:scale-95 flex items-center justify-center gap-2 shadow-xs"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span>Buat Pesanan Baru / Ubah Formulir</span>
+                  </button>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
-                  <span>{t('order.email', 'Email (Untuk Lampiran Invoice)')}</span>
-                  <span className="text-[10px] text-gray-400 font-semibold">Format RFC 5322 Validated</span>
-                </label>
-                <input
-                  type="email"
-                  value={customerEmail}
-                  onChange={(e) => setCustomerEmail(e.target.value)}
-                  placeholder={t('order.email_placeholder', 'Contoh: budi.santoso@email.com (opsional)')}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
-                  <span>
-                    {t('order.address', 'Alamat Kirim Lengkap')} <span className="text-red-500">*</span>
-                  </span>
-                  <span className="text-[10px] text-gray-400 font-semibold">Sanitized Address</span>
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder={t(
-                    'order.address_placeholder',
-                    'Jalan, Nomor Rumah, RT/RW, Kelurahan, Kecamatan, Kota, Kode Pos'
-                  )}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
-                />
-              </div>
+              {/* The Official Printable & Downloadable Invoice Component */}
+              <InvoiceView
+                order={createdOrder}
+                company={company}
+                onClose={onClose}
+              />
             </div>
+          ) : (
+            <>
+              {/* Header Subtitle Banner */}
+              <div className="text-center pb-2 border-b border-gray-100">
+                <span className="bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40 inline-flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-yellow-800" />
+                  {t('order.tag', 'Formulir Pesanan Resmi')}
+                </span>
+                <h4 className="text-xl sm:text-2xl font-black text-[#2E6F40] mt-2">
+                  {t('order.title', 'Keranjang Belanja & Otomatisasi Kurir')}
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-xl mx-auto leading-relaxed">
+                  {t(
+                    'order.subtitle',
+                    'Pilih menu katering, tentukan titik lokasi koordinat, pilih armada kurir (Gojek / Grab / Lalamove / Toko), lalu buat order untuk mendapatkan Invoice Resmi otomatis.'
+                  )}
+                </p>
+              </div>
 
-            {/* 2. DAFTAR PRODUK PILIHAN (KERANJANG & KATALOG MENU) */}
-            <div className="space-y-4 border-b border-gray-100 pb-8">
+              {formError && (
+                <div className="mb-6 bg-red-50 border-2 border-red-300 text-red-800 px-4 py-3.5 rounded-2xl text-xs sm:text-sm flex items-center gap-3 shadow-2xs">
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
+                  <div className="flex-1 font-semibold">{formError}</div>
+                </div>
+              )}
+
+              <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); handleCreateOrder(); }}>
+                {/* 1. INFORMASI PELANGGAN */}
+                <div className="space-y-4 border-b border-gray-100 pb-8">
+                  <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
+                    <UserCheck className="w-5 h-5 mr-2 text-[#4A9E60]" />
+                    <span>{t('order.step1', '1. Informasi Pelanggan')}</span>
+                  </h4>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                        <span>
+                          {t('order.name', 'Nama Lengkap')} <span className="text-red-500">*</span>
+                        </span>
+                        <span className="text-[10px] text-gray-400 font-semibold">XSS Sanitized</span>
+                      </label>
+                      <input
+                        id="input-customer-name"
+                        type="text"
+                        required
+                        value={customerName}
+                        onChange={(e) => {
+                          setCustomerName(e.target.value);
+                          if (formError) setFormError(null);
+                        }}
+                        placeholder={t('order.name_placeholder', 'Contoh: Budi Santoso')}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                        <span>
+                          {t('order.phone', 'Nomor WhatsApp / Telepon')} <span className="text-red-500">*</span>
+                        </span>
+                        {phoneValidation && (
+                          <span
+                            className={`text-[10px] font-black px-2 py-0.5 rounded-md ${
+                              phoneValidation.isValid
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : 'bg-amber-100 text-amber-900 border border-amber-300'
+                            }`}
+                          >
+                            {phoneValidation.isValid
+                              ? `✓ Valid (${phoneValidation.cleanNumber.length} digit)`
+                              : `Min. 9 digit (${whatsapp.replace(/\D/g, '').length}/9)`}
+                          </span>
+                        )}
+                      </label>
+                      <input
+                        id="input-whatsapp"
+                        type="tel"
+                        required
+                        value={whatsapp}
+                        onChange={(e) => handlePhoneInputChange(e.target.value)}
+                        placeholder={t('order.phone_placeholder', 'Contoh: 081234567890 (Hanya Angka)')}
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:outline-none text-sm bg-white shadow-2xs font-mono ${
+                          whatsapp && phoneValidation && !phoneValidation.isValid
+                            ? 'border-amber-400 focus:ring-amber-500'
+                            : 'border-gray-200 focus:ring-[#2E6F40]'
+                        }`}
+                      />
+                      <p className="text-[10px] text-gray-500 mt-1">
+                        {lang === 'en'
+                          ? 'Only numbers accepted (min. 9 digits). Used for instant delivery WhatsApp notification.'
+                          : 'Hanya angka yang diterima (min. 9 digit). Digunakan untuk konfirmasi pesanan & kurir via WhatsApp.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                      <span>{t('order.email', 'Email (Untuk Lampiran Invoice)')}</span>
+                      <span className="text-[10px] text-gray-400 font-semibold">Format RFC 5322 Validated</span>
+                    </label>
+                    <input
+                      id="input-email"
+                      type="email"
+                      value={customerEmail}
+                      onChange={(e) => {
+                        setCustomerEmail(e.target.value);
+                        if (formError) setFormError(null);
+                      }}
+                      placeholder={t('order.email_placeholder', 'Contoh: budi.santoso@email.com (opsional)')}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                      <span>
+                        {t('order.address', 'Alamat Kirim Lengkap')} <span className="text-red-500">*</span>
+                      </span>
+                      <span className="text-[10px] text-gray-400 font-semibold">Sanitized Address</span>
+                    </label>
+                    <textarea
+                      id="input-address"
+                      required
+                      rows={3}
+                      value={address}
+                      onChange={(e) => {
+                        const newAddr = e.target.value;
+                        setAddress(newAddr);
+                        if (formError) setFormError(null);
+                        if (!searchQuery || searchQuery === address) {
+                          setSearchQuery(newAddr);
+                        }
+                      }}
+                      placeholder={t(
+                        'order.address_placeholder',
+                        'Jalan, Nomor Rumah, RT/RW, Kelurahan, Kecamatan, Kota, Kode Pos'
+                      )}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                    />
+                  </div>
+                </div>
+
+                {/* 2. DAFTAR PRODUK PILIHAN (KERANJANG & KATALOG MENU) */}
+                <div id="section-keranjang" className="space-y-4 border-b border-gray-100 pb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                   <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
@@ -1350,7 +1504,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                   {/* Search Results Dropdown */}
                   {showSearchResults && searchResults.length > 0 && (
-                    <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
                       {searchResults.map((res, i) => (
                         <div
                           key={i}
@@ -1365,34 +1519,56 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                       ))}
                     </div>
                   )}
-                </div>
 
-                {/* Quick Presets */}
-                <div>
-                  <label className="block text-[11px] font-bold text-gray-500 mb-1.5">
-                    {t('order.or_select_preset', 'Atau Pilih Preset Titik Cepat Jabodetabek:')}
-                  </label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {QUICK_LOCATION_PRESETS.map((preset) => {
-                      const isMatch = Math.abs(destLat - preset.lat) < 0.001 && Math.abs(destLng - preset.lng) < 0.001;
-                      return (
-                        <button
-                          key={preset.name}
-                          type="button"
-                          onClick={() => {
-                            setSearchQuery(preset.name);
-                            updateCoordinatesAndDistance(preset.lat, preset.lng, preset.name);
-                          }}
-                          className={`text-[11px] px-2.5 py-1 rounded-lg border font-semibold transition cursor-pointer ${
-                            isMatch
-                              ? 'bg-[#2E6F40] text-white border-[#2E6F40] shadow-2xs'
-                              : 'bg-gray-100 hover:bg-emerald-50 text-gray-700 border-gray-200'
-                          }`}
-                        >
-                          {preset.name}
-                        </button>
-                      );
-                    })}
+                  {/* Address from Step 1 synchronization card */}
+                  {address && address.trim().length > 0 && (
+                    <div className="mt-2.5 p-3 bg-emerald-50/90 border border-emerald-300 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+                      <div className="flex items-start sm:items-center gap-2 overflow-hidden">
+                        <MapPin className="w-4 h-4 text-[#2E6F40] shrink-0 mt-0.5 sm:mt-0" />
+                        <div className="text-gray-800">
+                          <span className="font-extrabold text-[#2E6F40]">Alamat Tujuan (Langkah 1):</span>{' '}
+                          <span className="text-gray-700 font-medium line-clamp-1">{address}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery(address);
+                          handleCalculateOngkir();
+                        }}
+                        disabled={isCalculatingOngkir}
+                        className="shrink-0 bg-[#2E6F40] hover:bg-green-800 disabled:opacity-75 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg border border-emerald-600 transition cursor-pointer shadow-2xs self-end sm:self-auto flex items-center gap-1"
+                      >
+                        <Calculator className="w-3 h-3" />
+                        <span>{isCalculatingOngkir ? 'Menghitung...' : 'Hitung Ongkir Alamat Ini'}</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Quick Preset Locations */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                    <span className="text-[11px] font-bold text-gray-500 mr-1 flex items-center gap-1">
+                      <Compass className="w-3.5 h-3.5 text-[#2E6F40]" />
+                      {lang === 'en' ? 'Quick Preset:' : 'Preset Cepat Area:'}
+                    </span>
+                    {QUICK_LOCATION_PRESETS.map((loc, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery(loc.name);
+                          if (!address) setAddress(loc.name);
+                          updateCoordinatesAndDistance(loc.lat, loc.lng, loc.name);
+                        }}
+                        className={`text-[11px] px-2.5 py-1 rounded-lg border transition font-medium cursor-pointer ${
+                          Math.abs(destLat - loc.lat) < 0.005 && Math.abs(destLng - loc.lng) < 0.005
+                            ? 'bg-emerald-100 text-[#2E6F40] border-emerald-400 font-bold shadow-2xs'
+                            : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-200'
+                        }`}
+                      >
+                        {loc.name}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
@@ -1711,15 +1887,6 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                         </span>
                                       </div>
 
-                                      <div className="text-[11px] text-gray-500 mt-1 flex flex-wrap items-center gap-2">
-                                        <span>{courier.description}</span>
-                                        <span className="text-gray-300">•</span>
-                                        <span className="flex items-center gap-1 text-gray-700 font-semibold">
-                                          <Clock className="w-3 h-3 text-emerald-700" />
-                                          <span>{courier.estTime || courier.estimatedTime}</span>
-                                        </span>
-                                      </div>
-
                                       {!isAvailable && (
                                         <div className="mt-1 inline-block text-[10px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-md border border-red-200">
                                           {courier.statusText || t('order.out_of_store_coverage', 'Di luar area Kurir Toko')}
@@ -1800,70 +1967,87 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
               </p>
             </div>
 
-            {/* Action Button: Buat Order & Terbitkan Invoice */}
-            {!createdOrder && (
-              <div className="space-y-3">
-                {hasStockIssues && (
-                  <div className="p-3.5 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900 font-bold flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-                      <span>
-                        {lang === 'en'
-                          ? 'Resolve stock quantity issues above before proceeding to invoice.'
-                          : 'Selesaikan penyesuaian jumlah stok di atas sebelum menerbitkan invoice resmi.'}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleAutoAdjustStock}
-                      className="underline text-amber-800 hover:text-amber-950 font-black cursor-pointer shrink-0"
-                    >
-                      {lang === 'en' ? 'Auto-Fix Now' : 'Perbaiki Otomatis'}
-                    </button>
+            {/* Action Button & Instant Feedback Banner: Buat Order & Terbitkan Invoice */}
+            <div className="space-y-4 pt-2">
+              {hasStockIssues && (
+                <div className="p-3.5 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900 font-bold flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+                    <span>
+                      {lang === 'en'
+                        ? 'Resolve stock quantity issues above before proceeding to invoice.'
+                        : 'Selesaikan penyesuaian jumlah stok di atas sebelum menerbitkan invoice resmi.'}
+                    </span>
                   </div>
-                )}
-
-                <button
-                  type="button"
-                  id="btn-buat-order"
-                  onClick={() => handleCreateOrder()}
-                  disabled={hasStockIssues}
-                  className={`w-full font-extrabold py-4 px-6 rounded-2xl shadow-xl transition duration-200 flex items-center justify-center space-x-2 text-base ${
-                    hasStockIssues
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 cursor-pointer transform hover:-translate-y-0.5 active:scale-98'
-                  }`}
-                >
-                  <ReceiptText className="w-5 h-5 text-green-950" />
-                  <span>{t('order.btn_create_invoice', 'Buat Order & Terbitkan Invoice Resmi')}</span>
-                </button>
-              </div>
-            )}
-
-            {/* 5. INVOICE RESMI & INSTRUKSI PEMBAYARAN */}
-            {createdOrder && (
-              <div className="space-y-6 pt-4" id="checkout-invoice-panel">
-                <div className="text-center">
-                  <span className="bg-emerald-100 text-emerald-900 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-300">
-                    {t('order.step5', 'Langkah Terakhir: Pembayaran')}
-                  </span>
-                  <h4 className="text-2xl sm:text-3xl font-black text-[#2E6F40] mt-2">
-                    {t('order.invoice_issued', 'Invoice Pesanan Telah Terbit')}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-lg mx-auto">
-                    {t(
-                      'order.invoice_sub',
-                      'Data pesanan Anda telah dikonversi menjadi Invoice Resmi berformat siap cetak & unduh.'
-                    )}
-                  </p>
+                  <button
+                    type="button"
+                    onClick={handleAutoAdjustStock}
+                    className="underline text-amber-800 hover:text-amber-950 font-black cursor-pointer shrink-0"
+                  >
+                    {lang === 'en' ? 'Auto-Fix Now' : 'Perbaiki Otomatis'}
+                  </button>
                 </div>
+              )}
 
-                <InvoiceView order={createdOrder} company={company} />
-              </div>
-            )}
+              {formError && (
+                <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-red-800 text-xs sm:text-sm animate-in fade-in shadow-xs">
+                  <div className="flex items-start gap-2.5">
+                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="block font-black text-red-950 text-xs sm:text-sm">
+                        Periksa Kembali Data Pemesanan:
+                      </strong>
+                      <span className="leading-relaxed font-medium">{formError}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!customerName.trim() || customerName.length < 2) scrollToElement('input-customer-name');
+                      else if (!whatsapp.trim() || (phoneValidation && !phoneValidation.isValid)) scrollToElement('input-whatsapp');
+                      else if (!address.trim() || address.length < 5) scrollToElement('input-address');
+                      else if (cartItems.length === 0) {
+                        setShowCatalogMenuPicker(true);
+                        scrollToElement('section-keranjang');
+                      } else scrollToElement('section-kurir');
+                    }}
+                    className="shrink-0 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer active:scale-95 shadow-2xs flex items-center justify-center gap-1"
+                  >
+                    <span>Perbaiki Field Sekarang</span>
+                    <span>&rarr;</span>
+                  </button>
+                </div>
+              )}
+
+              <button
+                type="button"
+                id="btn-buat-order"
+                onClick={() => handleCreateOrder()}
+                disabled={hasStockIssues || isSubmittingOrder}
+                className={`w-full font-extrabold py-4 px-6 rounded-2xl shadow-xl transition duration-200 flex items-center justify-center space-x-2 text-base ${
+                  hasStockIssues || isSubmittingOrder
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 cursor-pointer transform hover:-translate-y-0.5 active:scale-98'
+                }`}
+              >
+                {isSubmittingOrder ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin text-green-950" />
+                    <span>Memproses Order &amp; Menerbitkan Invoice...</span>
+                  </>
+                ) : (
+                  <>
+                    <ReceiptText className="w-5 h-5 text-green-950" />
+                    <span>{t('order.btn_create_invoice', 'Buat Order & Terbitkan Invoice Resmi')}</span>
+                  </>
+                )}
+              </button>
+            </div>
           </form>
-        </div>
-      </div>
+        </>
+      )}
     </div>
-  );
+  </div>
+</div>
+);
 };

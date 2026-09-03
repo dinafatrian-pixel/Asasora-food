@@ -747,7 +747,7 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                   : 'border-gray-200 hover:border-green-300'
               }`}
             >
-              <div className="relative h-40 bg-gray-100 overflow-hidden">
+              <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
                 <img
                   src={prod.image}
                   alt={prod.name}

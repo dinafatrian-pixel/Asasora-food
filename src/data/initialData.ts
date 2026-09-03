@@ -71,9 +71,9 @@ export const initialCompanyInfo: CompanyInfo = {
   },
   cloudStorage: {
     provider: 'cloudinary',
-    cloudName: 'dmx8i2p7y',
+    cloudName: 'xhzjg0n0',
     uploadPreset: 'asasora_unsigned',
-    folder: 'asasora_media',
+    folder: 'asasora',
     autoOptimize: true,
     enabled: true,
   },
@@ -238,7 +238,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '20 - 45 Menit',
     estTime: '20 - 45 Menit',
-    description: 'Jarak * Rp 2.500 (Min. Rp 12.000). Cepat, praktis untuk nasi box & snack.',
+    description: '',
   },
   {
     id: 'grab-motor',
@@ -254,7 +254,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '20 - 45 Menit',
     estTime: '20 - 45 Menit',
-    description: 'Jarak * Rp 2.600 (Min. Rp 13.000). Pengantaran higienis dengan thermal bag.',
+    description: '',
   },
   {
     id: 'lalamove-motor',
@@ -270,7 +270,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '25 - 50 Menit',
     estTime: '25 - 50 Menit',
-    description: 'Jarak * Rp 2.200 (Min. Rp 10.000). Tarif hemat pengantaran langsung titik.',
+    description: '',
   },
   {
     id: 'gocar-delivery',
@@ -286,7 +286,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '35 - 60 Menit',
     estTime: '35 - 60 Menit',
-    description: 'Jarak * Rp 4.500 (Min. Rp 20.000). Mobil roda 4 aman guncangan & hujan untuk porsi sedang.',
+    description: '',
   },
   {
     id: 'grab-car',
@@ -302,7 +302,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '35 - 60 Menit',
     estTime: '35 - 60 Menit',
-    description: 'Jarak * Rp 4.700 (Min. Rp 22.000). Nyaman & aman untuk tumpeng mini & prasmanan mini.',
+    description: '',
   },
   {
     id: 'lalamove-car',
@@ -318,7 +318,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: '45 - 90 Menit',
     estTime: '45 - 90 Menit',
-    description: 'Jarak * Rp 5.000 (Min. Rp 35.000). Kapasitas besar luas untuk prasmanan partai besar.',
+    description: '',
   },
   {
     id: 'toko-reguler',
@@ -334,7 +334,7 @@ export const initialShippingMethods: ShippingMethod[] = [
     minKm: 1,
     estimatedTime: 'Terjadwal Dapur Asasora',
     estTime: 'Terjadwal Sesuai Acara',
-    description: '<5 Km: Rp 20.000 | 5-12 Km: Rp 35.000 | >12 Km: Di luar area Kurir Toko.',
+    description: '',
   },
 ];
 

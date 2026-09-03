@@ -328,8 +328,8 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                     : 'border-gray-200'
                 }`}
               >
-                {/* Product Image & Badges */}
-                <div className="relative h-48 bg-gray-100 overflow-hidden">
+                {/* Product Image & Badges (Rasio 1:1 / 1200x1200px) */}
+                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}

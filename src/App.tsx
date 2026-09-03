@@ -77,7 +77,13 @@ export default function App() {
       try {
         const parsed: ShippingMethod[] = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.map((m) => ({
+            ...m,
+            description:
+              m.description && (m.description.includes('Jarak *') || m.description.includes('Min. Rp'))
+                ? ''
+                : m.description,
+          }));
         }
       } catch (e) {
         return initialShippingMethods;

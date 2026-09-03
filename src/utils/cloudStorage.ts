@@ -10,9 +10,9 @@ export interface CloudStorageConfig {
 
 export const DEFAULT_CLOUDINARY_CONFIG: CloudStorageConfig = {
   provider: 'cloudinary',
-  cloudName: 'dmx8i2p7y',
+  cloudName: 'xhzjg0n0',
   uploadPreset: 'asasora_unsigned',
-  folder: 'asasora_media',
+  folder: 'asasora',
   autoOptimize: true,
   enabled: true,
 };
@@ -27,7 +27,15 @@ export function getSavedCloudConfig(): CloudStorageConfig {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return { ...DEFAULT_CLOUDINARY_CONFIG, ...parsed };
+      const merged = { ...DEFAULT_CLOUDINARY_CONFIG, ...parsed };
+      // If legacy cloudName is present, prioritize permanent production credentials
+      if (merged.cloudName === 'dmx8i2p7y' || !merged.cloudName) {
+        merged.cloudName = 'xhzjg0n0';
+        merged.folder = 'asasora';
+        merged.uploadPreset = 'asasora_unsigned';
+        saveCloudConfig(merged);
+      }
+      return merged;
     }
   } catch (e) {
     // Ignore parse error

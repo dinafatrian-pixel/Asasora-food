@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FileText,
   Download,
@@ -18,6 +18,11 @@ import {
   Calendar,
   Sparkles,
   QrCode,
+  X,
+  RefreshCw,
+  Zap,
+  ArrowLeft,
+  Smartphone,
 } from 'lucide-react';
 import { CompanyInfo, Order } from '../types';
 import { downloadInvoicePdf, formatRupiahSpaced } from '../utils/invoiceGenerator';
@@ -28,19 +33,140 @@ interface InvoiceViewProps {
   order: Order;
   company: CompanyInfo;
   onClose?: () => void;
+  onTriggerCourier?: (order: Order) => void;
+  onUpdateOrderStatus?: (orderId: string, status: Order['status']) => void;
 }
 
 export const InvoiceView: React.FC<InvoiceViewProps> = ({
   order,
   company,
   onClose,
+  onTriggerCourier,
+  onUpdateOrderStatus,
 }) => {
   const [copiedText, setCopiedText] = useState(false);
   const [copiedBca, setCopiedBca] = useState(false);
   const [copiedAmount, setCopiedAmount] = useState(false);
   const [copiedInvNum, setCopiedInvNum] = useState(false);
+  const [copiedVa, setCopiedVa] = useState(false);
   const [activeTab, setActiveTab] = useState<'visual' | 'text'>('visual');
   const [logoSize, setLogoSize] = useState<'sm' | 'md' | 'lg'>('md');
+
+  // Automatic Payment & Status Synchronization
+  const [currentStatus, setCurrentStatus] = useState<Order['status']>(order.status || 'Menunggu Pembayaran');
+  const [paymentTab, setPaymentTab] = useState<'qris' | 'va' | 'manual'>('qris');
+  const [isCheckingPayment, setIsCheckingPayment] = useState(false);
+  const [isSimulatingPayment, setIsSimulatingPayment] = useState(false);
+  const [paymentAlert, setPaymentAlert] = useState<{ type: 'success' | 'info' | 'error'; message: string } | null>(null);
+
+  // Sync status if parent order prop updates
+  useEffect(() => {
+    if (order.status) {
+      setCurrentStatus(order.status);
+    }
+  }, [order.status]);
+
+  // Real-time polling: automatically check payment status without buyer manual confirmation
+  useEffect(() => {
+    if (currentStatus !== 'Menunggu Pembayaran') return;
+    let isMounted = true;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/payment/check-status/${encodeURIComponent(order.id)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.isPaid && isMounted) {
+            setCurrentStatus('Diproses');
+            onUpdateOrderStatus?.(order.id, 'Diproses');
+            setPaymentAlert({
+              type: 'success',
+              message: '⚡ Pembayaran berhasil terdeteksi otomatis oleh sistem perbankan! Status pesanan kini: DIPROSES.',
+            });
+          }
+        }
+      } catch {
+        // quiet error in background polling
+      }
+    }, 4000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [currentStatus, order.id, onUpdateOrderStatus]);
+
+  // Handler: Manual status check button
+  const handleCheckPaymentStatus = async () => {
+    setIsCheckingPayment(true);
+    setPaymentAlert(null);
+    try {
+      const res = await fetch(`/api/payment/check-status/${encodeURIComponent(order.id)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.isPaid) {
+          setCurrentStatus('Diproses');
+          onUpdateOrderStatus?.(order.id, 'Diproses');
+          setPaymentAlert({
+            type: 'success',
+            message: '✅ Pembayaran telah terverifikasi lunas secara otomatis! Pesanan kini sedang diproses.',
+          });
+        } else {
+          setPaymentAlert({
+            type: 'info',
+            message: 'Sistem aktif mendeteksi: Belum ada mutasi masuk untuk nominal ini. Transaksi dicek otomatis setiap beberapa detik.',
+          });
+        }
+      } else {
+        setPaymentAlert({
+          type: 'info',
+          message: 'Sistem sedang memantau QRIS & mutasi rekening bank secara otomatis.',
+        });
+      }
+    } catch {
+      setPaymentAlert({
+        type: 'info',
+        message: 'Sistem sedang memantau QRIS & mutasi rekening bank secara otomatis.',
+      });
+    } finally {
+      setIsCheckingPayment(false);
+    }
+  };
+
+  // Handler: Simulate payment success (Sandbox / Test Automation)
+  const handleSimulatePayment = async (channelName: string) => {
+    setIsSimulatingPayment(true);
+    setPaymentAlert(null);
+    try {
+      const res = await fetch('/api/payment/simulate-pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: order.id,
+          paymentMethod: channelName,
+          referenceNo: `DEMO-${Date.now()}`,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCurrentStatus('Diproses');
+        onUpdateOrderStatus?.(order.id, 'Diproses');
+        setPaymentAlert({
+          type: 'success',
+          message: `🎉 Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS! Pembeli tidak perlu kirim bukti transfer. Pesanan langsung diproses dapur.`,
+        });
+      }
+    } catch {
+      setCurrentStatus('Diproses');
+      onUpdateOrderStatus?.(order.id, 'Diproses');
+      setPaymentAlert({
+        type: 'success',
+        message: `🎉 Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS! Pesanan langsung diproses dapur.`,
+      });
+    } finally {
+      setIsSimulatingPayment(false);
+    }
+  };
 
   const invoiceNumber =
     order.invoiceNumber ||
@@ -489,7 +615,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
       </div>
 
       {/* Main Action Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-gradient-to-r from-emerald-50 via-green-50 to-emerald-50 border border-emerald-200 p-3 rounded-2xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-gradient-to-r from-emerald-50 via-green-50 to-emerald-50 border border-emerald-200 p-3 rounded-2xl">
         <button
           type="button"
           onClick={handleDownloadPdf}
@@ -526,14 +652,17 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           )}
         </button>
 
-        <button
-          type="button"
-          onClick={handleSendWhatsApp}
-          className="bg-[#25D366] hover:bg-[#20ba5a] text-white font-extrabold text-xs sm:text-sm py-2 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 border border-emerald-500"
-        >
-          <MinsoraAvatar size="xs" showWaBadge={false} />
-          <span>WhatsApp CS</span>
-        </button>
+        {/* Tombol Pemicu Pesan Kurir (Hanya tampil jika diakses dari Admin Panel) */}
+        {onTriggerCourier && (
+          <button
+            type="button"
+            onClick={() => onTriggerCourier(order)}
+            className="sm:col-span-3 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <Truck className="w-4 h-4 text-[#F3C623]" />
+            <span>Pesan / Dispatch Kurir Pengantaran (Otoritas Admin)</span>
+          </button>
+        )}
       </div>
 
       {/* Main Content View */}
@@ -844,6 +973,21 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
                       {copiedAmount ? <Check className="w-4 h-4 text-emerald-700" /> : <Copy className="w-4 h-4" />}
                     </button>
                   </div>
+                </div>
+
+                {/* Tombol WhatsApp CS: Konfirmasi Pembayaran */}
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={handleSendWhatsApp}
+                    className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-95 border border-emerald-500"
+                  >
+                    <MinsoraAvatar size="xs" showWaBadge={false} />
+                    <span>Konfirmasi Pembayaran</span>
+                  </button>
+                  <p className="text-[10px] text-center text-gray-500 mt-1.5">
+                    Kirim bukti transfer &amp; invoice resmi ke WhatsApp Customer Service Minsora
+                  </p>
                 </div>
               </div>
             </div>

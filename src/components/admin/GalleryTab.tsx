@@ -258,8 +258,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   onChange={(e) => setCategory(e.target.value as any)}
                   className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-semibold"
                 >
+                  <option value="event">🏢 Even Perusahaan</option>
                   <option value="dapur">🍳 Fasilitas Dapur &amp; Produksi</option>
-                  <option value="event">🍱 Katering &amp; Prasmanan Event</option>
                   <option value="olahan">🍲 Olahan Pangan &amp; Frozen Food</option>
                   <option value="sertifikasi">📜 Sertifikasi &amp; Audit Mutu</option>
                 </select>
@@ -410,8 +410,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   }
                   className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-semibold"
                 >
+                  <option value="event">🏢 Even Perusahaan</option>
                   <option value="dapur">🍳 Fasilitas Dapur &amp; Produksi</option>
-                  <option value="event">🍱 Katering &amp; Prasmanan Event</option>
                   <option value="olahan">🍲 Olahan Pangan &amp; Frozen Food</option>
                   <option value="sertifikasi">📜 Sertifikasi &amp; Audit Mutu</option>
                 </select>
@@ -507,7 +507,7 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   }}
                 />
                 <span className="absolute top-1.5 left-1.5 bg-[#2E6F40] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">
-                  {item.category}
+                  {item.category === 'event' || item.category === 'even perusahaan' || item.category === 'event-perusahaan' ? 'Even Perusahaan' : item.category}
                 </span>
                 {isCurrentEditing && (
                   <span className="absolute bottom-1.5 left-1.5 bg-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-sm animate-pulse">

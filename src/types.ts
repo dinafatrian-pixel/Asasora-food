@@ -117,7 +117,7 @@ export interface ClientPartner {
 export interface GalleryItem {
   id: string;
   title: string;
-  category: 'dapur' | 'event' | 'olahan' | 'sertifikasi' | 'medis';
+  category: 'dapur' | 'event' | 'olahan' | 'sertifikasi' | 'medis' | 'even perusahaan' | 'event-perusahaan' | string;
   image?: string;
   imageUrl?: string;
   caption: string;

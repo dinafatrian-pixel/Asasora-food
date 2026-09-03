@@ -16,12 +16,20 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallery }) => {
   const filterTabs = [
     { id: 'all', label: t('gallery.tab_all', 'Semua Dokumentasi') },
     { id: 'dapur', label: t('gallery.tab_kitchen', '🍳 Dapur & Sanitasi') },
-    { id: 'event', label: t('gallery.tab_event', '🍱 Event & Nasi Box') },
+    { id: 'event', label: t('gallery.tab_event', '🏢 Even Perusahaan') },
     { id: 'olahan', label: t('gallery.tab_frozen', '🍲 Olahan & Frozen') },
+    { id: 'sertifikasi', label: '📜 Sertifikasi & Mutu' },
   ];
 
   const filteredGallery = gallery.filter((item) => {
     if (activeFilter === 'all') return true;
+    if (activeFilter === 'event') {
+      return (
+        item.category === 'event' ||
+        item.category === 'even perusahaan' ||
+        item.category === 'event-perusahaan'
+      );
+    }
     return item.category === activeFilter;
   });
 
