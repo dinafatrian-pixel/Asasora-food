@@ -84,6 +84,10 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallery }) => {
                   <img
                     src={item.image || item.imageUrl}
                     alt={item.title}
+                    width={400}
+                    height={288}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                   />
                 </div>
@@ -94,7 +98,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallery }) => {
                     <Eye className="w-3.5 h-3.5" />
                     <span>{t('gallery.view_detail', 'Lihat Detail Foto')}</span>
                   </div>
-                  <h4 className="font-bold text-base leading-snug">{item.title}</h4>
+                  <h3 className="font-bold text-base leading-snug">{item.title}</h3>
                   <p className="text-xs text-gray-200 mt-1 line-clamp-2">{item.caption}</p>
                 </div>
               </div>

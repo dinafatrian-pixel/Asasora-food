@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import { CartItem, CompanyInfo, Order } from '../types';
 
 export interface InvoiceData {
@@ -241,6 +240,7 @@ export async function downloadInvoicePdf(
   },
   companyData?: CompanyInfo
 ) {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',

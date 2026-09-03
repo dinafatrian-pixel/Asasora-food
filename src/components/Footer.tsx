@@ -53,7 +53,7 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
   };
 
   return (
-    <footer className="bg-gray-900 text-white border-t border-gray-800">
+    <footer role="contentinfo" className="bg-gray-900 text-white border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Col */}
@@ -62,6 +62,10 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
               <img
                 src={company.logoUrl || '/logo-asasora.png'}
                 alt={`Logo ${company.name || 'PT. ASASORA BIO HEALTHORA'}`}
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
                 className="h-10 w-10 object-contain rounded-xl bg-white p-0.5"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/logo-asasora.svg';
@@ -91,9 +95,9 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
+            <p className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
               {t('footer.nav_title', 'Navigasi Cepat')}
-            </h4>
+            </p>
             <ul className="space-y-2 text-xs text-gray-300">
               <li>
                 <button
@@ -132,9 +136,9 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
 
           {/* Dokumen & Informasi */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
+            <p className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
               {t('footer.legality_title', 'Legalitas & Dokumen')}
-            </h4>
+            </p>
             <ul className="space-y-2 text-xs text-gray-300">
               <li>
                 <button
@@ -181,9 +185,9 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
 
           {/* Rekening & Kontak */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
+            <p className="text-xs font-bold text-[#F3C623] uppercase tracking-wider">
               {t('footer.payment_info', 'Informasi Pembayaran')}
-            </h4>
+            </p>
             <div className="bg-gray-800/80 p-3.5 rounded-xl border border-gray-700 space-y-1.5 text-xs">
               <div className="font-bold text-gray-200">
                 {t('footer.bank_account', 'Rekening Bank BCA Resmi:')}
@@ -218,9 +222,9 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h4 className="text-xs sm:text-sm font-bold text-white">
+                  <h3 className="text-xs sm:text-sm font-bold text-white">
                     {lang === 'en' ? 'Live Visitor Traffic & GA4 Analytics' : 'Statistik Trafik Pengunjung & Google Analytics'}
-                  </h4>
+                  </h3>
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-900/60 border border-emerald-700/60 px-2 py-0.5 rounded-full">
                     <Zap className="w-3 h-3 text-[#F3C623]" />
                     {lang === 'en' ? 'GA4 Accelerated' : 'GA4 Terakselerasi'}

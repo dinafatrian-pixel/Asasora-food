@@ -264,9 +264,9 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
           <span className="bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40">
             {t('catalog.tag', 'Pilihan Produk')}
           </span>
-          <h3 className="text-2xl sm:text-4xl font-black text-[#2E6F40] mt-3">
+          <h2 className="text-2xl sm:text-4xl font-black text-[#2E6F40] mt-3">
             {t('catalog.title', 'Pilihan Produk')}
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-gray-500 mt-2 leading-relaxed">
             {t(
               'catalog.subtitle',
@@ -294,10 +294,14 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
             ))}
           </div>
 
-          {/* Search Input */}
+          {/* Search Input with Explicit Accessible Label */}
           <div className="w-full md:w-80">
             <div className="relative w-full">
+              <label htmlFor="catalog-search" className="sr-only">
+                {t('catalog.search_placeholder', 'Cari produk katering atau camilan...')}
+              </label>
               <input
+                id="catalog-search"
                 type="text"
                 placeholder={t('catalog.search_placeholder', 'Cari produk katering atau camilan...')}
                 value={searchQuery}
@@ -333,8 +337,11 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    width={300}
+                    height={300}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
 
                   {/* Halal Badge */}
@@ -354,9 +361,9 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                 {/* Product Body */}
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div>
-                    <h4 className="font-extrabold text-gray-900 text-sm sm:text-base line-clamp-1 group-hover:text-[#2E6F40] transition">
+                    <h3 className="font-extrabold text-gray-900 text-sm sm:text-base line-clamp-1 group-hover:text-[#2E6F40] transition">
                       {product.name}
-                    </h4>
+                    </h3>
                     <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
                       {product.description}
                     </p>

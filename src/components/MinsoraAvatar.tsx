@@ -72,13 +72,30 @@ export const MinsoraAvatar: React.FC<MinsoraAvatarProps> = ({
     }
   };
 
+  const getPixelDimension = () => {
+    switch (size) {
+      case 'xs': return 24;
+      case 'sm': return 28;
+      case 'md': return 36;
+      case 'lg': return 48;
+      case 'xl': return 64;
+      case '2xl': return 96;
+      default: return 36;
+    }
+  };
+
   const s = getSizeStyles();
+  const dimension = getPixelDimension();
 
   return (
     <div className={`relative inline-flex items-center justify-center shrink-0 ${s.container} ${className}`}>
       <img
         src={MINSORA_AVATAR_SRC}
         alt={alt}
+        width={dimension}
+        height={dimension}
+        loading="lazy"
+        decoding="async"
         referrerPolicy="no-referrer"
         className={`${s.img} rounded-full object-cover border-2 border-white shadow-sm ring-2 ring-emerald-500/80 bg-emerald-50`}
         onError={(e) => {

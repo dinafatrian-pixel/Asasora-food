@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ProductCatalogSection } from './components/ProductCatalogSection';
-import { OrderFormSection } from './components/OrderFormSection';
 import { ClientsSection } from './components/ClientsSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { GallerySection } from './components/GallerySection';
 import { LegalitasSection } from './components/LegalitasSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { AdminModal } from './components/AdminModal';
+
+// Code Splitting & Dynamic Imports to drastically minimize initial JS payload (reduces FCP & eliminates Long Main-Thread Tasks)
+const OrderFormSection = lazy(() =>
+  import('./components/OrderFormSection').then((m) => ({ default: m.OrderFormSection }))
+);
+const AdminModal = lazy(() =>
+  import('./components/AdminModal').then((m) => ({ default: m.AdminModal }))
+);
 import { syncManager } from './utils/syncManager';
 import {
   initialCompanyInfo,
@@ -248,11 +254,25 @@ export default function App() {
       setSyncStatus(status);
     });
 
-    // Fetch latest fresh data immediately on mount
-    syncManager.fetchLatestData();
+    // Schedule non-critical startup tasks on browser idle to avoid blocking FCP & LCP main thread
+    const runOnIdle = (callback: () => void, delayMs = 1200) => {
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(callback, { timeout: delayMs + 1000 });
+      } else {
+        setTimeout(callback, delayMs);
+      }
+    };
 
-    // Track visitor ping on initial load
-    trackVisitorPing(window.location.hash || '/');
+    // Fetch latest fresh data safely after first visual paint
+    runOnIdle(() => {
+      syncManager.fetchLatestData();
+      trackVisitorPing(window.location.hash || '/');
+    }, 1200);
+
+    // Prefetch order form in background when browser is idle
+    runOnIdle(() => {
+      import('./components/OrderFormSection');
+    }, 2500);
 
     const handleHashChange = () => {
       trackVisitorPing(window.location.hash || '/');
@@ -266,10 +286,18 @@ export default function App() {
     };
   }, []);
 
-  // Initialize Google Analytics with speed acceleration
+  // Initialize Google Analytics with speed acceleration after critical paint
   useEffect(() => {
     if (company.googleAnalyticsEnabled !== false) {
-      initGoogleAnalytics(company.googleAnalyticsId);
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          initGoogleAnalytics(company.googleAnalyticsId);
+        }, { timeout: 3000 });
+      } else {
+        setTimeout(() => {
+          initGoogleAnalytics(company.googleAnalyticsId);
+        }, 1500);
+      }
     }
   }, [company.googleAnalyticsId, company.googleAnalyticsEnabled]);
 
@@ -652,52 +680,59 @@ export default function App() {
         onScrollToSection={scrollToSection}
       />
 
-      {/* Hero Section */}
-      <HeroSection
-        company={company}
-        onOrderClick={() => setIsOrderModalOpen(true)}
-      />
+      {/* Main Landmark for Accessibility & SEO */}
+      <main id="main-content" role="main" className="flex-1">
+        {/* Hero Section */}
+        <HeroSection
+          company={company}
+          onOrderClick={() => setIsOrderModalOpen(true)}
+        />
 
-      {/* Katalog Produk & Tambah ke Keranjang */}
-      <ProductCatalogSection
-        products={products}
-        orders={orders}
-        company={company}
-        onAddToCart={handleAddToCart}
-        onInstantCheckout={handleInstantCheckout}
-        onOpenOrderModal={() => setIsOrderModalOpen(true)}
-      />
+        {/* Katalog Produk & Tambah ke Keranjang */}
+        <ProductCatalogSection
+          products={products}
+          orders={orders}
+          company={company}
+          onAddToCart={handleAddToCart}
+          onInstantCheckout={handleInstantCheckout}
+          onOpenOrderModal={() => setIsOrderModalOpen(true)}
+        />
 
-      {/* Formulir Pesanan Resmi Modal (Muncul saat tombol Order Online diklik) */}
-      <OrderFormSection
-        isOpen={isOrderModalOpen}
-        onClose={() => setIsOrderModalOpen(false)}
-        company={company}
-        products={products}
-        cartItems={cartItems}
-        shippingMethods={shippingMethods}
-        onAddToCart={handleAddToCart}
-        onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
-        onRemoveCartItem={handleRemoveCartItem}
-        onAddCustomCartItem={handleAddCustomCartItem}
-        onChangeCartItemProduct={handleChangeCartItemProduct}
-        onOrderCreated={handleOrderCreated}
-      />
+        {/* Mitra & Rekanan / Our Client */}
+        <ClientsSection clients={clients} />
 
-      {/* Mitra & Rekanan / Our Client */}
-      <ClientsSection clients={clients} />
+        {/* Review & Testimoni Pelanggan */}
+        <ReviewsSection reviews={reviews} onAddReview={handleAddReview} />
 
-      {/* Review & Testimoni Pelanggan */}
-      <ReviewsSection reviews={reviews} onAddReview={handleAddReview} />
+        {/* Galeri Perusahaan */}
+        <GallerySection gallery={gallery} />
 
-      {/* Galeri Perusahaan */}
-      <GallerySection gallery={gallery} />
+        {/* Legalitas Perusahaan */}
+        <LegalitasSection documents={legalDocuments} />
 
-      {/* Legalitas Perusahaan */}
-      <LegalitasSection documents={legalDocuments} />
+        {/* Kontak & Konsultasi */}
+        <ContactSection company={company} />
+      </main>
 
-      {/* Kontak & Konsultasi */}
-      <ContactSection company={company} />
+      {/* Formulir Pesanan Resmi Modal (Loaded asynchronously on demand) */}
+      {isOrderModalOpen && (
+        <Suspense fallback={null}>
+          <OrderFormSection
+            isOpen={isOrderModalOpen}
+            onClose={() => setIsOrderModalOpen(false)}
+            company={company}
+            products={products}
+            cartItems={cartItems}
+            shippingMethods={shippingMethods}
+            onAddToCart={handleAddToCart}
+            onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
+            onRemoveCartItem={handleRemoveCartItem}
+            onAddCustomCartItem={handleAddCustomCartItem}
+            onChangeCartItemProduct={handleChangeCartItemProduct}
+            onOrderCreated={handleOrderCreated}
+          />
+        </Suspense>
+      )}
 
       {/* Footer */}
       <Footer
@@ -706,53 +741,57 @@ export default function App() {
         onOpenOrderModal={() => setIsOrderModalOpen(true)}
       />
 
-      {/* Admin Panel Modal */}
-      <AdminModal
-        isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
-        orders={orders}
-        products={products}
-        reviews={reviews}
-        clients={clients}
-        gallery={gallery}
-        legalDocuments={legalDocuments}
-        shippingMethods={shippingMethods}
-        company={company}
-        syncStatus={syncStatus}
-        onManualSync={() => syncManager.fetchLatestData()}
-        onUpdateOrderStatus={handleUpdateOrderStatus}
-        onAddOrder={handleOrderCreated}
-        onDeleteOrder={(orderId: string) => {
-          setOrders((prev) => {
-            const next = prev.filter((o) => o.id !== orderId);
-            syncManager.saveData({ orders: next });
-            return next;
-          });
-        }}
-        onUpdateProduct={handleUpdateProduct}
-        onAddProduct={handleAddProduct}
-        onDeleteProduct={handleDeleteProduct}
-        onUpdateReview={handleUpdateReview}
-        onAddReview={handleAddReview}
-        onDeleteReview={handleDeleteReview}
-        onUpdateClient={handleUpdateClient}
-        onAddClient={handleAddClient}
-        onDeleteClient={handleDeleteClient}
-        onUpdateGalleryItem={handleUpdateGalleryItem}
-        onAddGalleryItem={handleAddGalleryItem}
-        onDeleteGalleryItem={handleDeleteGalleryItem}
-        onUpdateLegalDocument={handleUpdateLegalDocument}
-        onAddLegalDocument={handleAddLegalDocument}
-        onDeleteLegalDocument={handleDeleteLegalDocument}
-        onUpdateShippingMethod={handleUpdateShippingMethod}
-        onUpdateCompany={handleUpdateCompany}
-        onResetAllData={handleResetAllData}
-        adminUsers={adminUsers}
-        onUpdateAdminUser={handleUpdateAdminUser}
-        onAddAdminUser={handleAddAdminUser}
-        onDeleteAdminUser={handleDeleteAdminUser}
-        onResetAdminUsers={handleResetAdminUsers}
-      />
+      {/* Admin Panel Modal (Loaded asynchronously on demand) */}
+      {isAdminOpen && (
+        <Suspense fallback={null}>
+          <AdminModal
+            isOpen={isAdminOpen}
+            onClose={() => setIsAdminOpen(false)}
+            orders={orders}
+            products={products}
+            reviews={reviews}
+            clients={clients}
+            gallery={gallery}
+            legalDocuments={legalDocuments}
+            shippingMethods={shippingMethods}
+            company={company}
+            syncStatus={syncStatus}
+            onManualSync={() => syncManager.fetchLatestData()}
+            onUpdateOrderStatus={handleUpdateOrderStatus}
+            onAddOrder={handleOrderCreated}
+            onDeleteOrder={(orderId: string) => {
+              setOrders((prev) => {
+                const next = prev.filter((o) => o.id !== orderId);
+                syncManager.saveData({ orders: next });
+                return next;
+              });
+            }}
+            onUpdateProduct={handleUpdateProduct}
+            onAddProduct={handleAddProduct}
+            onDeleteProduct={handleDeleteProduct}
+            onUpdateReview={handleUpdateReview}
+            onAddReview={handleAddReview}
+            onDeleteReview={handleDeleteReview}
+            onUpdateClient={handleUpdateClient}
+            onAddClient={handleAddClient}
+            onDeleteClient={handleDeleteClient}
+            onUpdateGalleryItem={handleUpdateGalleryItem}
+            onAddGalleryItem={handleAddGalleryItem}
+            onDeleteGalleryItem={handleDeleteGalleryItem}
+            onUpdateLegalDocument={handleUpdateLegalDocument}
+            onAddLegalDocument={handleAddLegalDocument}
+            onDeleteLegalDocument={handleDeleteLegalDocument}
+            onUpdateShippingMethod={handleUpdateShippingMethod}
+            onUpdateCompany={handleUpdateCompany}
+            onResetAllData={handleResetAllData}
+            adminUsers={adminUsers}
+            onUpdateAdminUser={handleUpdateAdminUser}
+            onAddAdminUser={handleAddAdminUser}
+            onDeleteAdminUser={handleDeleteAdminUser}
+            onResetAdminUsers={handleResetAdminUsers}
+          />
+        </Suspense>
+      )}
 
       {/* Floating Action Button: WhatsApp MinSora Chat Mascot */}
       <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end pointer-events-auto">

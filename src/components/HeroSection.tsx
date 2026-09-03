@@ -162,23 +162,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
               {/* Central Logo Container */}
               <div className="flex flex-col items-center text-center">
                 <div className="relative p-3 bg-white rounded-2xl shadow-xs border border-emerald-100 group-hover:shadow-md transition duration-300">
-                  <img
-                    src={halalLogo}
-                    alt="Logo Sertifikat Halal BPJPH Kemenag RI"
-                    className="h-28 sm:h-32 w-auto object-contain transition duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = DEFAULT_HALAL_LOGO;
-                    }}
-                  />
+                  <picture>
+                    <source srcSet={halalLogo} type="image/svg+xml" />
+                    <img
+                      src={halalLogo}
+                      alt="Logo Sertifikat Halal BPJPH Kemenag RI"
+                      width={128}
+                      height={128}
+                      fetchPriority="high"
+                      decoding="async"
+                      className="h-28 sm:h-32 w-auto object-contain transition duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = DEFAULT_HALAL_LOGO;
+                      }}
+                    />
+                  </picture>
                   <div className="absolute bottom-1 right-1 bg-[#F3C623] text-gray-900 p-1 rounded-full shadow-xs">
                     <CheckCircle2 className="w-3.5 h-3.5 text-green-950" />
                   </div>
                 </div>
 
                 <div className="mt-3">
-                  <h4 className="font-extrabold text-gray-900 text-xs sm:text-sm tracking-tight">
+                  <p className="font-extrabold text-gray-900 text-xs sm:text-sm tracking-tight">
                     {lang === 'en' ? 'Halal Product Assurance Organizing Agency' : company.halalAgency || 'Badan Penyelenggara Jaminan Produk Halal'}
-                  </h4>
+                  </p>
                   <p className="text-[11px] text-emerald-700 font-bold mt-0.5 font-mono">
                     No. Reg: {company.halalNumber || 'ID3611000000000'}
                   </p>

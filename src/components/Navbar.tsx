@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     : 'ASASORA';
 
   return (
-    <header className="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-2xs border-b border-emerald-900/10 transition-all">
+    <header role="banner" className="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-2xs border-b border-emerald-900/10 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Left: Brand Identity & Logo */}
@@ -54,6 +54,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img
                 src={company.logoUrl || '/logo-asasora.png'}
                 alt={`Logo ${company.name || 'PT. ASASORA BIO HEALTHORA'}`}
+                width={48}
+                height={48}
+                fetchPriority="high"
+                decoding="async"
                 className="h-11 w-11 sm:h-12 sm:w-12 object-contain rounded-2xl shadow-2xs border border-emerald-100 bg-white p-0.5 group-hover:scale-105 transition-transform duration-200"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/logo-asasora.svg';

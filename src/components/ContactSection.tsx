@@ -103,9 +103,9 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
+                  <h3 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
                     {t('contact.address_label', 'Alamat Kantor')}
-                  </h5>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mt-0.5" id="disp-address">
                     {company.address}
                   </p>
@@ -118,9 +118,9 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
+                  <h3 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
                     {t('contact.email_label', 'Email Resmi')}
-                  </h5>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-600" id="disp-email">
                     {company.email}
                   </p>
@@ -133,9 +133,9 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
+                  <h3 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
                     {t('contact.wa_label', 'WhatsApp Customer Care (MinSora)')}
-                  </h5>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-600 font-mono font-bold" id="disp-wa">
                     {company.phone}
                   </p>
@@ -148,9 +148,9 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                   <Clock className="w-5 h-5" />
                 </div>
                 <div className="space-y-0.5">
-                  <h5 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
+                  <h3 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
                     {t('contact.hours_label', 'Jam Operasional & Pengiriman')}
-                  </h5>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-800 font-semibold" id="disp-operational-hours">
                     {company.operationalHours ||
                       (lang === 'en'
@@ -191,10 +191,11 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
 
             <form className="space-y-4 pt-2" onSubmit={handleSendInquiry}>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="contact-form-name" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('contact.form_name_label', 'Nama Anda / Nama Perusahaan')} <span className="text-red-500">*</span>
                 </label>
                 <input
+                  id="contact-form-name"
                   type="text"
                   required
                   value={name}
@@ -205,10 +206,11 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="contact-form-topic" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('contact.form_topic_label', 'Pilihan Topik Kebutuhan Produk / Divisi')} <span className="text-red-500">*</span>
                 </label>
                 <select
+                  id="contact-form-topic"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none font-medium text-gray-800"
@@ -238,10 +240,11 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="contact-form-message" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('contact.form_msg_label', 'Pesan / Rincian Kebutuhan & Penawaran')} <span className="text-red-500">*</span>
                 </label>
                 <textarea
+                  id="contact-form-message"
                   required
                   rows={4}
                   value={message}

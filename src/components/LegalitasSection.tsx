@@ -133,9 +133,9 @@ export const LegalitasSection: React.FC<LegalitasSectionProps> = ({ documents })
                     <ShieldCheck className="w-5 h-5 text-emerald-200" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-sm sm:text-base leading-tight text-white">
+                    <p className="font-extrabold text-sm sm:text-base leading-tight text-white">
                       {t('legality.modal_title', 'Lembar Dokumen Legalitas')}
-                    </h4>
+                    </p>
                     <p className="text-[11px] text-emerald-200 font-mono">
                       {selectedDoc.docNumber}
                     </p>
@@ -181,6 +181,10 @@ export const LegalitasSection: React.FC<LegalitasSectionProps> = ({ documents })
                     <img
                       src={selectedDoc.image || selectedDoc.previewUrl}
                       alt={selectedDoc.title}
+                      width={600}
+                      height={400}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full max-h-72 object-contain bg-slate-900/5 mx-auto"
                     />
                     <a

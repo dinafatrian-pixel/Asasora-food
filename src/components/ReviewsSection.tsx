@@ -148,10 +148,11 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="review-author-name" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('reviews.name_label', 'Nama Lengkap')} <span className="text-red-500">*</span>
                 </label>
                 <input
+                  id="review-author-name"
                   type="text"
                   required
                   value={name}
@@ -162,10 +163,11 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="review-company" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('reviews.company_label', 'Instansi / Perusahaan (Opsional)')}
                 </label>
                 <input
+                  id="review-company"
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
@@ -175,10 +177,11 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="review-rating" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('reviews.rating_label', 'Rating Bintang (1 - 5)')}
                 </label>
                 <select
+                  id="review-rating"
                   value={rating}
                   onChange={(e) => setRating(parseInt(e.target.value))}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none shadow-2xs font-medium"
@@ -192,11 +195,12 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
+                <label htmlFor="review-comment" className="block text-xs font-bold text-gray-700 mb-1">
                   {t('reviews.comment_label', 'Tulis Pengalaman & Ulasan Anda')}{' '}
                   <span className="text-red-500">*</span>
                 </label>
                 <textarea
+                  id="review-comment"
                   required
                   rows={3}
                   value={comment}

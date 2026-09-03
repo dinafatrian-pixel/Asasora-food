@@ -45,6 +45,10 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
                     <img
                       src={client.logo}
                       alt={client.name}
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain"
                     />
                   ) : (
@@ -53,9 +57,9 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <h4 className="font-bold text-gray-900 text-xs sm:text-sm leading-snug">
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm leading-snug">
                     {client.name}
-                  </h4>
+                  </h3>
                   <p className="text-[11px] text-gray-500 font-medium">
                     {client.type}
                   </p>
