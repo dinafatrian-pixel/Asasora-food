@@ -21,7 +21,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { CompanyInfo, VisitorAnalytics } from '../../types';
-import { initGoogleAnalytics, trackGAEvent, defaultAnalyticsData } from '../../utils/analytics';
+import { initGoogleAnalytics, trackGAEvent, defaultAnalyticsData, fetchAnalyticsData } from '../../utils/analytics';
 
 interface AnalyticsTabProps {
   company: CompanyInfo;
@@ -39,12 +39,9 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ company, onUpdateCom
   const loadAnalytics = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/analytics');
-      if (res.ok) {
-        const json = await res.json();
-        if (json.data) {
-          setAnalyticsData(json.data);
-        }
+      const data = await fetchAnalyticsData();
+      if (data) {
+        setAnalyticsData(data);
       }
     } catch (e) {
       console.warn('Failed to load analytics', e);
@@ -55,8 +52,19 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ company, onUpdateCom
 
   useEffect(() => {
     loadAnalytics();
+
+    const handleUpdate = (e: any) => {
+      if (e && e.detail) {
+        setAnalyticsData(e.detail);
+      }
+    };
+    window.addEventListener('asasora_analytics_update', handleUpdate);
+
     const interval = setInterval(loadAnalytics, 15000);
-    return () => clearInterval(interval);
+    return () => {
+      window.removeEventListener('asasora_analytics_update', handleUpdate);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSaveGaConfig = () => {

@@ -9,11 +9,13 @@ import {
   Flame,
   MessageCircle,
   CheckCircle2,
+  Heart,
 } from 'lucide-react';
 import { Product, Order, CompanyInfo } from '../types';
 import { formatRupiah } from '../utils/distance';
 import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedProduct, translateText } from '../utils/translator';
+import { syncManager } from '../utils/syncManager';
 
 interface ProductCatalogSectionProps {
   products: Product[];
@@ -39,6 +41,100 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   const [copiedProductId, setCopiedProductId] = useState<string | null>(null);
   const [toastNotification, setToastNotification] = useState<string | null>(null);
   const [highlightedProductId, setHighlightedProductId] = useState<string | null>(null);
+
+  // Likes state stored in localStorage for user persistence
+  const [likedProductIds, setLikedProductIds] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('asasora_liked_products');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Base like counts synced with product objects or defaults
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {
+      'prod-1': 148,
+      'prod-2': 94,
+      'prod-3': 72,
+      'prod-nmk-1': 86,
+      'prod-nmk-2': 65,
+      'prod-4': 112,
+      'prod-1788335918404': 230,
+    };
+    return initial;
+  });
+
+  // Keep like counts in sync whenever products prop updates from cloud/server
+  useEffect(() => {
+    if (Array.isArray(products)) {
+      setLikeCounts((prev) => {
+        const next = { ...prev };
+        products.forEach((p) => {
+          if (typeof p.likes === 'number') {
+            next[p.id] = p.likes;
+          }
+        });
+        return next;
+      });
+    }
+  }, [products]);
+
+  // Toggle Like with sound/animation feedback, toast, and ONLINE CLOUD SYNC
+  const handleToggleLike = async (e: React.MouseEvent, productId: string, productName: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const isCurrentlyLiked = !likedProductIds[productId];
+    const newStatus = isCurrentlyLiked;
+
+    const newLiked = {
+      ...likedProductIds,
+      [productId]: newStatus,
+    };
+    setLikedProductIds(newLiked);
+    try {
+      localStorage.setItem('asasora_liked_products', JSON.stringify(newLiked));
+    } catch (err) {
+      console.error('Failed to save liked state', err);
+    }
+
+    // Immediate Optimistic Update for instant visual feedback
+    const currentCount = likeCounts[productId] ?? 50;
+    const optimisticCount = newStatus ? currentCount + 1 : Math.max(0, currentCount - 1);
+    setLikeCounts((prev) => ({
+      ...prev,
+      [productId]: optimisticCount,
+    }));
+
+    // Trigger toast
+    setToastNotification(
+      newStatus
+        ? lang === 'en'
+          ? `You liked "${productName}" ❤️`
+          : `Anda menyukai "${productName}" ❤️`
+        : lang === 'en'
+          ? `Removed "${productName}" from favorites`
+          : `Batal menyukai "${productName}"`
+    );
+    setTimeout(() => {
+      setToastNotification(null);
+    }, 2000);
+
+    // Online Persistence: sync immediately to Cloud Firestore & Express API
+    try {
+      const serverLikes = await syncManager.toggleProductLike(productId, newStatus);
+      if (typeof serverLikes === 'number') {
+        setLikeCounts((prev) => ({
+          ...prev,
+          [productId]: serverLikes,
+        }));
+      }
+    } catch (err) {
+      console.warn('Could not sync like to cloud:', err);
+    }
+  };
 
   // Categories definition matching requested categories
   const categories = React.useMemo(() => {
@@ -321,6 +417,8 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
             const isCopied = copiedProductId === product.id;
             const isHighlighted = highlightedProductId === product.id;
             const soldCount = getProductSoldCount(product.id, rawProduct.name);
+            const isLiked = !!likedProductIds[product.id];
+            const productLikes = likeCounts[product.id] ?? 50;
 
             return (
               <div
@@ -349,22 +447,47 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                     <span>✓</span> {t('catalog.badge_halal', 'Halal BPJPH')}
                   </span>
 
-                  {/* Terjual Count Badge */}
-                  {soldCount > 0 && (
-                    <span className="absolute top-2.5 right-2.5 bg-[#F3C623] text-gray-900 text-[10px] font-black px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
-                      <Flame className="w-3 h-3 text-red-600 fill-red-600" />
-                      <span>{soldCount} {t('catalog.sold', 'Terjual')}</span>
-                    </span>
-                  )}
+                  {/* Top Right Badges: Terjual Count & Tombol Like Hati */}
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+                    {/* Terjual Count Badge */}
+                    {soldCount > 0 && (
+                      <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1 backdrop-blur-xs">
+                        <Flame className="w-3 h-3 text-red-600 fill-red-600" />
+                        <span>{soldCount} {t('catalog.sold', 'Terjual')}</span>
+                      </span>
+                    )}
+
+                    {/* Tombol Like (Heart / Hati) */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleToggleLike(e, product.id, product.name)}
+                      aria-label={isLiked ? t('catalog.liked', 'Disukai') : t('catalog.like', 'Suka')}
+                      title={isLiked ? `${t('catalog.liked', 'Disukai')} (${productLikes})` : `${t('catalog.like', 'Suka')} (${productLikes})`}
+                      className={`group/like flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black transition-all duration-200 cursor-pointer shadow-xs active:scale-90 select-none ${
+                        isLiked
+                          ? 'bg-rose-500 text-white shadow-rose-200 ring-1 ring-rose-400'
+                          : 'bg-white/90 hover:bg-white text-gray-700 hover:text-rose-600 border border-gray-200/80 backdrop-blur-xs'
+                      }`}
+                    >
+                      <Heart
+                        className={`w-3 h-3 transition-transform duration-200 group-hover/like:scale-110 ${
+                          isLiked
+                            ? 'text-white fill-white'
+                            : 'text-rose-500 hover:fill-rose-500/20'
+                        }`}
+                      />
+                      <span>{productLikes}</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Product Body */}
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div>
-                    <h3 className="font-extrabold text-gray-900 text-sm sm:text-base line-clamp-1 group-hover:text-[#2E6F40] transition">
+                    <h3 className="font-extrabold text-gray-900 text-sm sm:text-base group-hover:text-[#2E6F40] transition leading-snug">
                       {product.name}
                     </h3>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-gray-600 mt-1.5 leading-relaxed whitespace-pre-line">
                       {product.description}
                     </p>
                   </div>

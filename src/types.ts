@@ -16,6 +16,7 @@ export interface Product {
   isPopular?: boolean;
   minOrder?: number;
   stock?: number;
+  likes?: number;
 }
 
 export interface CartItem {

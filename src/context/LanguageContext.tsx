@@ -55,6 +55,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'catalog.search_placeholder': 'Cari produk katering atau camilan...',
     'catalog.badge_halal': 'Halal BPJPH',
     'catalog.sold': 'Terjual',
+    'catalog.like': 'Suka',
+    'catalog.liked': 'Disukai',
     'catalog.price_label': 'Harga Menu',
     'catalog.btn_add_cart': '+ Keranjang',
     'catalog.btn_added': 'Ditambahkan!',
@@ -65,6 +67,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'catalog.not_found': 'Produk tidak ditemukan',
     'catalog.not_found_sub': 'Coba cari dengan kata kunci lain atau pilih kategori "Semua Produk".',
     'catalog.reset_filter': 'Reset Filter',
+    'catalog.read_more': 'Selengkapnya',
+    'catalog.read_less': 'Tutup',
 
     // Order & Shipping Section
     'order.modal_title': 'Formulir Order Online & Keranjang',
@@ -319,6 +323,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'catalog.search_placeholder': 'Search catering menus or snacks...',
     'catalog.badge_halal': 'Halal BPJPH',
     'catalog.sold': 'Sold',
+    'catalog.like': 'Like',
+    'catalog.liked': 'Liked',
     'catalog.price_label': 'Menu Price',
     'catalog.btn_add_cart': '+ Cart',
     'catalog.btn_added': 'Added!',
@@ -329,6 +335,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'catalog.not_found': 'No products found',
     'catalog.not_found_sub': 'Try searching with other keywords or select the "All Products" category.',
     'catalog.reset_filter': 'Reset Filter',
+    'catalog.read_more': 'Read More',
+    'catalog.read_less': 'Show Less',
 
     // Order & Shipping Section
     'order.modal_title': 'Online Order Form & Cart',

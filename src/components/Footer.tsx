@@ -18,15 +18,35 @@ import { fetchAnalyticsData, defaultAnalyticsData } from '../utils/analytics';
 
 interface FooterProps {
   company: CompanyInfo;
+  analytics?: VisitorAnalytics;
   onScrollToSection: (sectionId: string) => void;
   onOpenOrderModal?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOpenOrderModal }) => {
+export const Footer: React.FC<FooterProps> = ({
+  company,
+  analytics: propAnalytics,
+  onScrollToSection,
+  onOpenOrderModal,
+}) => {
   const { t, lang } = useLanguage();
-  const [analytics, setAnalytics] = useState<VisitorAnalytics>(defaultAnalyticsData);
+  const [analytics, setAnalytics] = useState<VisitorAnalytics>(() => propAnalytics || defaultAnalyticsData);
+
+  // Sync with prop updates from App.tsx
+  useEffect(() => {
+    if (propAnalytics) {
+      setAnalytics(propAnalytics);
+    }
+  }, [propAnalytics]);
 
   useEffect(() => {
+    const handleUpdate = (e: any) => {
+      if (e && e.detail) {
+        setAnalytics(e.detail);
+      }
+    };
+    window.addEventListener('asasora_analytics_update', handleUpdate);
+
     fetchAnalyticsData().then((data) => {
       if (data) setAnalytics(data);
     });
@@ -35,9 +55,12 @@ export const Footer: React.FC<FooterProps> = ({ company, onScrollToSection, onOp
       fetchAnalyticsData().then((data) => {
         if (data) setAnalytics(data);
       });
-    }, 20000);
+    }, 15000);
 
-    return () => clearInterval(timer);
+    return () => {
+      window.removeEventListener('asasora_analytics_update', handleUpdate);
+      clearInterval(timer);
+    };
   }, []);
 
   const scrollToTop = () => {

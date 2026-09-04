@@ -242,7 +242,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                       onChange={(e) =>
                         handlePropChange(idx, 'subtitle', e.target.value)
                       }
-                      className="w-full p-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs"
+                      className="w-full p-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs text-justify"
                       placeholder="Contoh: Bahan Baku"
                     />
                   </div>

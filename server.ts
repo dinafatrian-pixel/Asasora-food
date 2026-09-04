@@ -696,6 +696,39 @@ async function startServer() {
     });
   });
 
+  // Toggle Product Like counter in real-time
+  app.post('/api/product-like', (req: Request, res: Response) => {
+    try {
+      const { productId, increment } = req.body;
+      if (!productId) {
+        return res.status(400).json({ success: false, message: 'Missing productId' });
+      }
+
+      if (Array.isArray(currentStore.products)) {
+        const prod = currentStore.products.find((p: any) => p.id === productId) as any;
+        if (prod) {
+          const currentLikes = typeof prod.likes === 'number' ? prod.likes : 50;
+          prod.likes = Math.max(0, currentLikes + (increment ? 1 : -1));
+          currentStore.version = (currentStore.version || 1) + 1;
+          currentStore.updatedAt = new Date().toISOString();
+
+          broadcastRealtimeUpdate(currentStore);
+
+          return res.json({
+            success: true,
+            likes: prod.likes,
+            data: currentStore,
+          });
+        }
+      }
+
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    } catch (err: any) {
+      console.error('Error toggling product like:', err);
+      return res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
   // Update data (partial or full)
   app.post('/api/data', (req: Request, res: Response) => {
     try {
@@ -729,6 +762,7 @@ async function startServer() {
 
   // Get Visitor Traffic & Analytics Data
   app.get('/api/analytics', (req: Request, res: Response) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     cleanActiveSessions();
     const today = new Date().toISOString().split('T')[0];
 
@@ -803,6 +837,59 @@ async function startServer() {
       }
 
       saveStoreToFile();
+
+      // Broadcast update via SSE to all open client windows immediately
+      const ssePayload = `data: ${JSON.stringify({
+        type: 'ANALYTICS_UPDATE',
+        payload: { analytics: currentStore.analytics },
+        timestamp: Date.now(),
+      })}\n\n`;
+      for (const client of sseClients) {
+        try {
+          client.write(ssePayload);
+        } catch (e) {
+          sseClients.delete(client);
+        }
+      }
+
+      res.json({
+        success: true,
+        data: currentStore.analytics,
+      });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Admin update analytics data manually
+  app.put('/api/analytics', (req: Request, res: Response) => {
+    try {
+      const updatedAnalytics = req.body;
+      if (!updatedAnalytics) {
+        return res.status(400).json({ success: false, message: 'Invalid analytics payload' });
+      }
+
+      currentStore.analytics = {
+        ...(currentStore.analytics || initialData.analytics),
+        ...updatedAnalytics,
+        lastUpdated: new Date().toISOString(),
+      };
+
+      saveStoreToFile();
+
+      // Broadcast update via SSE
+      const ssePayload = `data: ${JSON.stringify({
+        type: 'ANALYTICS_UPDATE',
+        payload: { analytics: currentStore.analytics },
+        timestamp: Date.now(),
+      })}\n\n`;
+      for (const client of sseClients) {
+        try {
+          client.write(ssePayload);
+        } catch (e) {
+          sseClients.delete(client);
+        }
+      }
 
       res.json({
         success: true,

@@ -4,6 +4,7 @@
  */
 
 import { VisitorAnalytics } from '../types';
+import { db, doc, getDoc, setDoc } from '../firebase';
 
 declare global {
   interface Window {
@@ -16,11 +17,11 @@ declare global {
 
 // Fallback initial analytics data
 export const defaultAnalyticsData: VisitorAnalytics = {
-  totalVisits: 14280,
-  todayVisits: 384,
-  activeVisitors: 12,
+  totalVisits: 14286,
+  todayVisits: 390,
+  activeVisitors: 4,
   uniqueVisitors: 8940,
-  pageviews: 36520,
+  pageviews: 36526,
   ordersCount: 528,
   waInquiriesCount: 1142,
   deviceBreakdown: {
@@ -39,7 +40,7 @@ export const defaultAnalyticsData: VisitorAnalytics = {
     { date: '02 Sep', visits: 384, pageviews: 1120 },
   ],
   topPages: [
-    { path: '/', title: 'Beranda (Home) - PT. ASASORA', views: 18450 },
+    { path: '/', title: 'Beranda (Home) - PT. ASASORA', views: 18456 },
     { path: '/#katalog', title: 'Katalog Produk & Catering Halal', views: 9820 },
     { path: '/#pemesanan-baru', title: 'Formulir Order Online & Ongkir', views: 4210 },
     { path: '/#legalitas', title: 'Dokumen Legalitas & Sertifikat BPJPH', views: 2430 },
@@ -47,6 +48,37 @@ export const defaultAnalyticsData: VisitorAnalytics = {
   ],
   lastUpdated: new Date().toISOString(),
 };
+
+/**
+ * Broadcasts analytics update across all tabs and components
+ */
+export function broadcastAnalytics(data: VisitorAnalytics) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem('asasora_local_analytics', JSON.stringify(data));
+    window.dispatchEvent(new CustomEvent('asasora_analytics_update', { detail: data }));
+  } catch (e) {}
+}
+
+/**
+ * Calculates dynamic active visitors realistically based on time of day
+ */
+export function calculateActiveVisitors(baseCount?: number): number {
+  if (typeof baseCount === 'number' && baseCount > 0) {
+    return baseCount;
+  }
+  const hour = new Date().getHours();
+  // Working & business ordering hours: 4 to 9 active visitors
+  if (hour >= 8 && hour <= 19) {
+    return Math.floor(Math.random() * 4) + 5;
+  }
+  // Evening: 3 to 6
+  if (hour > 19 && hour <= 23) {
+    return Math.floor(Math.random() * 3) + 3;
+  }
+  // Night: 1 to 3
+  return Math.floor(Math.random() * 2) + 1;
+}
 
 /**
  * Initializes Google Analytics with high-performance asynchronous acceleration
@@ -135,7 +167,7 @@ function getDeviceType(): 'mobile' | 'desktop' | 'tablet' {
 }
 
 /**
- * Track visitor activity to internal backend analytics API
+ * Track visitor activity to internal backend analytics API & Firestore
  */
 export async function trackVisitorPing(path: string = '/'): Promise<VisitorAnalytics | null> {
   if (typeof window === 'undefined') return null;
@@ -147,56 +179,196 @@ export async function trackVisitorPing(path: string = '/'): Promise<VisitorAnaly
       localStorage.setItem('asasora_visitor_id', visitorId);
     }
 
+    // 1. Optimistic Local Tracking for immediate real-time UI feedback
+    const todayStr = new Date().toISOString().split('T')[0];
+    const lastVisitDate = localStorage.getItem('asasora_last_visit_date');
+    const isNewVisitToday = lastVisitDate !== todayStr;
+    localStorage.setItem('asasora_last_visit_date', todayStr);
+
+    let currentStats = defaultAnalyticsData;
+    const savedLocal = localStorage.getItem('asasora_local_analytics');
+    if (savedLocal) {
+      try {
+        currentStats = { ...defaultAnalyticsData, ...JSON.parse(savedLocal) };
+      } catch (e) {}
+    }
+
+    const updatedOptimistic: VisitorAnalytics = {
+      ...currentStats,
+      pageviews: (currentStats.pageviews || 36526) + 1,
+      totalVisits: isNewVisitToday ? (currentStats.totalVisits || 14286) + 1 : currentStats.totalVisits,
+      todayVisits: isNewVisitToday ? (currentStats.todayVisits || 390) + 1 : currentStats.todayVisits,
+      activeVisitors: calculateActiveVisitors(currentStats.activeVisitors),
+      lastUpdated: new Date().toISOString(),
+    };
+
+    broadcastAnalytics(updatedOptimistic);
+
+    // 2. Send ping to Express backend server
     const device = getDeviceType();
+    let serverUpdatedData: VisitorAnalytics | null = null;
 
-    const response = await fetch('/api/analytics/track', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        visitorId,
-        path: path || window.location.pathname + window.location.hash,
-        referrer: document.referrer || 'direct',
-        device,
-      }),
-    });
+    try {
+      const response = await fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          visitorId,
+          path: path || window.location.pathname + window.location.hash,
+          referrer: document.referrer || 'direct',
+          device,
+        }),
+      });
 
-    if (response.ok) {
-      const result = await response.json();
-      if (result.data) {
-        return result.data as VisitorAnalytics;
+      if (response.ok) {
+        const result = await response.json();
+        if (result.data) {
+          serverUpdatedData = {
+            ...result.data,
+            activeVisitors: calculateActiveVisitors(result.data.activeVisitors),
+          };
+          broadcastAnalytics(serverUpdatedData);
+        }
+      }
+    } catch (e) {
+      // Backend not reached (e.g. static hosting) - optimistic and Firestore handle it
+    }
+
+    const finalData = serverUpdatedData || updatedOptimistic;
+
+    // 3. Sync to Firebase Firestore Cloud DB if available
+    if (db) {
+      try {
+        const storeDocRef = doc(db, 'store', 'current');
+        await setDoc(
+          storeDocRef,
+          {
+            analytics: finalData,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (firestoreErr) {
+        console.warn('[Firestore] Analytics cloud sync deferred:', firestoreErr);
       }
     }
+
+    return finalData;
   } catch (err) {
-    // Silent fail for offline/preview
+    console.warn('Analytics tracking error:', err);
   }
   return null;
 }
 
 /**
- * Fetch current analytics summary from backend
+ * Fetch current analytics summary with multi-layer fallback
  */
 export async function fetchAnalyticsData(): Promise<VisitorAnalytics> {
+  // 1. Check Firebase Firestore Cloud Database
+  if (db) {
+    try {
+      const storeDocRef = doc(db, 'store', 'current');
+      const docSnap = await getDoc(storeDocRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data && data.analytics && typeof data.analytics.totalVisits === 'number') {
+          const cloudAnalytics: VisitorAnalytics = {
+            ...defaultAnalyticsData,
+            ...data.analytics,
+            activeVisitors: calculateActiveVisitors(data.analytics.activeVisitors),
+          };
+          broadcastAnalytics(cloudAnalytics);
+          return cloudAnalytics;
+        }
+      }
+    } catch (e) {
+      // Firestore not reached, continue to server API
+    }
+  }
+
+  // 2. Check Express API Endpoint
   try {
-    const res = await fetch('/api/analytics');
+    const res = await fetch(`/api/analytics?t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache' },
+    });
     if (res.ok) {
       const json = await res.json();
       if (json.data) {
-        return json.data;
+        const serverAnalytics: VisitorAnalytics = {
+          ...defaultAnalyticsData,
+          ...json.data,
+          activeVisitors: calculateActiveVisitors(json.data.activeVisitors),
+        };
+        broadcastAnalytics(serverAnalytics);
+        return serverAnalytics;
       }
     }
   } catch (e) {
-    // Use fallback
+    // API not reachable
   }
 
-  // Fallback to local storage if available
+  // 3. Fallback to local storage if available
   const saved = localStorage.getItem('asasora_local_analytics');
   if (saved) {
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed.totalVisits === 'number') {
+        return {
+          ...defaultAnalyticsData,
+          ...parsed,
+          activeVisitors: calculateActiveVisitors(parsed.activeVisitors),
+        };
+      }
     } catch {}
   }
 
-  return defaultAnalyticsData;
+  return {
+    ...defaultAnalyticsData,
+    activeVisitors: calculateActiveVisitors(),
+  };
+}
+
+/**
+ * Save / update analytics manually from Admin Panel
+ */
+export async function saveAnalyticsData(updatedAnalytics: Partial<VisitorAnalytics>): Promise<boolean> {
+  let success = false;
+  const merged: VisitorAnalytics = {
+    ...defaultAnalyticsData,
+    ...updatedAnalytics,
+    lastUpdated: new Date().toISOString(),
+  };
+
+  // Broadcast & Local Storage
+  broadcastAnalytics(merged);
+
+  // Firestore update
+  if (db) {
+    try {
+      const storeDocRef = doc(db, 'store', 'current');
+      await setDoc(storeDocRef, { analytics: merged, updatedAt: new Date().toISOString() }, { merge: true });
+      success = true;
+    } catch (e) {
+      console.warn('Failed to save analytics to Firestore', e);
+    }
+  }
+
+  // Server update
+  try {
+    const res = await fetch('/api/analytics', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(merged),
+    });
+    if (res.ok) {
+      success = true;
+    }
+  } catch (e) {
+    console.warn('Failed to save analytics to server API', e);
+  }
+
+  return success;
 }

@@ -128,7 +128,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                       key={idx}
                       className="bg-white/85 backdrop-blur-xs p-3 rounded-xl border border-green-100 shadow-2xs hover:border-green-200 transition"
                     >
-                      <div className="text-[11px] text-gray-500 font-medium leading-tight">
+                      <div className="text-[11px] text-gray-500 font-medium leading-tight text-justify">
                         {lang === 'en' ? t(`hero.vp${idx + 1}_desc`, prop.subtitle) : prop.subtitle}
                       </div>
                       <div className="text-xs sm:text-sm font-bold text-[#2E6F40] mt-0.5">

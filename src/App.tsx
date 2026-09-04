@@ -40,11 +40,12 @@ import {
   GalleryItem,
   LegalDocument,
   AdminUser,
+  VisitorAnalytics,
 } from './types';
 import { MessageSquareQuote, ShoppingBag } from 'lucide-react';
 import { MinsoraAvatar } from './components/MinsoraAvatar';
 import { useLanguage } from './context/LanguageContext';
-import { initGoogleAnalytics, trackVisitorPing, trackGAEvent } from './utils/analytics';
+import { initGoogleAnalytics, trackVisitorPing, trackGAEvent, defaultAnalyticsData } from './utils/analytics';
 
 export default function App() {
   const { t } = useLanguage();
@@ -197,6 +198,18 @@ export default function App() {
     return initialAdminUsers;
   });
 
+  const [analytics, setAnalytics] = useState<VisitorAnalytics>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('asasora_local_analytics');
+      if (saved) {
+        try {
+          return { ...defaultAnalyticsData, ...JSON.parse(saved) };
+        } catch (e) {}
+      }
+    }
+    return defaultAnalyticsData;
+  });
+
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -211,6 +224,19 @@ export default function App() {
 
   // Track if we are currently applying a remote update to avoid echoing back redundant saves
   const isApplyingRemoteRef = useRef(false);
+
+  // Listen to live local analytics broadcast events
+  useEffect(() => {
+    const handleAnalyticsUpdate = (e: any) => {
+      if (e && e.detail) {
+        setAnalytics((prev) => ({ ...prev, ...e.detail }));
+      }
+    };
+    window.addEventListener('asasora_analytics_update', handleAnalyticsUpdate);
+    return () => {
+      window.removeEventListener('asasora_analytics_update', handleAnalyticsUpdate);
+    };
+  }, []);
 
   // Subscribe to real-time events from server (Server-Sent Events + Polling fallback + BroadcastChannel)
   useEffect(() => {
@@ -244,6 +270,9 @@ export default function App() {
       if (Array.isArray(incomingData.adminUsers) && incomingData.adminUsers.length > 0) {
         setAdminUsers(incomingData.adminUsers);
       }
+      if (incomingData.analytics) {
+        setAnalytics((prev) => ({ ...prev, ...incomingData.analytics }));
+      }
 
       setTimeout(() => {
         isApplyingRemoteRef.current = false;
@@ -255,7 +284,7 @@ export default function App() {
     });
 
     // Schedule non-critical startup tasks on browser idle to avoid blocking FCP & LCP main thread
-    const runOnIdle = (callback: () => void, delayMs = 1200) => {
+    const runOnIdle = (callback: () => void, delayMs = 800) => {
       if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
         (window as any).requestIdleCallback(callback, { timeout: delayMs + 1000 });
       } else {
@@ -263,11 +292,13 @@ export default function App() {
       }
     };
 
-    // Fetch latest fresh data safely after first visual paint
+    // Fetch latest fresh data safely and track visitor immediately
     runOnIdle(() => {
       syncManager.fetchLatestData();
-      trackVisitorPing(window.location.hash || '/');
-    }, 1200);
+      trackVisitorPing(window.location.hash || '/').then((res) => {
+        if (res) setAnalytics(res);
+      });
+    }, 800);
 
     // Prefetch order form in background when browser is idle
     runOnIdle(() => {
@@ -275,7 +306,9 @@ export default function App() {
     }, 2500);
 
     const handleHashChange = () => {
-      trackVisitorPing(window.location.hash || '/');
+      trackVisitorPing(window.location.hash || '/').then((res) => {
+        if (res) setAnalytics(res);
+      });
     };
     window.addEventListener('hashchange', handleHashChange);
 
@@ -737,6 +770,7 @@ export default function App() {
       {/* Footer */}
       <Footer
         company={company}
+        analytics={analytics}
         onScrollToSection={scrollToSection}
         onOpenOrderModal={() => setIsOrderModalOpen(true)}
       />

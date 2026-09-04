@@ -96,6 +96,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 10,
     stock: 100,
+    likes: 148,
   },
   {
     id: 'prod-2',
@@ -110,6 +111,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 20,
     stock: 50,
+    likes: 94,
   },
   {
     id: 'prod-3',
@@ -124,6 +126,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 20,
     stock: 200,
+    likes: 72,
   },
   {
     id: 'prod-nmk-1',
@@ -138,6 +141,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 20,
     stock: 25,
+    likes: 86,
   },
   {
     id: 'prod-nmk-2',
@@ -153,6 +157,7 @@ export const initialProducts: Product[] = [
     isPopular: false,
     minOrder: 1,
     stock: 20,
+    likes: 65,
   },
   {
     id: 'prod-4',
@@ -168,6 +173,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 1,
     stock: 40,
+    likes: 112,
   },
   {
     id: 'prod-1788335918404',
@@ -183,6 +189,7 @@ export const initialProducts: Product[] = [
     isPopular: true,
     minOrder: 1,
     stock: 100,
+    likes: 230,
   },
 ];
 
