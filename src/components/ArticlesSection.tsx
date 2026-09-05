@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BookOpen,
   Calendar,
@@ -12,6 +12,8 @@ import {
   MessageCircle,
   Tag,
   Sparkles,
+  ExternalLink,
+  Send,
 } from 'lucide-react';
 import { Article, CompanyInfo } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -32,6 +34,98 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Helper to generate specific article direct URL
+  const getArticleShareUrl = (art: Article) => {
+    const identifier = art.slug || art.id;
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    return `${baseUrl}?article=${encodeURIComponent(identifier)}#article-${encodeURIComponent(identifier)}`;
+  };
+
+  // Open specific article and update browser address bar so URL can be copied directly
+  const handleOpenArticle = (art: Article) => {
+    setActiveArticle(art);
+    try {
+      const identifier = art.slug || art.id;
+      const url = new URL(window.location.href);
+      url.searchParams.set('article', identifier);
+      url.hash = `article-${identifier}`;
+      window.history.pushState({ articleId: art.id }, '', url.toString());
+    } catch {
+      // Sandbox fallback
+    }
+  };
+
+  // Close article and clean URL parameter
+  const handleCloseArticle = () => {
+    setActiveArticle(null);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('article');
+      url.hash = 'articles';
+      window.history.replaceState(null, '', url.toString());
+    } catch {
+      // Sandbox fallback
+    }
+  };
+
+  // Auto-detect and open specific article if URL contains ?article=... or #article-...
+  useEffect(() => {
+    const detectArticleFromUrl = () => {
+      try {
+        if (!articles || articles.length === 0) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleParam = urlParams.get('article');
+        const rawHash = window.location.hash ? window.location.hash.replace(/^#/, '') : '';
+
+        let targetKey: string | null = null;
+        if (articleParam) {
+          targetKey = decodeURIComponent(articleParam).trim().toLowerCase();
+        } else if (rawHash.startsWith('article-')) {
+          targetKey = decodeURIComponent(rawHash.replace(/^article-/, '')).trim().toLowerCase();
+        } else if (rawHash.startsWith('art-')) {
+          targetKey = decodeURIComponent(rawHash).trim().toLowerCase();
+        }
+
+        if (targetKey) {
+          const match = articles.find((a) => {
+            const s = (a.slug || '').toLowerCase();
+            const id = (a.id || '').toLowerCase();
+            return (
+              s === targetKey ||
+              id === targetKey ||
+              s.includes(targetKey) ||
+              id.includes(targetKey)
+            );
+          });
+
+          if (match) {
+            setActiveArticle(match);
+            setTimeout(() => {
+              const el =
+                document.getElementById(`article-${match.slug || match.id}`) ||
+                document.getElementById('articles');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }, 300);
+          }
+        }
+      } catch (err) {
+        console.warn('Error detecting article from URL:', err);
+      }
+    };
+
+    detectArticleFromUrl();
+    window.addEventListener('popstate', detectArticleFromUrl);
+    window.addEventListener('hashchange', detectArticleFromUrl);
+
+    return () => {
+      window.removeEventListener('popstate', detectArticleFromUrl);
+      window.removeEventListener('hashchange', detectArticleFromUrl);
+    };
+  }, [articles]);
 
   // Derive unique categories
   const categories = [
@@ -61,20 +155,41 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
     return matchesCategory && matchesQuery;
   });
 
-  const handleCopyLink = (art: Article, e?: React.MouseEvent) => {
+  const handleCopyLink = async (art: Article, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    const url = `${window.location.origin}${window.location.pathname}#articles`;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(`${art.title} - ${url}`);
+    const url = getArticleShareUrl(art);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
       setCopiedId(art.id);
-      setTimeout(() => setCopiedId(null), 2500);
+      setTimeout(() => setCopiedId(null), 3000);
+    } catch (err) {
+      console.error('Failed to copy link:', err);
     }
   };
 
-  const handleShareWhatsApp = (art: Article, e?: React.MouseEvent) => {
+  const handleShareToWhatsApp = (art: Article, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    const url = `${window.location.origin}${window.location.pathname}#articles`;
-    const message = `Halo MinSora, saya membaca artikel "${art.title}" di website Asasora Food (${url}). Saya ingin konsultasi katering kantor kami.`;
+    const url = getArticleShareUrl(art);
+    const text = `*${art.title}*\n\n${art.excerpt}\n\nBaca artikel selengkapnya di Asasora Food:\n${url}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const handleConsultWhatsApp = (art: Article, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const url = getArticleShareUrl(art);
+    const message = `Halo MinSora, saya membaca artikel "${art.title}" di website Asasora Food: ${url}. Saya ingin konsultasi katering kantor kami.`;
     window.open(`https://wa.me/${company.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -171,8 +286,9 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
             {filteredArticles.map((article) => (
               <article
                 key={article.id}
-                onClick={() => setActiveArticle(article)}
-                className="bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:shadow-md hover:border-emerald-300/80 transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer"
+                id={`article-${article.slug || article.id}`}
+                onClick={() => handleOpenArticle(article)}
+                className="bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:shadow-md hover:border-emerald-300/80 transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer scroll-mt-24"
               >
                 {/* Image Cover */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
@@ -233,13 +349,19 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                     <button
                       type="button"
                       onClick={(e) => handleCopyLink(article, e)}
-                      title="Salin Link Artikel"
-                      className="p-1.5 text-gray-400 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition"
+                      title="Salin Link Spesifik Artikel"
+                      className="px-2 py-1.5 text-xs font-bold text-gray-500 hover:text-[#2E6F40] hover:bg-emerald-50 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
                     >
                       {copiedId === article.id ? (
-                        <Check className="w-4 h-4 text-emerald-600" />
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-[11px] text-emerald-700 font-extrabold">Tersalin!</span>
+                        </>
                       ) : (
-                        <Share2 className="w-4 h-4" />
+                        <>
+                          <Share2 className="w-3.5 h-3.5" />
+                          <span className="text-[11px] text-gray-500 hover:text-emerald-700">Bagikan</span>
+                        </>
                       )}
                     </button>
                   </div>
@@ -257,7 +379,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
           aria-modal="true"
           aria-labelledby="modal-article-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150 overflow-y-auto"
-          onClick={() => setActiveArticle(null)}
+          onClick={handleCloseArticle}
         >
           <div
             className="bg-white w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-6 max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200"
@@ -277,18 +399,34 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => handleCopyLink(activeArticle)}
-                  className="p-2 text-gray-500 hover:text-[#2E6F40] hover:bg-emerald-50 rounded-xl transition"
-                  title="Salin Link Artikel"
+                  className="px-3 py-1.5 bg-emerald-50 text-[#2E6F40] hover:bg-emerald-100 rounded-xl transition text-xs font-extrabold flex items-center gap-1.5 border border-emerald-200/80 cursor-pointer shadow-2xs"
+                  title="Salin Link Spesifik Artikel"
                 >
                   {copiedId === activeArticle.id ? (
-                    <Check className="w-4 h-4 text-emerald-600" />
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Link Tersalin!</span>
+                    </>
                   ) : (
-                    <Share2 className="w-4 h-4" />
+                    <>
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>Salin Link</span>
+                    </>
                   )}
                 </button>
+
                 <button
                   type="button"
-                  onClick={() => setActiveArticle(null)}
+                  onClick={() => handleShareToWhatsApp(activeArticle)}
+                  className="p-2 text-emerald-700 hover:bg-emerald-50 rounded-xl transition cursor-pointer"
+                  title="Bagikan Artikel ke WhatsApp"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCloseArticle}
                   className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition cursor-pointer"
                   title="Tutup"
                 >
@@ -367,21 +505,31 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full sm:w-auto">
                   <button
                     type="button"
-                    onClick={(e) => handleShareWhatsApp(activeArticle, e)}
+                    onClick={(e) => handleShareToWhatsApp(activeArticle, e)}
+                    className="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-95 cursor-pointer border border-emerald-500/40"
+                    title="Bagikan artikel ini ke WhatsApp rekan atau grup"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    <span>Bagikan Artikel</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleConsultWhatsApp(activeArticle, e)}
                     className="flex-1 sm:flex-none bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-95 cursor-pointer"
                   >
                     <MessageCircle className="w-4 h-4 fill-current" />
-                    <span>Chat WhatsApp</span>
+                    <span>Tanya MinSora</span>
                   </button>
 
                   {onOpenOrderModal && (
                     <button
                       type="button"
                       onClick={() => {
-                        setActiveArticle(null);
+                        handleCloseArticle();
                         onOpenOrderModal();
                       }}
                       className="flex-1 sm:flex-none bg-white/15 hover:bg-white/25 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition border border-white/20 active:scale-95 cursor-pointer"

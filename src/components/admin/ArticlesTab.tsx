@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   Eye,
   FileText,
+  Share2,
 } from 'lucide-react';
 
 interface ArticlesTabProps {
@@ -67,6 +68,34 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null);
   const [previewArticle, setPreviewArticle] = useState<Article | null>(null);
+  const [copiedLinkArticleId, setCopiedLinkArticleId] = useState<string | null>(null);
+
+  const handleCopyArticleDirectUrl = async (art: Article) => {
+    const identifier = encodeURIComponent(art.slug || art.id);
+    const url = `${window.location.origin}${window.location.pathname}?article=${identifier}#article-${identifier}`;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      setCopiedLinkArticleId(art.id);
+      if (onNotify) {
+        onNotify('Link spesifik artikel berhasil disalin!');
+      }
+      setTimeout(() => setCopiedLinkArticleId(null), 3000);
+    } catch (err) {
+      console.error('Failed to copy article link:', err);
+    }
+  };
 
   // Form states for new article
   const [title, setTitle] = useState('');
@@ -745,6 +774,25 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                <button
+                  type="button"
+                  onClick={() => handleCopyArticleDirectUrl(art)}
+                  className="px-3 py-1.5 rounded-xl border border-gray-200 text-gray-600 hover:text-[#2E6F40] hover:bg-emerald-50 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                  title="Salin Link Spesifik Artikel"
+                >
+                  {copiedLinkArticleId === art.id ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700 font-extrabold">Tersalin</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Salin Link</span>
+                    </>
+                  )}
+                </button>
+
                 <button
                   type="button"
                   onClick={() => setPreviewArticle(art)}
