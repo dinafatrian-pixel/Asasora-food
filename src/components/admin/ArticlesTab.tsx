@@ -29,11 +29,10 @@ interface ArticlesTabProps {
 }
 
 const CATEGORY_PRESETS = [
-  'Katering Kantor',
-  'Higienitas & Halal',
-  'Event & Seminar',
-  'Kuliner Nusantara',
-  'Info & Pengumuman',
+  'Event',
+  'Tips & resep',
+  'Kuliner nusantara',
+  'Info & pengumuman',
 ];
 
 const SAMPLE_IMAGE_PRESETS = [
@@ -71,7 +70,7 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
 
   // Form states for new article
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('Katering Kantor');
+  const [category, setCategory] = useState('Event');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
@@ -137,7 +136,7 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
     onAddArticle({
       slug: finalSlug,
       title: title.trim(),
-      category: category.trim() || 'Katering Kantor',
+      category: category.trim() || 'Event',
       excerpt: excerpt.trim() || title.trim(),
       content: content.trim() || excerpt.trim() || title.trim(),
       image:
@@ -181,7 +180,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
 
   const filteredArticles = articles.filter((art) => {
     const matchesCategory =
-      categoryFilter === 'all' || art.category === categoryFilter;
+      categoryFilter === 'all' ||
+      art.category.toLowerCase() === categoryFilter.toLowerCase();
     const query = searchFilter.toLowerCase().trim();
     const matchesQuery =
       !query ||
@@ -514,6 +514,11 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   }
                   className="w-full text-xs font-semibold p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-amber-500 outline-none"
                 >
+                  {!CATEGORY_PRESETS.some((c) => c.toLowerCase() === editingArticle.category.toLowerCase()) && (
+                    <option value={editingArticle.category}>
+                      {editingArticle.category} (Kategori Sebelumnya)
+                    </option>
+                  )}
                   {CATEGORY_PRESETS.map((c) => (
                     <option key={c} value={c}>
                       {c}

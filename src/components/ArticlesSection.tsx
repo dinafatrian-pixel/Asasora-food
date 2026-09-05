@@ -36,15 +36,22 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
   // Derive unique categories
   const categories = [
     { id: 'all', label: lang === 'id' ? 'Semua Artikel' : 'All Articles' },
-    { id: 'Katering Kantor', label: lang === 'id' ? 'Katering Kantor' : 'Office Catering' },
-    { id: 'Higienitas & Halal', label: lang === 'id' ? 'Higienitas & Halal' : 'Hygiene & Halal' },
-    { id: 'Event & Seminar', label: lang === 'id' ? 'Event & Seminar' : 'Event & Seminar' },
-    { id: 'Kuliner Nusantara', label: lang === 'id' ? 'Kuliner Nusantara' : 'Indonesian Cuisine' },
+    { id: 'Event', label: 'Event' },
+    { id: 'Tips & resep', label: lang === 'id' ? 'Tips & Resep' : 'Tips & Recipes' },
+    { id: 'Kuliner nusantara', label: lang === 'id' ? 'Kuliner Nusantara' : 'Indonesian Cuisine' },
+    { id: 'Info & pengumuman', label: lang === 'id' ? 'Info & Pengumuman' : 'Info & News' },
   ];
 
   const filteredArticles = articles.filter((art) => {
+    const artCat = (art.category || '').toLowerCase();
+    const selCat = selectedCategory.toLowerCase();
     const matchesCategory =
-      selectedCategory === 'all' || art.category === selectedCategory;
+      selectedCategory === 'all' ||
+      artCat === selCat ||
+      (selectedCategory === 'Event' && artCat.includes('event')) ||
+      (selectedCategory === 'Tips & resep' && (artCat.includes('tips') || artCat.includes('katering kantor'))) ||
+      (selectedCategory === 'Kuliner nusantara' && artCat.includes('nusantara')) ||
+      (selectedCategory === 'Info & pengumuman' && (artCat.includes('info') || artCat.includes('higien')));
     const query = searchQuery.toLowerCase().trim();
     const matchesQuery =
       !query ||

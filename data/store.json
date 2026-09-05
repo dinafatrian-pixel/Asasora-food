@@ -462,50 +462,50 @@
   "orders": [],
   "adminUsers": [
     {
-      "id": "user-1",
-      "username": "admin",
-      "password": "admin",
-      "name": "Administrator Utama",
-      "role": "Super Admin",
-      "email": "admin@asasora.com",
+      "lastLogin": "2026-09-05T11:31:52.631Z",
       "isActive": true,
+      "password": "asasora2025",
+      "username": "admin",
+      "id": "user-1",
       "createdAt": "2025-01-01T08:00:00.000Z",
-      "lastLogin": "2025-01-01T08:30:00.000Z"
+      "email": "admin@asasora.com",
+      "name": "Administrator Utama",
+      "role": "Super Admin"
     },
     {
-      "id": "user-2",
+      "isActive": true,
+      "name": "Admin PT. Asasora",
+      "email": "healthoraplus@gmail.com",
+      "role": "Admin",
+      "createdAt": "2025-01-10T10:00:00.000Z",
       "username": "asasora",
       "password": "admin",
-      "name": "Admin PT. Asasora",
-      "role": "Admin",
-      "email": "healthoraplus@gmail.com",
-      "isActive": true,
-      "createdAt": "2025-01-10T10:00:00.000Z",
-      "lastLogin": "2025-01-10T10:15:00.000Z"
+      "lastLogin": "2025-01-10T10:15:00.000Z",
+      "id": "user-2"
     },
     {
-      "id": "user-3",
-      "username": "operator",
-      "password": "admin",
-      "name": "Operator Pesanan & Dapur",
+      "lastLogin": "2025-01-15T09:30:00.000Z",
       "role": "Staff",
+      "name": "Operator Pesanan & Dapur",
       "email": "operator@asasora.com",
       "isActive": true,
+      "password": "admin",
+      "username": "operator",
       "createdAt": "2025-01-15T09:00:00.000Z",
-      "lastLogin": "2025-01-15T09:30:00.000Z"
+      "id": "user-3"
     }
   ],
   "analytics": {
-    "totalVisits": 14290,
-    "todayVisits": 4,
+    "totalVisits": 14294,
+    "todayVisits": 8,
     "activeVisitors": 1,
     "uniqueVisitors": 8940,
-    "pageviews": 36530,
+    "pageviews": 36534,
     "ordersCount": 528,
     "waInquiriesCount": 1142,
     "deviceBreakdown": {
       "mobile": 68,
-      "desktop": 29.000000000000014,
+      "desktop": 29.40000000000002,
       "tablet": 4
     },
     "dailyHistory": [
@@ -554,7 +554,7 @@
       {
         "path": "/",
         "title": "Beranda (Home) - PT. ASASORA",
-        "views": 18460
+        "views": 18464
       },
       {
         "path": "/#katalog",
@@ -582,15 +582,17 @@
         "views": 840
       }
     ],
-    "lastUpdated": "2026-09-05T10:45:24.910Z",
+    "lastUpdated": "2026-09-05T11:09:18.708Z",
     "lastDay": "2026-09-05"
   },
+  "version": 14,
+  "updatedAt": "2026-09-05T11:32:25.255Z",
   "articles": [
     {
       "id": "art-1",
       "slug": "tips-memilih-katering-harian-karyawan-tangerang",
       "title": "5 Tips Memilih Katering Harian Karyawan di Tangerang untuk Produktivitas Kantor",
-      "category": "Katering Kantor",
+      "category": "Tips & resep",
       "excerpt": "Panduan lengkap bagi HRD & General Affairs dalam menentukan katering makan siang kantor yang higienis, bergizi seimbang, dan selalu tepat waktu di Tangerang.",
       "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80",
       "author": "Tim Nutrisi & HRD Solution Asasora",
@@ -609,7 +611,7 @@
       "id": "art-2",
       "slug": "standar-dapur-higienis-sertifikasi-halal-bpjph",
       "title": "Standar Dapur Higienis & Sertifikasi Halal BPJPH: Jaminan Keamanan Pangan Katering Asasora",
-      "category": "Higienitas & Halal",
+      "category": "Info & pengumuman",
       "excerpt": "Menelisik standar operasional dapur steril, sertifikat laik higiene sanitasi jasaboga, dan audit bahan baku 100% Halal BPJPH di PT. Asasora Bio Healthora.",
       "image": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
       "author": "Penyelia Halal & Tim QC Asasora",
@@ -628,7 +630,7 @@
       "id": "art-3",
       "slug": "panduan-memilih-nasi-kotak-seminar-tangerang",
       "title": "Panduan Memilih Paket Nasi Kotak Seminar di Tangerang untuk Event Korporat & Instansi",
-      "category": "Event & Seminar",
+      "category": "Event",
       "excerpt": "Strategi praktis mengatur konsumsi seminar, rapat direksi, dan workshop perusahaan dengan pilihan kemasan eksklusif serta porsi proporsional.",
       "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
       "author": "Event Coordinator Asasora",
@@ -647,7 +649,7 @@
       "id": "art-4",
       "slug": "rahasia-paru-balado-asasora-syukuran-kantor",
       "title": "Rahasia Paru Balado Khas Asasora: Menu Primadona untuk Syukuran Kantor & Gathering",
-      "category": "Kuliner Nusantara",
+      "category": "Kuliner nusantara",
       "excerpt": "Mengenal keistimewaan olahan Paru Sapi Balado Asasora yang empuk, tidak amis, berpadu sambal balado khas Minang yang selalu jadi favorit di setiap perayaan kantor.",
       "image": "https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335914/asasora/bdkhax7wror6ws4nmjii.jpg",
       "author": "Chef Spesialis Nusantara Asasora",
@@ -662,7 +664,5 @@
       ],
       "content": "Dalam setiap momen syukuran pencapaian target kantor, peresmian cabang baru, milad yayasan, maupun family gathering perusahaan, hidangan khas Nusantara selalu menjadi pusat kehangatan kebersamaan.\n\nDi antara sekian banyak varian menu katering Asasora, Paru Sapi Balado \"Asasora\" menempati posisi istimewa sebagai lauk paling banyak dipesan dan digemari oleh klien korporat kami.\n\nApa Rahasia di Balik Kelezatan Paru Balado Asasora?\n\n1. Pemilihan Bahan Baku Paru Segar Halal\nKami hanya menggunakan potongan paru sapi segar berkualitas prima dari Rumah Pemotongan Hewan (RPH) bersertifikasi Halal BPJPH. Paru dibersihkan melalui beberapa tahap pencucian dengan air mengalir untuk menghilangkan aroma amis secara menyeluruh.\n\n2. Teknik Perebusan Rempah Tradisional\nParu direbus perlahan bersama kombinasi rempah aromatik Nusantara: daun salam, serai wangi, jahe segar, lengkuas, dan asam kandis hingga teksturnya empuk namun tetap mempertahankan kekenyalan yang pas saat digigit.\n\n3. Irisan Tipis & Penggorengan Pas\nParu kemudian diiris tipis dengan ketebalan presisi, lalu digoreng hingga bagian luarnya memiliki sensasi garing lembut (crispy on the outside, tender on the inside), tanpa menjadi keras atau alot.\n\n4. Siraman Sambal Balado Uleg Asli\nSambal balado diracik dari cabai merah keriting segar pilihan, bawang merah brebes, dan sedikit perasan jeruk limau yang dimasak matang tanak hingga keluar minyak alaminya yang wangi dan menggugah selera.\n\nKombinasi Sempurna untuk Syukuran Kantor:\nParu Balado Asasora sangat cocok disajikan sebagai lauk pendamping Nasi Tumpeng Tampah, Paket Nasi Bento NaSemangkuk, maupun hidangan prasmanan kantor. Hubungi MinSora sekarang untuk memesan paket syukuran kantor Anda!"
     }
-  ],
-  "version": 7,
-  "updatedAt": "2026-09-05T11:00:00.000Z"
+  ]
 }
