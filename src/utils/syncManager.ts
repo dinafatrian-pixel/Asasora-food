@@ -8,6 +8,7 @@ import {
   LegalDocument,
   Order,
   AdminUser,
+  Article,
 } from '../types';
 import { db, doc, setDoc, getDoc, onSnapshot } from '../firebase';
 import {
@@ -20,6 +21,7 @@ import {
   initialLegalDocuments,
   initialOrders,
   initialAdminUsers,
+  initialArticles,
 } from '../data/initialData';
 
 export interface AppSyncData {
@@ -32,6 +34,7 @@ export interface AppSyncData {
   legalDocuments?: LegalDocument[];
   orders?: Order[];
   adminUsers?: AdminUser[];
+  articles?: Article[];
   analytics?: any;
   version?: number;
   updatedAt?: string;
@@ -208,6 +211,7 @@ class RealtimeSyncManager {
         legalDocuments: initialLegalDocuments,
         orders: initialOrders,
         adminUsers: initialAdminUsers,
+        articles: initialArticles,
         analytics: {
           totalVisits: 14286,
           todayVisits: 390,
@@ -613,6 +617,7 @@ class RealtimeSyncManager {
       legalDocuments: initialLegalDocuments,
       orders: initialOrders,
       adminUsers: initialAdminUsers,
+      articles: initialArticles,
       version: this.currentVersion + 1,
       updatedAt: new Date().toISOString(),
     };

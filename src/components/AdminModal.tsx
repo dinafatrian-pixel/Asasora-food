@@ -22,6 +22,7 @@ import {
   Shield,
   CheckCircle2,
   BarChart3,
+  BookOpen,
 } from 'lucide-react';
 import {
   CompanyInfo,
@@ -34,6 +35,7 @@ import {
   GalleryItem,
   LegalDocument,
   AdminUser,
+  Article,
 } from '../types';
 
 import { LogoBrandTab } from './admin/LogoBrandTab';
@@ -42,6 +44,7 @@ import { KatalogTab } from './admin/KatalogTab';
 import { ReviewsTab } from './admin/ReviewsTab';
 import { ClientsTab } from './admin/ClientsTab';
 import { GalleryTab } from './admin/GalleryTab';
+import { ArticlesTab } from './admin/ArticlesTab';
 import { LegalitasTab } from './admin/LegalitasTab';
 import { ShippingTab } from './admin/ShippingTab';
 import { OrdersTab } from './admin/OrdersTab';
@@ -61,6 +64,7 @@ type AdminTab =
   | 'reviews'
   | 'clients'
   | 'gallery'
+  | 'articles'
   | 'legalitas'
   | 'shipping'
   | 'company';
@@ -107,6 +111,10 @@ interface AdminModalProps {
   onUpdateLegalDocument: (doc: LegalDocument) => void;
   onAddLegalDocument: (doc: Omit<LegalDocument, 'id'>) => void;
   onDeleteLegalDocument: (docId: string) => void;
+  articles?: Article[];
+  onUpdateArticle?: (article: Article) => void;
+  onAddArticle?: (article: Omit<Article, 'id'>) => void;
+  onDeleteArticle?: (articleId: string) => void;
   onUpdateShippingMethod: (method: ShippingMethod) => void;
   onUpdateCompany: (company: CompanyInfo) => void;
   onResetAllData?: () => void;
@@ -126,6 +134,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   clients,
   gallery,
   legalDocuments,
+  articles = [],
   shippingMethods,
   company,
   adminUsers = [],
@@ -152,6 +161,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   onUpdateLegalDocument,
   onAddLegalDocument,
   onDeleteLegalDocument,
+  onUpdateArticle,
+  onAddArticle,
+  onDeleteArticle,
   onUpdateShippingMethod,
   onUpdateCompany,
   onResetAllData,
@@ -392,6 +404,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       label: 'Edit Galeri',
       icon: <Camera className="w-3.5 h-3.5" />,
       badge: gallery.length,
+    },
+    {
+      id: 'articles',
+      label: 'Edit Artikel & Berita',
+      icon: <BookOpen className="w-3.5 h-3.5 text-emerald-600" />,
+      badge: articles.length,
     },
     {
       id: 'legalitas',
@@ -729,6 +747,16 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onUpdateGalleryItem={onUpdateGalleryItem}
                   onAddGalleryItem={onAddGalleryItem}
                   onDeleteGalleryItem={onDeleteGalleryItem}
+                  onNotify={handleNotify}
+                />
+              )}
+
+              {activeTab === 'articles' && onUpdateArticle && onAddArticle && onDeleteArticle && (
+                <ArticlesTab
+                  articles={articles}
+                  onUpdateArticle={onUpdateArticle}
+                  onAddArticle={onAddArticle}
+                  onDeleteArticle={onDeleteArticle}
                   onNotify={handleNotify}
                 />
               )}

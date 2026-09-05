@@ -9,6 +9,7 @@ import {
   ShippingMethod,
   Order,
   AdminUser,
+  Article,
 } from '../types';
 
 export const initialCompanyInfo: CompanyInfo = {
@@ -580,4 +581,132 @@ export const initialAdminUsers: AdminUser[] = [
     createdAt: '2025-01-15T09:00:00.000Z',
     lastLogin: '2025-01-15T09:30:00.000Z',
   },
+];
+
+export const initialArticles: Article[] = [
+  {
+    id: 'art-1',
+    slug: 'tips-memilih-katering-harian-karyawan-tangerang',
+    title: '5 Tips Memilih Katering Harian Karyawan di Tangerang untuk Produktivitas Kantor',
+    category: 'Katering Kantor',
+    excerpt: 'Panduan lengkap bagi HRD & General Affairs dalam menentukan katering makan siang kantor yang higienis, bergizi seimbang, dan selalu tepat waktu di Tangerang.',
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80',
+    author: 'Tim Nutrisi & HRD Solution Asasora',
+    date: '03 September 2026',
+    readTime: '4 menit baca',
+    isFeatured: true,
+    tags: ['katering harian karyawan Tangerang', 'catering makan siang kantor', 'Solusi HRD', 'Nutrisi Kantor'],
+    content: `Bagi divisi Human Resources (HRD) dan General Affairs (GA), menyediakan makan siang harian bagi tim bukan sekadar fasilitas kantor tambahan, melainkan investasi strategis dalam menjaga stamina, fokus, dan produktivitas karyawan.
+
+Berikut adalah 5 kriteria utama yang wajib diperhatikan saat memilih vendor katering harian karyawan Tangerang:
+
+1. Variasi Menu Seimbang dan Tidak Membosankan
+Karyawan yang menyantap menu yang monoton cenderung merasa jenuh dan kehilangan semangat saat istirahat siang. Vendor katering profesional harus menyediakan rotasi menu mingguan atau bulanan yang memadukan karbohidrat kompleks, protein berkualitas, sayuran berserat tinggi, serta pelengkap segar seperti buah dan sambal Nusantara.
+
+2. Jaminan Sertifikasi Halal Resmi BPJPH & Keamanan Pangan
+Ketenteraman dan kenyamanan seluruh karyawan saat bersantap adalah hal utama. Pastikan vendor memiliki Sertifikat Halal resmi dari BPJPH Kementerian Agama Republik Indonesia, bukan sekadar klaim sepihak. Ini memastikan seluruh bahan baku, bumbu, hingga proses pemotongan dan pengolahan terbebas dari unsur non-halal.
+
+3. Standar Dapur Higienis Bersertifikasi Laik Sanitasi
+Dapur katering harus menerapkan standar kebersihan yang ketat dengan tenaga pengolah makanan bersertifikasi higiene sanitasi. Makanan yang higienis menghindarkan tim kantor Anda dari risiko gangguan pencernaan yang dapat mengganggu operasional perusahaan.
+
+4. Armada Pengiriman Tepat Waktu Sebelum Jam Istirahat
+Ketepatan waktu adalah komitmen krusial dalam jasa boga B2B. Makanan harus tiba 30-45 menit sebelum bel istirahat berbunyi dalam wadah boks tertutup rapi dan tetap hangat. Asasora Food didukung armada kurir khusus yang berdedikasi menjangkau kawasan perkantoran dan industri di seluruh Tangerang dan Jabodetabek.
+
+5. Legalitas Resmi Berbadan Hukum (PT & NPWP)
+Untuk kemudahan administrasi keuangan, pelaporan pajak (faktur pajak), serta perjanjian kerja sama jangka panjang (Term of Payment / TOP), pilihlah vendor yang berbadan hukum resmi seperti PT. ASASORA BIO HEALTHORA. Legalitas lengkap memberikan rasa aman dan pertanggungjawaban profesional tingkat korporasi.`
+  },
+  {
+    id: 'art-2',
+    slug: 'standar-dapur-higienis-sertifikasi-halal-bpjph',
+    title: 'Standar Dapur Higienis & Sertifikasi Halal BPJPH: Jaminan Keamanan Pangan Katering Asasora',
+    category: 'Higienitas & Halal',
+    excerpt: 'Menelisik standar operasional dapur steril, sertifikat laik higiene sanitasi jasaboga, dan audit bahan baku 100% Halal BPJPH di PT. Asasora Bio Healthora.',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
+    author: 'Penyelia Halal & Tim QC Asasora',
+    date: '28 Agustus 2026',
+    readTime: '5 menit baca',
+    isFeatured: true,
+    tags: ['katering dapur higienis', 'Sertifikasi Halal BPJPH', 'Laik Higiene Jasaboga', 'Audit Pangan'],
+    content: `Kepercayaan pelanggan korporat dan instansi pemerintah dibangun di atas fondasi keamanan pangan yang tanpa kompromi. Di PT. ASASORA BIO HEALTHORA, standar kebersihan dan kehalalan merupakan DNA operasional sehari-hari.
+
+Sistem Jaminan Produk Halal (SJPH) Terintegrasi
+Setiap bahan mentah yang masuk ke fasilitas dapur Asasora di Buaran Indah Kota Tangerang melewati pemeriksaan ketat oleh Penyelia Halal tersertifikasi. Mulai dari daging sapi, daging ayam, aneka bumbu rempah Nusantara, hingga minyak dan saus kemasan, seluruhnya bersertifikasi resmi BPJPH.
+
+Penerapan Protokol Sanitasi & Dapur Steril
+1. Area Produksi Terpisah: Pembagian zona basah (persiapan bahan mentah), zona panas (pengolahan/memasak), dan zona steril (penataan porsi & packing) mencegah terjadinya kontaminasi silang (cross-contamination).
+2. Sanitasi Personal APD Penuh: Seluruh koki dan staf penataan makanan diwajibkan mengenakan hairnet, masker sanitasi, apron higienis, serta sarung tangan food-grade.
+3. Kontrol Suhu Masak & Pendinginan Alami: Suhu pematangan dimonitor secara berkala untuk memastikan bakteri patogen mati sempurna tanpa merusak nutrisi alami bahan pangan.
+
+Legalitas & Sertifikat Resmi yang Telah Terbit:
+- Sertifikat Halal BPJPH Republik Indonesia
+- Sertifikat Laik Higiene Sanitasi Jasaboga
+- Sertifikat Standar Pengolahan Pangan Industri Rumah Tangga (SPP-PIRT)
+- Izin Edar PM-UMKU & NIB Berbasis Risiko Pemerintah RI
+
+Dengan komitmen ini, setiap suapan nasi kotak, tumpeng, maupun prasmanan yang Anda santap dijamin 100% thayyib, lezat, dan menyehatkan bagi seluruh rekan kerja di kantor.`
+  },
+  {
+    id: 'art-3',
+    slug: 'panduan-memilih-nasi-kotak-seminar-tangerang',
+    title: 'Panduan Memilih Paket Nasi Kotak Seminar di Tangerang untuk Event Korporat & Instansi',
+    category: 'Event & Seminar',
+    excerpt: 'Strategi praktis mengatur konsumsi seminar, rapat direksi, dan workshop perusahaan dengan pilihan kemasan eksklusif serta porsi proporsional.',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+    author: 'Event Coordinator Asasora',
+    date: '20 Agustus 2026',
+    readTime: '4 menit baca',
+    isFeatured: false,
+    tags: ['nasi kotak seminar Tangerang', 'Meeting Direksi', 'Event Korporat', 'Konsumsi Rapat'],
+    content: `Menyelenggarakan seminar bisnis, workshop karyawan, atau rapat tahunan direksi di Tangerang menuntut ketelitian tinggi pada setiap detail, terutama ketersediaan konsumsi. Sajian makanan yang lezat dan disajikan secara elegan mencerminkan martabat perusahaan penyelenggara.
+
+Panduan Praktis Menentukan Konsumsi Seminar & Rapat:
+
+1. Tentukan Format Acara dan Durasi
+- Acara Setengah Hari (Half-Day): Cukup sediakan 1 kali Snack Box pembuka di pagi hari dan 1 kali Nasi Kotak Premium menjelang siang.
+- Acara Sehari Penuh (Full-Day): Sediakan Coffee Break pagi, Nasi Kotak Makan Siang Sehat, dan Snack Box sore untuk menjaga energi peserta.
+
+2. Pemilihan Wadah Kemasan yang Elegan & Kokoh
+Untuk event seminar eksekutif, hindari wadah styrofoam atau kardus tipis yang mudah penyok. Asasora Food menggunakan kemasan kotak tebal food-grade dengan sekat terpisah untuk nasi, lauk utama, sayur, dan sambal, sehingga kuah atau minyak tidak merembes ke bagian lain. Setiap boks dilengkapi sendok, garpu, tisu higienis, dan tusuk gigi tertutup.
+
+3. Memperhitungkan Porsi Buffer (Cadangan)
+Sering kali terdapat tamu VIP tambahan atau peserta pengganti di hari pelaksanaan. Selalu tambahkan cadangan sekitar 5-10% dari total undangan resmi agar tidak terjadi kekurangan konsumsi di tengah acara.
+
+4. Pilihan Menu Favorit Peserta Seminar
+Menu Nusantara seperti Nasi Kotak Ayam Bakar Madu, Nasi Daun Jeruk NaSemangkuk, dan Nasi Liwet Gurih merupakan opsi teraman yang disukai lidah seluruh kalangan peserta dari berbagai latar belakang daerah.
+
+Konsultasikan kebutuhan konsumsi event kantor Anda bersama tim Asasora Food untuk mendapatkan simulasi paket harga dan rincian menu yang paling tepat.`
+  },
+  {
+    id: 'art-4',
+    slug: 'rahasia-paru-balado-asasora-syukuran-kantor',
+    title: 'Rahasia Paru Balado Khas Asasora: Menu Primadona untuk Syukuran Kantor & Gathering',
+    category: 'Kuliner Nusantara',
+    excerpt: 'Mengenal keistimewaan olahan Paru Sapi Balado Asasora yang empuk, tidak amis, berpadu sambal balado khas Minang yang selalu jadi favorit di setiap perayaan kantor.',
+    image: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335914/asasora/bdkhax7wror6ws4nmjii.jpg',
+    author: 'Chef Spesialis Nusantara Asasora',
+    date: '14 Agustus 2026',
+    readTime: '3 menit baca',
+    isFeatured: false,
+    tags: ['paket catering syukuran kantor', 'Paru Balado Asasora', 'Menu Primadona', 'Kuliner Nusantara'],
+    content: `Dalam setiap momen syukuran pencapaian target kantor, peresmian cabang baru, milad yayasan, maupun family gathering perusahaan, hidangan khas Nusantara selalu menjadi pusat kehangatan kebersamaan.
+
+Di antara sekian banyak varian menu katering Asasora, Paru Sapi Balado "Asasora" menempati posisi istimewa sebagai lauk paling banyak dipesan dan digemari oleh klien korporat kami.
+
+Apa Rahasia di Balik Kelezatan Paru Balado Asasora?
+
+1. Pemilihan Bahan Baku Paru Segar Halal
+Kami hanya menggunakan potongan paru sapi segar berkualitas prima dari Rumah Pemotongan Hewan (RPH) bersertifikasi Halal BPJPH. Paru dibersihkan melalui beberapa tahap pencucian dengan air mengalir untuk menghilangkan aroma amis secara menyeluruh.
+
+2. Teknik Perebusan Rempah Tradisional
+Paru direbus perlahan bersama kombinasi rempah aromatik Nusantara: daun salam, serai wangi, jahe segar, lengkuas, dan asam kandis hingga teksturnya empuk namun tetap mempertahankan kekenyalan yang pas saat digigit.
+
+3. Irisan Tipis & Penggorengan Pas
+Paru kemudian diiris tipis dengan ketebalan presisi, lalu digoreng hingga bagian luarnya memiliki sensasi garing lembut (crispy on the outside, tender on the inside), tanpa menjadi keras atau alot.
+
+4. Siraman Sambal Balado Uleg Asli
+Sambal balado diracik dari cabai merah keriting segar pilihan, bawang merah brebes, dan sedikit perasan jeruk limau yang dimasak matang tanak hingga keluar minyak alaminya yang wangi dan menggugah selera.
+
+Kombinasi Sempurna untuk Syukuran Kantor:
+Paru Balado Asasora sangat cocok disajikan sebagai lauk pendamping Nasi Tumpeng Tampah, Paket Nasi Bento NaSemangkuk, maupun hidangan prasmanan kantor. Hubungi MinSora sekarang untuk memesan paket syukuran kantor Anda!`
+  }
 ];

@@ -154,6 +154,14 @@ export const Footer: React.FC<FooterProps> = ({
                   {t('footer.nav_clients', 'Klien Kami (Our Client)')}
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => onScrollToSection('articles')}
+                  className="hover:text-white transition cursor-pointer text-emerald-400 font-semibold"
+                >
+                  {t('nav.articles', 'Artikel & Berita Seputar Katering')}
+                </button>
+              </li>
             </ul>
           </div>
 

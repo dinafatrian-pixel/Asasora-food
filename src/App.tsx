@@ -5,6 +5,7 @@ import { ProductCatalogSection } from './components/ProductCatalogSection';
 import { ClientsSection } from './components/ClientsSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { GallerySection } from './components/GallerySection';
+import { ArticlesSection } from './components/ArticlesSection';
 import { LegalitasSection } from './components/LegalitasSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -27,6 +28,7 @@ import {
   initialLegalDocuments,
   initialOrders,
   initialAdminUsers,
+  initialArticles,
 } from './data/initialData';
 import {
   CartItem,
@@ -40,6 +42,7 @@ import {
   GalleryItem,
   LegalDocument,
   AdminUser,
+  Article,
   VisitorAnalytics,
 } from './types';
 import { MessageSquareQuote, ShoppingBag } from 'lucide-react';
@@ -172,6 +175,21 @@ export default function App() {
     return initialLegalDocuments;
   });
 
+  const [articles, setArticles] = useState<Article[]>(() => {
+    const saved = localStorage.getItem('asasora_articles');
+    if (saved) {
+      try {
+        const parsed: Article[] = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        return initialArticles;
+      }
+    }
+    return initialArticles;
+  });
+
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('asasora_orders');
     if (saved) {
@@ -263,6 +281,9 @@ export default function App() {
       }
       if (Array.isArray(incomingData.legalDocuments) && incomingData.legalDocuments.length > 0) {
         setLegalDocuments(incomingData.legalDocuments);
+      }
+      if (Array.isArray(incomingData.articles) && incomingData.articles.length > 0) {
+        setArticles(incomingData.articles);
       }
       if (Array.isArray(incomingData.orders)) {
         setOrders(incomingData.orders);
@@ -366,6 +387,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('asasora_legal', JSON.stringify(legalDocuments));
   }, [legalDocuments]);
+
+  useEffect(() => {
+    localStorage.setItem('asasora_articles', JSON.stringify(articles));
+  }, [articles]);
 
   useEffect(() => {
     localStorage.setItem('asasora_orders', JSON.stringify(orders));
@@ -653,6 +678,35 @@ export default function App() {
     });
   };
 
+  // Article handlers
+  const handleUpdateArticle = (updated: Article) => {
+    setArticles((prev) => {
+      const next = prev.map((a) => (a.id === updated.id ? updated : a));
+      syncManager.saveData({ articles: next });
+      return next;
+    });
+  };
+
+  const handleAddArticle = (newArticle: Omit<Article, 'id'>) => {
+    const article: Article = {
+      ...newArticle,
+      id: `art-${Date.now()}`,
+    };
+    setArticles((prev) => {
+      const next = [article, ...prev];
+      syncManager.saveData({ articles: next });
+      return next;
+    });
+  };
+
+  const handleDeleteArticle = (articleId: string) => {
+    setArticles((prev) => {
+      const next = prev.filter((a) => a.id !== articleId);
+      syncManager.saveData({ articles: next });
+      return next;
+    });
+  };
+
   // Admin User handlers
   const handleUpdateAdminUser = (updatedUser: AdminUser) => {
     setAdminUsers((prev) => {
@@ -694,6 +748,7 @@ export default function App() {
     setClients(initialClients);
     setGallery(initialGallery);
     setLegalDocuments(initialLegalDocuments);
+    setArticles(initialArticles);
     setShippingMethods(initialShippingMethods);
     setOrders(initialOrders);
     setAdminUsers(initialAdminUsers);
@@ -739,6 +794,13 @@ export default function App() {
 
         {/* Galeri Perusahaan */}
         <GallerySection gallery={gallery} />
+
+        {/* Artikel & Berita Seputar Katering */}
+        <ArticlesSection
+          articles={articles}
+          company={company}
+          onOpenOrderModal={() => setIsOrderModalOpen(true)}
+        />
 
         {/* Legalitas Perusahaan */}
         <LegalitasSection documents={legalDocuments} />
@@ -815,6 +877,10 @@ export default function App() {
             onUpdateLegalDocument={handleUpdateLegalDocument}
             onAddLegalDocument={handleAddLegalDocument}
             onDeleteLegalDocument={handleDeleteLegalDocument}
+            articles={articles}
+            onUpdateArticle={handleUpdateArticle}
+            onAddArticle={handleAddArticle}
+            onDeleteArticle={handleDeleteArticle}
             onUpdateShippingMethod={handleUpdateShippingMethod}
             onUpdateCompany={handleUpdateCompany}
             onResetAllData={handleResetAllData}

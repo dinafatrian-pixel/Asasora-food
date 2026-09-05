@@ -16,11 +16,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.clients': 'Klien',
     'nav.reviews': 'Ulasan',
     'nav.gallery': 'Galeri',
+    'nav.articles': 'Artikel & Berita',
     'nav.legality': 'Legalitas',
     'nav.contact': 'Kontak',
     'nav.admin': 'Admin',
     'nav.order_online': 'Order Online',
     'nav.whatsapp_chat': 'Chat MinSora',
+
+    // Articles Section
+    'articles.badge': 'Edukasi & Wawasan Katering',
+    'articles.title': 'Artikel & Berita Seputar Katering',
+    'articles.subtitle': 'Panduan praktis katering makan siang kantor, standar dapur higienis halal BPJPH, serta tips memilih nasi kotak seminar & event di Tangerang.',
 
     // Hero Section
     'hero.food_partner_badge': 'Food & Health Partner',
@@ -284,11 +290,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.clients': 'Clients',
     'nav.reviews': 'Reviews',
     'nav.gallery': 'Gallery',
+    'nav.articles': 'Articles & News',
     'nav.legality': 'Legality',
     'nav.contact': 'Contact',
     'nav.admin': 'Admin',
     'nav.order_online': 'Order Online',
     'nav.whatsapp_chat': 'Chat MinSora',
+
+    // Articles Section
+    'articles.badge': 'Catering Education & Insights',
+    'articles.title': 'Articles & News on Catering',
+    'articles.subtitle': 'Practical guides for office lunch catering, hygienic BPJPH halal kitchen standards, and tips for choosing seminar & event box meals in Tangerang.',
 
     // Hero Section
     'hero.food_partner_badge': 'Food & Health Partner',

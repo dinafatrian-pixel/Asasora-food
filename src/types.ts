@@ -227,6 +227,21 @@ export interface VisitorAnalytics {
   lastUpdated: string;
 }
 
+export interface Article {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  author: string;
+  date: string;
+  readTime: string;
+  tags?: string[];
+  isFeatured?: boolean;
+}
+
 export interface AdminUser {
   id: string;
   username: string;
