@@ -1077,6 +1077,24 @@ async function startServer() {
     }
   });
 
+  // Serve XML Sitemap for search engines & Google Search Console
+  app.get('/sitemap.xml', (req: Request, res: Response) => {
+    const sitemapPath = fs.existsSync(path.join(process.cwd(), 'public', 'sitemap.xml'))
+      ? path.join(process.cwd(), 'public', 'sitemap.xml')
+      : path.join(process.cwd(), 'sitemap.xml');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    return res.sendFile(sitemapPath);
+  });
+
+  // Serve robots.txt
+  app.get('/robots.txt', (req: Request, res: Response) => {
+    const robotsPath = fs.existsSync(path.join(process.cwd(), 'public', 'robots.txt'))
+      ? path.join(process.cwd(), 'public', 'robots.txt')
+      : path.join(process.cwd(), 'robots.txt');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    return res.sendFile(robotsPath);
+  });
+
   // Vite middleware setup (development) or static files serving (production)
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

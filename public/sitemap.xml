@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Halaman Utama (Homepage) -->
+  <url>
+    <loc>https://asasorafood.com/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Halaman Blog / Artikel Edukasi Katering -->
+  <url>
+    <loc>https://asasorafood.com/#articles</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Halaman Kontak & Layanan Pemesanan -->
+  <url>
+    <loc>https://asasorafood.com/#contact</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Halaman Menu Katalog Katering -->
+  <url>
+    <loc>https://asasorafood.com/#catalog</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Halaman Layanan B2B & Event Kantor -->
+  <url>
+    <loc>https://asasorafood.com/#services</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Halaman Legalitas Resmi & Sertifikasi Halal BPJPH -->
+  <url>
+    <loc>https://asasorafood.com/#legalitas</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Formulir Pesanan Online & Cek Ongkir Otomatis -->
+  <url>
+    <loc>https://asasorafood.com/#order</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Detail Artikel Blog: Tips Memilih Katering Harian Karyawan Tangerang -->
+  <url>
+    <loc>https://asasorafood.com/?article=tips-memilih-katering-harian-karyawan-tangerang</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Detail Artikel Blog: Standar Dapur Higienis & Sertifikasi Halal BPJPH -->
+  <url>
+    <loc>https://asasorafood.com/?article=standar-dapur-higienis-sertifikasi-halal-bpjph</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Detail Artikel Blog: Panduan Memilih Nasi Kotak Seminar Tangerang -->
+  <url>
+    <loc>https://asasorafood.com/?article=panduan-memilih-nasi-kotak-seminar-tangerang</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Detail Artikel Blog: Rahasia Paru Balado Asasora Syukuran Kantor -->
+  <url>
+    <loc>https://asasorafood.com/?article=rahasia-paru-balado-asasora-syukuran-kantor</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
