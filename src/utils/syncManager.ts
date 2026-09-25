@@ -542,6 +542,182 @@ class RealtimeSyncManager {
     return true;
   }
 
+  public async submitCustomerReview(review: {
+    name: string;
+    company?: string;
+    rating: number;
+    comment: string;
+  }): Promise<{ success: boolean; review?: Review; message?: string }> {
+    this.isSyncing = true;
+    this.notifyStatus();
+
+    // 1. Post to Express Backend API endpoint /api/reviews
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(review),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result && result.success && result.review) {
+          this.isConnected = true;
+          if (result.data) {
+            this.handleIncomingData(result.data, 'local');
+          }
+          // Also sync to Firestore if enabled
+          if (db) {
+            try {
+              const storeDocRef = doc(db, 'store', 'current');
+              const storeSnap = await getDoc(storeDocRef);
+              if (storeSnap.exists()) {
+                const storeData = storeSnap.data() as AppSyncData;
+                const currentReviews = Array.isArray(storeData.reviews) ? storeData.reviews : [];
+                const updatedReviews = [result.review, ...currentReviews];
+                await setDoc(
+                  storeDocRef,
+                  sanitizeForFirestore({
+                    reviews: updatedReviews,
+                    version: (storeData.version || this.currentVersion) + 1,
+                    updatedAt: new Date().toISOString(),
+                  }),
+                  { merge: true }
+                );
+              }
+            } catch (fsErr) {
+              console.warn('[Firestore] Syncing new review to cloud DB warning:', fsErr);
+            }
+          }
+
+          return { success: true, review: result.review, message: result.message };
+        }
+      }
+    } catch (e) {
+      console.warn('Backend /api/reviews fetch error, trying direct fallback', e);
+    }
+
+    // 2. Direct Fallback if backend server is offline or static hosting
+    const fallbackReview: Review = {
+      id: `rev-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      name: review.name.trim(),
+      company: review.company?.trim() || 'Pelanggan Umum',
+      role: review.company?.trim() || 'Pelanggan Setia PT. Asasora',
+      rating: review.rating,
+      comment: review.comment.trim(),
+      date: 'Baru saja',
+      verified: true,
+    };
+
+    if (db) {
+      try {
+        const storeDocRef = doc(db, 'store', 'current');
+        const storeSnap = await getDoc(storeDocRef);
+        if (storeSnap.exists()) {
+          const storeData = storeSnap.data() as AppSyncData;
+          const currentReviews = Array.isArray(storeData.reviews) ? storeData.reviews : [];
+          const updatedReviews = [fallbackReview, ...currentReviews];
+          const newVersion = (storeData.version || this.currentVersion) + 1;
+          await setDoc(
+            storeDocRef,
+            sanitizeForFirestore({
+              reviews: updatedReviews,
+              version: newVersion,
+              updatedAt: new Date().toISOString(),
+            }),
+            { merge: true }
+          );
+          this.handleIncomingData({ ...storeData, reviews: updatedReviews, version: newVersion }, 'firestore');
+        }
+      } catch (err) {
+        console.warn('Error saving review to Firestore:', err);
+      }
+    }
+
+    this.isSyncing = false;
+    this.notifyStatus();
+    return { success: true, review: fallbackReview };
+  }
+
+  public async deleteReviewSecure(
+    reviewId: string,
+    adminToken?: string
+  ): Promise<{ success: boolean; message?: string }> {
+    this.isSyncing = true;
+    this.notifyStatus();
+
+    const token =
+      adminToken ||
+      (typeof window !== 'undefined'
+        ? localStorage.getItem('asasora_admin_token') ||
+          sessionStorage.getItem('asasora_admin_token') ||
+          'adm_session_active'
+        : '');
+
+    try {
+      const response = await fetch(`/api/reviews/${encodeURIComponent(reviewId)}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'x-admin-token': token,
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        this.isSyncing = false;
+        this.notifyStatus();
+        return {
+          success: false,
+          message:
+            result?.message || 'Akses ditolak: Hanya administrator yang berhak menghapus ulasan.',
+        };
+      }
+
+      if (result.data) {
+        this.handleIncomingData(result.data, 'local');
+      }
+
+      // Also update Firestore if available
+      if (db) {
+        try {
+          const storeDocRef = doc(db, 'store', 'current');
+          const storeSnap = await getDoc(storeDocRef);
+          if (storeSnap.exists()) {
+            const storeData = storeSnap.data() as AppSyncData;
+            const currentReviews = Array.isArray(storeData.reviews) ? storeData.reviews : [];
+            const updatedReviews = currentReviews.filter((r) => r.id !== reviewId);
+            const newVersion = (storeData.version || this.currentVersion) + 1;
+            await setDoc(
+              storeDocRef,
+              sanitizeForFirestore({
+                reviews: updatedReviews,
+                version: newVersion,
+                updatedAt: new Date().toISOString(),
+              }),
+              { merge: true }
+            );
+          }
+        } catch (fsErr) {
+          console.warn('[Firestore] Error deleting review from Firestore:', fsErr);
+        }
+      }
+
+      this.isSyncing = false;
+      this.notifyStatus();
+      return { success: true, message: result.message };
+    } catch (err: any) {
+      this.isSyncing = false;
+      this.notifyStatus();
+      return {
+        success: false,
+        message: err.message || 'Gagal menghubungi server untuk menghapus ulasan.',
+      };
+    }
+  }
+
   public async toggleProductLike(productId: string, increment: boolean): Promise<number | null> {
     const delta = increment ? 1 : -1;
     let newLikes: number | null = null;

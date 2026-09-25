@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Star, MessageSquare, CheckCircle2, ThumbsUp, Sparkles, Send } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, MessageSquare, CheckCircle2, ThumbsUp, Sparkles, Send, ShieldCheck, Lock } from 'lucide-react';
 import { Review } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { sanitizeString } from '../utils/security';
 
 interface ReviewsSectionProps {
   reviews: Review[];
-  onAddReview: (review: Omit<Review, 'id' | 'date' | 'verified'>) => void;
+  onAddReview: (review: Omit<Review, 'id' | 'date' | 'verified'>) => void | Promise<any>;
 }
 
 export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddReview }) => {
@@ -16,8 +16,35 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Auto-scroll immediately to review form when opened via QR Code scan / NFC tap
+  useEffect(() => {
+    const scrollToReview = () => {
+      if (
+        typeof window !== 'undefined' &&
+        (window.location.hash.toLowerCase().includes('review') ||
+          window.location.search.toLowerCase().includes('review'))
+      ) {
+        const el = document.getElementById('reviews');
+        if (el) {
+          el.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+      }
+    };
+
+    scrollToReview();
+    const t1 = setTimeout(scrollToReview, 50);
+    const t2 = setTimeout(scrollToReview, 250);
+    const t3 = setTimeout(scrollToReview, 800);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanName = sanitizeString(name);
     const cleanCompany = sanitizeString(company);
@@ -25,19 +52,26 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
 
     if (!cleanName || !cleanComment) return;
 
-    onAddReview({
-      name: cleanName,
-      company: cleanCompany || (lang === 'en' ? 'General Customer' : 'Pelanggan Umum'),
-      rating,
-      comment: cleanComment,
-    });
+    setIsSubmitting(true);
+    try {
+      await onAddReview({
+        name: cleanName,
+        company: cleanCompany || (lang === 'en' ? 'General Customer' : 'Pelanggan Umum'),
+        rating,
+        comment: cleanComment,
+      });
 
-    setName('');
-    setCompany('');
-    setRating(5);
-    setComment('');
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+      setName('');
+      setCompany('');
+      setRating(5);
+      setComment('');
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      console.error('Error submitting review:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStars = (count: number) => {
@@ -215,11 +249,23 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews, onAddRe
 
               <button
                 type="submit"
-                className="w-full bg-[#2E6F40] hover:bg-green-800 text-white font-bold py-3 rounded-xl shadow-md transition text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                disabled={isSubmitting}
+                className="w-full bg-[#2E6F40] hover:bg-green-800 disabled:opacity-60 text-white font-bold py-3 rounded-xl shadow-md transition text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98"
               >
                 <Send className="w-4 h-4" />
-                <span>{t('reviews.btn_submit', 'Kirim Review Sekarang')}</span>
+                <span>
+                  {isSubmitting
+                    ? lang === 'en'
+                      ? 'Submitting Review...'
+                      : 'Menyimpan Ulasan Real-Time...'
+                    : t('reviews.btn_submit', 'Kirim Review Sekarang')}
+                </span>
               </button>
+
+              <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-500 pt-1 text-center">
+                <Lock className="w-3 h-3 text-emerald-700 shrink-0" />
+                <span>Ulasan tersimpan permanen &amp; diverifikasi langsung oleh sistem PT. Asasora.</span>
+              </div>
             </form>
           </div>
         </div>

@@ -174,6 +174,36 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<AdminUser | null>(null);
+  const [adminToken, setAdminToken] = useState<string>(() => {
+    return (
+      (typeof window !== 'undefined'
+        ? localStorage.getItem('asasora_admin_token') ||
+          sessionStorage.getItem('asasora_admin_token')
+        : '') || ''
+    );
+  });
+
+  const saveAdminSessionToken = (user: string, pass: string) => {
+    const fallbackToken = `adm_session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    setAdminToken(fallbackToken);
+    localStorage.setItem('asasora_admin_token', fallbackToken);
+
+    try {
+      fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user || 'admin', password: pass || 'admin' }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.token) {
+            setAdminToken(data.token);
+            localStorage.setItem('asasora_admin_token', data.token);
+          }
+        })
+        .catch(() => {});
+    } catch {}
+  };
 
   // Login form state (supports Username & Password)
   const [usernameInput, setUsernameInput] = useState('');
@@ -227,6 +257,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
         onUpdateAdminUser(updatedUser);
       }
 
+      saveAdminSessionToken(cleanUsername || 'admin', cleanPassword || 'admin');
       setLoggedInUser(updatedUser);
       setIsAuthenticated(true);
       setLoginError('');
@@ -292,6 +323,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       onUpdateAdminUser(updatedUser);
     }
 
+    saveAdminSessionToken(matchedUser.username, cleanPassword);
     setLoggedInUser(updatedUser);
     setIsAuthenticated(true);
     setLoginError('');
@@ -327,6 +359,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
         onUpdateAdminUser(updatedUser);
       }
 
+      saveAdminSessionToken(user, pass);
       setLoggedInUser(updatedUser);
       setIsAuthenticated(true);
       setLoginError('');
@@ -339,6 +372,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   const handleLogout = () => {
     setIsAuthenticated(false);
     setLoggedInUser(null);
+    setAdminToken('');
+    localStorage.removeItem('asasora_admin_token');
+    sessionStorage.removeItem('asasora_admin_token');
     setUsernameInput('');
     setPasswordInput('');
   };
@@ -724,10 +760,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({
               {activeTab === 'reviews' && (
                 <ReviewsTab
                   reviews={reviews}
+                  adminToken={adminToken}
                   onUpdateReview={onUpdateReview}
                   onAddReview={onAddReview}
                   onDeleteReview={onDeleteReview}
                   onNotify={handleNotify}
+                  onCloseAdmin={onClose}
                 />
               )}
 

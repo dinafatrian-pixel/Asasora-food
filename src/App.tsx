@@ -9,6 +9,7 @@ import { ArticlesSection } from './components/ArticlesSection';
 import { LegalitasSection } from './components/LegalitasSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { CustomerReviewPortal } from './components/CustomerReviewPortal';
 
 // Code Splitting & Dynamic Imports to drastically minimize initial JS payload (reduces FCP & eliminates Long Main-Thread Tasks)
 const OrderFormSection = lazy(() =>
@@ -52,6 +53,41 @@ import { initGoogleAnalytics, trackVisitorPing, trackGAEvent, defaultAnalyticsDa
 
 export default function App() {
   const { t } = useLanguage();
+
+  // Check if visitor specifically accessed customer review (via QR code scan or NFC tap)
+  const [isReviewOnlyMode, setIsReviewOnlyMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const hash = (window.location.hash || '').toLowerCase();
+    const search = (window.location.search || '').toLowerCase();
+    const path = (window.location.pathname || '').toLowerCase();
+    return (
+      hash.includes('review') ||
+      search.includes('review') ||
+      path.includes('review')
+    );
+  });
+
+  useEffect(() => {
+    const handleUrlReviewCheck = () => {
+      if (typeof window === 'undefined') return;
+      const hash = (window.location.hash || '').toLowerCase();
+      const search = (window.location.search || '').toLowerCase();
+      const path = (window.location.pathname || '').toLowerCase();
+      const isRev =
+        hash.includes('review') ||
+        search.includes('review') ||
+        path.includes('review');
+      setIsReviewOnlyMode(isRev);
+    };
+
+    window.addEventListener('hashchange', handleUrlReviewCheck);
+    window.addEventListener('popstate', handleUrlReviewCheck);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlReviewCheck);
+      window.removeEventListener('popstate', handleUrlReviewCheck);
+    };
+  }, []);
+
   // Local storage synced states
   const [company, setCompany] = useState<CompanyInfo>(() => {
     const saved = localStorage.getItem('asasora_company');
@@ -487,18 +523,27 @@ export default function App() {
   };
 
   // Review submission
-  const handleAddReview = (newReview: Omit<Review, 'id' | 'date' | 'verified'>) => {
-    const review: Review = {
-      ...newReview,
-      id: `rev-${Date.now()}`,
-      date: 'Baru saja',
-      verified: true,
-    };
-    setReviews((prev) => {
-      const next = [review, ...prev];
-      syncManager.saveData({ reviews: next });
-      return next;
-    });
+  const handleAddReview = async (newReview: Omit<Review, 'id' | 'date' | 'verified'>) => {
+    try {
+      const res = await syncManager.submitCustomerReview(newReview);
+      if (res && res.review) {
+        setReviews((prev) => {
+          const filtered = prev.filter((r) => r.id !== res.review!.id);
+          return [res.review!, ...filtered];
+        });
+      } else {
+        const review: Review = {
+          ...newReview,
+          id: `rev-${Date.now()}`,
+          date: 'Baru saja',
+          verified: true,
+        };
+        setReviews((prev) => [review, ...prev]);
+        syncManager.saveData({ reviews: [review, ...reviews] });
+      }
+    } catch (err) {
+      console.error('Error submitting review:', err);
+    }
   };
 
   // Order created
@@ -756,6 +801,25 @@ export default function App() {
   };
 
   const totalCartCount = cartItems.reduce((sum, it) => sum + it.quantity, 0);
+
+  // Dedicated Review Portal (Exclusive view for customers scanning QR Code / NFC)
+  if (isReviewOnlyMode) {
+    return (
+      <CustomerReviewPortal
+        company={company}
+        reviews={reviews}
+        onAddReview={handleAddReview}
+        onBackToHome={() => {
+          setIsReviewOnlyMode(false);
+          try {
+            window.history.pushState({}, '', window.location.pathname || '/');
+          } catch {
+            window.location.hash = '';
+          }
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-gray-800 flex flex-col selection:bg-[#2E6F40] selection:text-white font-sans">
