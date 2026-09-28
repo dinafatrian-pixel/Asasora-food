@@ -48,14 +48,40 @@
    ========================================================================== */
 .product-catalog-grid-wrap {
   min-height: 520px;
-  contain-intrinsic-size: auto 520px;
-  content-visibility: auto;
 }
 
 /* ==========================================================================
-   RESPONSIVITAS MOBILE-FIRST (@media (max-width: 768px))
+   MOBILE-FIRST PERFORMANCE & ZERO CLS (@media (max-width: 768px))
+   Khusus Smartphone: Kunci ukuran gambar katalog & pangkas LCP mobile < 2.5s
    ========================================================================== */
 @media (max-width: 768px) {
+  /* 1. Penguncian dimensi gambar katalog khusus HP (Atasi CLS 0.292 secara mutlak) */
+  .catalog-product-img-box,
+  .product-image-container,
+  [id^="product-"] .relative.aspect-square {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    contain: layout paint;
+  }
+
+  .catalog-product-img-box img,
+  .product-image-container img,
+  [id^="product-"] img {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* 2. Optimasi Rendering LCP Smartphone: content-visibility auto */
+  .product-catalog-grid-wrap,
+  .product-grid {
+    content-visibility: auto !important;
+    contain-intrinsic-size: 1px 520px !important;
+  }
+
   /* Tombol aksi utama minimal tinggi 48px agar ramah sentuhan jari */
   button:not(.btn-icon-only),
   a[class*="btn"],

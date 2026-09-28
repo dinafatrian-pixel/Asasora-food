@@ -490,14 +490,25 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                 >
                   {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif dengan penguncian dimensi mutlak) */}
                   <div
-                    className="relative aspect-square w-full bg-gray-100 overflow-hidden"
+                    className="catalog-product-img-box relative aspect-square w-full bg-gray-100 overflow-hidden"
                     style={{ aspectRatio: '1 / 1' }}
                   >
                     <picture className="w-full h-full block">
+                      {/* Sumber Gambar Terkompres Khusus Smartphone (LCP < 2.5s) */}
+                      <source
+                        media="(max-width: 768px)"
+                        srcSet={
+                          product.image.includes('cloudinary.com')
+                            ? product.image.replace('/upload/', '/upload/w_360,c_limit,f_webp,q_auto:eco/')
+                            : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
+                        }
+                        type="image/webp"
+                      />
+                      {/* Sumber Gambar Resolusi Penuh untuk Desktop / Layar Lebar */}
                       <source
                         srcSet={
                           product.image.includes('cloudinary.com')
-                            ? product.image.replace('/upload/', '/upload/f_webp,q_auto:good/')
+                            ? product.image.replace('/upload/', '/upload/w_600,c_limit,f_webp,q_auto:good/')
                             : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
                         }
                         type="image/webp"
