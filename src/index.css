@@ -50,12 +50,32 @@
   min-height: 520px;
 }
 
+/* Kunci aspek rasio gambar produk di seluruh resolusi agar browser mengalokasikan ruang sejak awal */
+.catalog-product-img-box,
+.product-image-container,
+[id^="product-"] .relative.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.catalog-product-img-box img,
+.product-image-container img,
+[id^="product-"] img {
+  aspect-ratio: 1 / 1;
+}
+
 /* ==========================================================================
    MOBILE-FIRST PERFORMANCE & ZERO CLS (@media (max-width: 768px))
    Khusus Smartphone: Kunci ukuran gambar katalog & pangkas LCP mobile < 2.5s
    ========================================================================== */
 @media (max-width: 768px) {
-  /* 1. Penguncian dimensi gambar katalog khusus HP (Atasi CLS 0.292 secara mutlak) */
+  /* 1. Penguncian min-height pasti pada container grid katalog khusus layar HP */
+  .product-catalog-grid-wrap {
+    min-height: 600px !important;
+    display: block;
+    width: 100%;
+  }
+
+  /* 2. Penguncian dimensi dan aspect-ratio gambar produk secara ketat di HP */
   .catalog-product-img-box,
   .product-image-container,
   [id^="product-"] .relative.aspect-square {
@@ -75,11 +95,11 @@
     display: block !important;
   }
 
-  /* 2. Optimasi Rendering LCP Smartphone: content-visibility auto */
+  /* 3. Optimasi Rendering LCP Smartphone: content-visibility auto */
   .product-catalog-grid-wrap,
   .product-grid {
     content-visibility: auto !important;
-    contain-intrinsic-size: 1px 520px !important;
+    contain-intrinsic-size: 1px 600px !important;
   }
 
   /* Tombol aksi utama minimal tinggi 48px agar ramah sentuhan jari */
