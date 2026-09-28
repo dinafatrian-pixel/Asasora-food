@@ -196,8 +196,9 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Legality Section
     'legality.tag': 'Dokumen Perusahaan',
-    'legality.title': 'Legalitas PT. ASASORA BIO HEALTHORA',
-    'legality.subtitle': 'Dokumen legalitas resmi perusahaan yang terdaftar dan terverifikasi pada kementerian dan dinas terkait Republik Indonesia.',
+    'legality.title': 'Legalitas Resmi PT Asasora Bio Healthora - Catering Halal Tangerang',
+    'legality.subtitle':
+      'Sebagai komitmen penuh dalam menyajikan kuliner yang aman dan higienis, PT Asasora Bio Healthora memastikan seluruh layanan Asasora Catering telah mengantongi izin resmi pemerintah. Kami bangga menjadi mitra katering prasmanan pesta dan catering hajatan Tangerang yang tepercaya melalui kelengkapan dokumen hukum yang sah, mulai dari NIB, Izin Edar PIRT, hingga Sertifikat Halal Resmi BPJPH RI.',
     'legality.issuer': 'Penerbit:',
     'legality.validity': 'Masa Berlaku:',
     'legality.btn_view': 'Lihat Lembar Dokumen',
@@ -470,8 +471,9 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Legality Section
     'legality.tag': 'Corporate Documents',
-    'legality.title': 'PT. ASASORA BIO HEALTHORA Legality',
-    'legality.subtitle': 'Official corporate legality documents registered and verified with the relevant ministries and agencies of the Republic of Indonesia.',
+    'legality.title': 'Official Legality of PT Asasora Bio Healthora - Halal Catering Tangerang',
+    'legality.subtitle':
+      'As a full commitment to serving safe and hygienic culinary delights, PT Asasora Bio Healthora ensures all Asasora Catering services hold official government permits. We are proud to be a trusted partner for wedding & celebration catering in Tangerang with complete legal documents, from NIB, PIRT Distribution Permit, to BPJPH RI Halal Certificate.',
     'legality.issuer': 'Issuer:',
     'legality.validity': 'Validity:',
     'legality.btn_view': 'View Document Sheet',

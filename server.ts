@@ -23,9 +23,9 @@ const initialData = {
     tagline: '"PRODUK TERSERTIFIKASI HALAL BPJPH"',
     description: 'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.',
     badgeText: 'Food & Catering Partner',
-    halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
-    halalNumber: 'ID3611000000000',
-    halalAgency: 'BPJPH Kemenag RI',
+    halalBadgeText: 'Sertifikat Halal Resmi',
+    halalNumber: 'ID36110081134110926',
+    halalAgency: 'Kemenag RI',
     logoUrl: '/logo-asasora.png',
     halalLogoUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Halal_Indonesia.svg/512px-Halal_Indonesia.svg.png',
@@ -1408,6 +1408,32 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
+
+    // Handle catalog page routes with dedicated SEO meta description
+    app.get(['/katalog', '/catalog', '/menu'], (req: Request, res: Response) => {
+      const indexPath = path.join(distPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf-8');
+        const catalogDesc =
+          'Katalog lengkap Asasora Catering: Nasi box daun jeruk, nasi kotak premium & ekonomis Tangerang mulai Rp20.000. 100% Halal Resmi BPJPH. Pesan sekarang!';
+        html = html.replace(
+          /<meta name="description" id="main-meta-description"[^>]*>/i,
+          `<meta name="description" id="main-meta-description" content="${catalogDesc}" />`
+        );
+        html = html.replace(
+          /<meta property="og:description"[^>]*>/i,
+          `<meta property="og:description" content="${catalogDesc}" />`
+        );
+        html = html.replace(
+          /<meta name="twitter:description"[^>]*>/i,
+          `<meta name="twitter:description" content="${catalogDesc}" />`
+        );
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.send(html);
+      }
+      res.sendFile(indexPath);
+    });
+
     app.get('*', (req: Request, res: Response) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });

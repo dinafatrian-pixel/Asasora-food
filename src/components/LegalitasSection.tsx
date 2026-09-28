@@ -41,14 +41,14 @@ export const LegalitasSection: React.FC<LegalitasSectionProps> = ({ documents })
           <span className="text-[#4A9E60] font-bold text-xs sm:text-sm tracking-widest uppercase">
             {t('legality.tag', 'Dokumen Perusahaan')}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#2E6F40] mt-2">
-            {t('legality.title', 'Legalitas PT. ASASORA BIO HEALTHORA')}
-          </h2>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#2E6F40] mt-2 leading-tight tracking-tight">
+            {t('legality.title', 'Legalitas Resmi PT Asasora Bio Healthora - Catering Halal Tangerang')}
+          </h1>
           <div className="w-24 h-1.5 bg-[#F3C623] mx-auto mt-4 rounded-full" />
-          <p className="text-gray-600 mt-4 text-sm sm:text-base">
+          <p className="text-gray-600 mt-5 text-sm sm:text-base leading-relaxed">
             {t(
               'legality.subtitle',
-              'Dokumen legalitas resmi perusahaan yang terdaftar dan terverifikasi pada kementerian dan dinas terkait Republik Indonesia.'
+              'Sebagai komitmen penuh dalam menyajikan kuliner yang aman dan higienis, PT Asasora Bio Healthora memastikan seluruh layanan Asasora Catering telah mengantongi izin resmi pemerintah. Kami bangga menjadi mitra katering prasmanan pesta dan catering hajatan Tangerang yang tepercaya melalui kelengkapan dokumen hukum yang sah, mulai dari NIB, Izin Edar PIRT, hingga Sertifikat Halal Resmi BPJPH RI.'
             )}
           </p>
         </div>

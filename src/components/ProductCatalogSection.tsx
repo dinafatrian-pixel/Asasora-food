@@ -66,6 +66,38 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
     return initial;
   });
 
+  // Dynamic SEO meta description for Product Catalog section
+  useEffect(() => {
+    const catalogDescription =
+      'Katalog lengkap Asasora Catering: Nasi box daun jeruk, nasi kotak premium & ekonomis Tangerang mulai Rp20.000. 100% Halal Resmi BPJPH. Pesan sekarang!';
+
+    const updateMetaTags = () => {
+      const isCatalogActive =
+        typeof window !== 'undefined' &&
+        (window.location.hash.toLowerCase().includes('katalog') ||
+          window.location.hash.toLowerCase().includes('catalog') ||
+          window.location.pathname.toLowerCase().includes('katalog') ||
+          window.location.pathname.toLowerCase().includes('catalog'));
+
+      if (isCatalogActive) {
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', catalogDescription);
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.setAttribute('content', catalogDescription);
+        const twDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twDesc) twDesc.setAttribute('content', catalogDescription);
+      }
+    };
+
+    updateMetaTags();
+    window.addEventListener('hashchange', updateMetaTags);
+    window.addEventListener('popstate', updateMetaTags);
+    return () => {
+      window.removeEventListener('hashchange', updateMetaTags);
+      window.removeEventListener('popstate', updateMetaTags);
+    };
+  }, []);
+
   // Keep like counts in sync whenever products prop updates from cloud/server
   useEffect(() => {
     if (Array.isArray(products)) {
@@ -213,6 +245,28 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
         setTimeout(attemptScroll, 300);
       }
     }, 120);
+  };
+
+  // SEO Alt Text helper according to specific product guidelines
+  const getProductAltText = (prod: Product): string => {
+    if (prod.altText && prod.altText.trim().length > 0) {
+      return prod.altText;
+    }
+    const id = prod.id.toLowerCase();
+    const name = prod.name.toLowerCase();
+    if (id === 'prod-1' || name.includes('kotak premium')) {
+      return 'Paket Nasi Kotak Premium Tangerang - Asasora Catering Sajian Prasmanan Hajatan Berlisensi Halal';
+    }
+    if (id === 'prod-2' || name.includes('kotak ekonomis')) {
+      return 'Nasi Kotak Ekonomis Tangerang - Catering Nasi Box Murah untuk Acara Kantor dan Syukuran';
+    }
+    if (id === 'prod-3' || name.includes('daun jeruk')) {
+      return 'Paket Nasi Box Daun Jeruk NaSemangkuk Tangerang - Menu Rice Bowl Unik Asasora Food';
+    }
+    if (id === 'prod-nmk-1' || name.includes('bento')) {
+      return 'Nasi Bento NaSemangkuk Tangerang - Catering Nasi Kotak Modern dengan Olahan Ayam Higienis';
+    }
+    return `${prod.name} Tangerang - Katering Halal BPJPH Asasora Food`;
   };
 
   // Handle direct WhatsApp share
@@ -430,17 +484,27 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                     : 'border-gray-200'
                 }`}
               >
-                {/* Product Image & Badges (Rasio 1:1 / 1200x1200px) */}
+                {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif) */}
                 <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    width={300}
-                    height={300}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  />
+                  <picture className="w-full h-full block">
+                    <source
+                      srcSet={
+                        product.image.includes('cloudinary.com')
+                          ? product.image.replace('/upload/', '/upload/f_webp,q_auto:good/')
+                          : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
+                      }
+                      type="image/webp"
+                    />
+                    <img
+                      src={product.image}
+                      alt={getProductAltText(product)}
+                      width={400}
+                      height={400}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </picture>
 
                   {/* Halal Badge */}
                   <span className="absolute top-2.5 left-2.5 bg-emerald-600/90 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">

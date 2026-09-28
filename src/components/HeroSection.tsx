@@ -115,44 +115,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
 
               {/* Card Top Pill Badge */}
               <div className="flex items-center justify-between gap-2 border-b border-emerald-100 pb-2.5 mb-2 sm:pb-3 sm:mb-2.5">
-                <div className="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] sm:text-[11px] font-black px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs tracking-wide">
-                  <ShieldCheck className="w-3.5 h-3.5 text-yellow-300" />
+                <div className="inline-flex items-center gap-1.5 bg-[#1B4D28] text-white text-[10px] sm:text-[11px] font-black px-3 py-1 rounded-full shadow-xs tracking-wide">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#F3C623]" />
                   <span>{t('hero.card_halal_tag', 'TERSERTIFIKASI HALAL RESMI')}</span>
                 </div>
-                <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md border border-emerald-200">
-                  BPJPH RI
-                </span>
               </div>
 
               {/* Central Logo Container */}
-              <div className="flex flex-col items-center text-center my-auto py-1 sm:py-2">
-                <div className="relative p-2.5 sm:p-3 bg-white rounded-2xl shadow-xs border border-emerald-100 group-hover:shadow-md transition duration-300">
+              <div className="flex flex-col items-center text-center my-auto py-2 sm:py-3">
+                <div className="relative p-3.5 sm:p-5 bg-white rounded-3xl shadow-sm border-2 border-emerald-100/90 group-hover:shadow-md group-hover:border-emerald-300 transition duration-300">
                   <picture>
                     <source srcSet={halalLogo} type="image/svg+xml" />
                     <img
                       src={halalLogo}
-                      alt="Logo Sertifikat Halal BPJPH Kemenag RI"
-                      width={128}
-                      height={128}
+                      alt="Logo Sertifikat Halal Resmi"
+                      width={200}
+                      height={200}
                       fetchPriority="high"
                       decoding="async"
-                      className="h-24 sm:h-28 lg:h-28 w-auto object-contain transition duration-300 group-hover:scale-105"
+                      className="h-32 sm:h-40 lg:h-44 w-auto max-w-[200px] object-contain transition duration-300 group-hover:scale-105"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = DEFAULT_HALAL_LOGO;
                       }}
                     />
                   </picture>
-                  <div className="absolute bottom-1 right-1 bg-[#F3C623] text-gray-900 p-1 rounded-full shadow-xs">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-green-950" />
+                  <div className="absolute -bottom-1.5 -right-1.5 bg-[#F3C623] text-gray-900 p-1.5 rounded-full shadow-md border-2 border-white">
+                    <CheckCircle2 className="w-4 h-4 text-green-950" />
                   </div>
                 </div>
 
-                <div className="mt-2.5 sm:mt-3">
+                <div className="mt-3 sm:mt-3.5">
                   <p className="font-extrabold text-gray-900 text-xs sm:text-sm tracking-tight">
-                    {lang === 'en' ? 'Halal Product Assurance Organizing Agency' : company.halalAgency || 'Badan Penyelenggara Jaminan Produk Halal'}
+                    {lang === 'en'
+                      ? 'Halal Product Assurance Organizing Agency'
+                      : (company.halalAgency || 'Badan Penyelenggara Jaminan Produk Halal')
+                          .replace(/\(?BPJPH\)?/gi, '')
+                          .trim() || 'Badan Penyelenggara Jaminan Produk Halal'}
                   </p>
-                  <p className="text-[11px] text-emerald-700 font-bold mt-0.5 font-mono">
-                    No. Reg: {company.halalNumber || 'ID3611000000000'}
+                  <p className="text-xs sm:text-[13px] text-emerald-700 font-extrabold mt-1 font-mono tracking-wide">
+                    No. Reg: {company.halalNumber || 'ID36110081134110926'}
                   </p>
                 </div>
               </div>

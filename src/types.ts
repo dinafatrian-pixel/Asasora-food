@@ -12,6 +12,7 @@ export interface Product {
   unit: string;
   description: string;
   image: string;
+  altText?: string;
   badge?: string;
   isPopular?: boolean;
   minOrder?: number;

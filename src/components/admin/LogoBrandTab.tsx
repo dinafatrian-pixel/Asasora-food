@@ -41,13 +41,13 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
     () => company.heroTitleHighlight || ''
   );
   const [halalBadgeText, setHalalBadgeText] = useState(
-    () => company.halalBadgeText || 'Sertifikat Halal Resmi BPJPH'
+    () => company.halalBadgeText?.replace(/BPJPH/gi, 'Kemenag') || 'Sertifikat Halal Resmi Kemenag'
   );
   const [halalNumber, setHalalNumber] = useState(
-    () => company.halalNumber || 'ID3611000000000'
+    () => company.halalNumber || 'ID36110081134110926'
   );
   const [halalAgency, setHalalAgency] = useState(
-    () => company.halalAgency || 'BPJPH Kemenag RI'
+    () => company.halalAgency?.replace(/BPJPH/gi, '').trim() || 'Kemenag RI'
   );
 
   const [isSaving, setIsSaving] = useState(false);
@@ -94,9 +94,9 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
     setHalalLogoUrl(DEFAULT_HALAL_LOGO);
     setHeroPrefix('PT. ASASORA');
     setHeroHighlight('');
-    setHalalBadgeText('Sertifikat Halal Resmi BPJPH');
-    setHalalNumber('ID3611000000000');
-    setHalalAgency('BPJPH Kemenag RI');
+    setHalalBadgeText('Sertifikat Halal Resmi');
+    setHalalNumber('ID36110081134110926');
+    setHalalAgency('Kemenag RI');
 
     const updated = {
       ...company,
@@ -104,9 +104,9 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
       halalLogoUrl: DEFAULT_HALAL_LOGO,
       heroTitlePrefix: 'PT. ASASORA',
       heroTitleHighlight: '',
-      halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
-      halalNumber: 'ID3611000000000',
-      halalAgency: 'BPJPH Kemenag RI',
+      halalBadgeText: 'Sertifikat Halal Resmi',
+      halalNumber: 'ID36110081134110926',
+      halalAgency: 'Kemenag RI',
     };
     onUpdateCompany(updated);
     try {
@@ -333,10 +333,10 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
                   </span>
                 </div>
                 <div className="font-extrabold text-gray-900 mt-1 text-xs">
-                  {halalBadgeText || 'Sertifikat Halal Resmi BPJPH'}
+                  {halalBadgeText || 'Sertifikat Halal Resmi'}
                 </div>
                 <div className="text-[10px] text-gray-500">
-                  Penerbit: {halalAgency || 'BPJPH Kemenag RI'}
+                  Penerbit: {halalAgency || 'Kemenag RI'}
                 </div>
               </div>
             </div>

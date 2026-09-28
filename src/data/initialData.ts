@@ -18,7 +18,7 @@ export const initialCompanyInfo: CompanyInfo = {
   description: 'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.',
   badgeText: 'Food & Catering Partner',
   halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
-  halalNumber: 'ID3611000000000',
+  halalNumber: 'ID36110081134110926',
   halalAgency: 'BPJPH Kemenag RI',
   logoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329882/asasora/mnswxa7jmq7nzsr0h7fk.png',
   halalLogoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329899/asasora/cz2l79okyiljtn321uzr.jpg',
@@ -93,6 +93,8 @@ export const initialProducts: Product[] = [
       'Nasi putih\nOlahan daging\nOlahan ayam\nOlahan kentang\nOlahan sayur\nSambal\nKerupuk\nAir Mineral',
     image:
       'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334142/asasora/cnhxbbj4rdjqrnpmwuwr.png',
+    altText:
+      'Paket Nasi Kotak Premium Tangerang - Asasora Catering Sajian Prasmanan Hajatan Berlisensi Halal',
     badge: 'Best Seller Halal',
     isPopular: true,
     minOrder: 10,
@@ -108,6 +110,8 @@ export const initialProducts: Product[] = [
     description: 'Nasi putih, olahan ayam, olahan kentang, olahan sayur, sambal, kerupuk',
     image:
       'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334401/asasora/x6fcjhjbv28ffrxdvqph.png',
+    altText:
+      'Nasi Kotak Ekonomis Tangerang - Catering Nasi Box Murah untuk Acara Kantor dan Syukuran',
     badge: 'Favorit Event',
     isPopular: true,
     minOrder: 20,
@@ -123,6 +127,8 @@ export const initialProducts: Product[] = [
     description: 'Nasi Daun Jeruk, Olahan Ayam, Sambal, Lalapan.',
     image:
       'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334529/asasora/fcsol8bqvn7if05nukga.png',
+    altText:
+      'Paket Nasi Box Daun Jeruk NaSemangkuk Tangerang - Menu Rice Bowl Unik Asasora Food',
     badge: 'Layanan Korporat',
     isPopular: true,
     minOrder: 20,
@@ -138,6 +144,8 @@ export const initialProducts: Product[] = [
     description: 'Nasi putih, olahan ayam/ikan pilet, olahan telur, olahan sayur, sambal',
     image:
       'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334686/asasora/xzwssxab3gxt16stowaq.png',
+    altText:
+      'Nasi Bento NaSemangkuk Tangerang - Catering Nasi Kotak Modern dengan Olahan Ayam Higienis',
     badge: 'Fresh Daily',
     isPopular: true,
     minOrder: 20,
