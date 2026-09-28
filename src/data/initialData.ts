@@ -92,7 +92,7 @@ export const initialProducts: Product[] = [
     description:
       'Nasi putih\nOlahan daging\nOlahan ayam\nOlahan kentang\nOlahan sayur\nSambal\nKerupuk\nAir Mineral',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334142/asasora/cnhxbbj4rdjqrnpmwuwr.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788334142/asasora/cnhxbbj4rdjqrnpmwuwr.webp',
     altText:
       'Paket Nasi Kotak Premium Tangerang - Asasora Catering Sajian Prasmanan Hajatan Berlisensi Halal',
     badge: 'Best Seller Halal',
@@ -109,7 +109,7 @@ export const initialProducts: Product[] = [
     unit: 'pax',
     description: 'Nasi putih, olahan ayam, olahan kentang, olahan sayur, sambal, kerupuk',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334401/asasora/x6fcjhjbv28ffrxdvqph.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788334401/asasora/x6fcjhjbv28ffrxdvqph.webp',
     altText:
       'Nasi Kotak Ekonomis Tangerang - Catering Nasi Box Murah untuk Acara Kantor dan Syukuran',
     badge: 'Favorit Event',
@@ -126,7 +126,7 @@ export const initialProducts: Product[] = [
     unit: 'porsi',
     description: 'Nasi Daun Jeruk, Olahan Ayam, Sambal, Lalapan.',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334529/asasora/fcsol8bqvn7if05nukga.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788334529/asasora/fcsol8bqvn7if05nukga.webp',
     altText:
       'Paket Nasi Box Daun Jeruk NaSemangkuk Tangerang - Menu Rice Bowl Unik Asasora Food',
     badge: 'Layanan Korporat',
@@ -143,7 +143,7 @@ export const initialProducts: Product[] = [
     unit: 'Bento',
     description: 'Nasi putih, olahan ayam/ikan pilet, olahan telur, olahan sayur, sambal',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334686/asasora/xzwssxab3gxt16stowaq.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788334686/asasora/xzwssxab3gxt16stowaq.webp',
     altText:
       'Nasi Bento NaSemangkuk Tangerang - Catering Nasi Kotak Modern dengan Olahan Ayam Higienis',
     badge: 'Fresh Daily',
@@ -161,7 +161,7 @@ export const initialProducts: Product[] = [
     description:
       'Nasi kuning, olahan ayam, olahan telur, olahan tahu/tempe. bihun/mie goreng,olahan kentang, olahan sayur,sambal',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788334937/asasora/ojlgbld8adn5ld1nvld6.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788334937/asasora/ojlgbld8adn5ld1nvld6.webp',
     badge: 'satu porsi @25',
     isPopular: false,
     minOrder: 1,
@@ -177,7 +177,7 @@ export const initialProducts: Product[] = [
     description:
       'Nasi Liwet, olahan ayam, olahan telur, oncom, ikan asin, olahan jengkol, olahan tahu&tempe, sambal, lalapan , kerupuk',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335167/asasora/ggtcek25egtmw2xwa3cf.png',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788335167/asasora/ggtcek25egtmw2xwa3cf.webp',
     badge: 'Paket @25 porsi',
     isPopular: true,
     minOrder: 1,
@@ -193,7 +193,7 @@ export const initialProducts: Product[] = [
     description:
       'Nikmati paru sapi goreng balado yang gurih, renyah, dan kaya rasa pedas khas Nusantara. Hadir dalam kemasan siap saji, praktis dan ekonomis, cukup dipanaskan sebelum disajikan. Tahan hingga 11 bulan pada suhu ruang, cocok untuk stok lauk di rumah maupun dibawa bepergian.',
     image:
-      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788335914/asasora/bdkhax7wror6ws4nmjii.jpg',
+      'https://res.cloudinary.com/xhzjg0n0/image/upload/f_webp,q_auto:good/v1788335914/asasora/bdkhax7wror6ws4nmjii.webp',
     badge: 'Makana Siap Santap',
     isPopular: true,
     minOrder: 1,

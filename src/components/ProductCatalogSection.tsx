@@ -17,6 +17,20 @@ import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedProduct, translateText } from '../utils/translator';
 import { syncManager } from '../utils/syncManager';
 
+/**
+ * Konversi URL gambar ke format .webp terkompresi optimal (menghemat ~702 KiB bandwidth)
+ */
+export const getOptimizedWebpUrl = (url: string, width?: number): string => {
+  if (!url) return '';
+  if (url.includes('cloudinary.com')) {
+    const transform = width ? `w_${width},c_limit,f_webp,q_auto:good` : 'f_webp,q_auto:good';
+    return url
+      .replace(/\/upload\/(?:[^\/]+\/)?/, `/upload/${transform}/`)
+      .replace(/\.(png|jpe?g)$/i, '.webp');
+  }
+  return url.replace(/\.(png|jpe?g)$/i, '.webp');
+};
+
 interface ProductCatalogSectionProps {
   products: Product[];
   orders?: Order[];
@@ -488,33 +502,27 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                       : 'border-gray-200'
                   }`}
                 >
-                  {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif dengan penguncian dimensi mutlak) */}
+                  {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif dengan penguncian dimensi mutlak & WebP) */}
                   <div
                     className="catalog-product-img-box relative aspect-square w-full bg-gray-100 overflow-hidden"
-                    style={{ aspectRatio: '1 / 1' }}
+                    style={{ aspectRatio: '1 / 1', minHeight: '260px' }}
                   >
                     <picture className="w-full h-full block">
-                      {/* Sumber Gambar Terkompres Khusus Smartphone (LCP < 2.5s) */}
+                      {/* Sumber Gambar WebP Terkompres Khusus Smartphone (w_360 ~25 KB) */}
                       <source
                         media="(max-width: 768px)"
-                        srcSet={
-                          product.image.includes('cloudinary.com')
-                            ? product.image.replace('/upload/', '/upload/w_360,c_limit,f_webp,q_auto:eco/')
-                            : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
-                        }
+                        srcSet={getOptimizedWebpUrl(product.image, 360)}
                         type="image/webp"
                       />
-                      {/* Sumber Gambar Resolusi Penuh untuk Desktop / Layar Lebar */}
+                      {/* Sumber Gambar WebP Resolusi Penuh untuk Desktop / Layar Lebar */}
                       <source
-                        srcSet={
-                          product.image.includes('cloudinary.com')
-                            ? product.image.replace('/upload/', '/upload/w_600,c_limit,f_webp,q_auto:good/')
-                            : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
-                        }
+                        media="(min-width: 769px)"
+                        srcSet={getOptimizedWebpUrl(product.image, 600)}
                         type="image/webp"
                       />
+                      {/* Tag img fallback mutlak format .webp dengan ukuran terkunci */}
                       <img
-                        src={product.image}
+                        src={getOptimizedWebpUrl(product.image, 400)}
                         alt={getProductAltText(product)}
                         width={400}
                         height={400}
