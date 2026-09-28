@@ -463,48 +463,56 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
           </div>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((rawProduct) => {
-            const product = getLocalizedProduct(rawProduct, lang);
-            const isAdded = addedProductId === product.id;
-            const isCopied = copiedProductId === product.id;
-            const isHighlighted = highlightedProductId === product.id;
-            const soldCount = getProductSoldCount(product.id, rawProduct.name);
-            const isLiked = !!likedProductIds[product.id];
-            const productLikes = likeCounts[product.id] ?? 50;
+        {/* Product Grid Wrapped with Minimum Height & Contain Intrinsic Size */}
+        <div
+          className="product-catalog-grid-wrap min-h-[520px] w-full"
+          style={{ minHeight: '520px', containIntrinsicSize: 'auto 520px' }}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((rawProduct) => {
+              const product = getLocalizedProduct(rawProduct, lang);
+              const isAdded = addedProductId === product.id;
+              const isCopied = copiedProductId === product.id;
+              const isHighlighted = highlightedProductId === product.id;
+              const soldCount = getProductSoldCount(product.id, rawProduct.name);
+              const isLiked = !!likedProductIds[product.id];
+              const productLikes = likeCounts[product.id] ?? 50;
 
-            return (
-              <div
-                key={product.id}
-                id={`product-${product.id}`}
-                className={`bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-md transition duration-300 flex flex-col group relative ${
-                  isHighlighted
-                    ? 'border-[#2E6F40] ring-4 ring-emerald-300 shadow-xl'
-                    : 'border-gray-200'
-                }`}
-              >
-                {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif) */}
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <picture className="w-full h-full block">
-                    <source
-                      srcSet={
-                        product.image.includes('cloudinary.com')
-                          ? product.image.replace('/upload/', '/upload/f_webp,q_auto:good/')
-                          : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
-                      }
-                      type="image/webp"
-                    />
-                    <img
-                      src={product.image}
-                      alt={getProductAltText(product)}
-                      width={400}
-                      height={400}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    />
-                  </picture>
+              return (
+                <div
+                  key={product.id}
+                  id={`product-${product.id}`}
+                  className={`bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-md transition duration-300 flex flex-col group relative ${
+                    isHighlighted
+                      ? 'border-[#2E6F40] ring-4 ring-emerald-300 shadow-xl'
+                      : 'border-gray-200'
+                  }`}
+                >
+                  {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif dengan penguncian dimensi mutlak) */}
+                  <div
+                    className="relative aspect-square w-full bg-gray-100 overflow-hidden"
+                    style={{ aspectRatio: '1 / 1' }}
+                  >
+                    <picture className="w-full h-full block">
+                      <source
+                        srcSet={
+                          product.image.includes('cloudinary.com')
+                            ? product.image.replace('/upload/', '/upload/f_webp,q_auto:good/')
+                            : product.image.replace(/\.(png|jpe?g)$/i, '.webp')
+                        }
+                        type="image/webp"
+                      />
+                      <img
+                        src={product.image}
+                        alt={getProductAltText(product)}
+                        width={400}
+                        height={400}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ aspectRatio: '1 / 1' }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                      />
+                    </picture>
 
                   {/* Halal Badge */}
                   <span className="absolute top-2.5 left-2.5 bg-emerald-600/90 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">
@@ -647,6 +655,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
             );
           })}
         </div>
+      </div>
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12 bg-white rounded-3xl border border-green-100 p-8 max-w-md mx-auto">

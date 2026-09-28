@@ -44,6 +44,15 @@
 }
 
 /* ==========================================================================
+   LAYOUT STABILITY & ZERO CLS (ASPECT RATIO & CONTAIN-INTRINSIC-SIZE)
+   ========================================================================== */
+.product-catalog-grid-wrap {
+  min-height: 520px;
+  contain-intrinsic-size: auto 520px;
+  content-visibility: auto;
+}
+
+/* ==========================================================================
    RESPONSIVITAS MOBILE-FIRST (@media (max-width: 768px))
    ========================================================================== */
 @media (max-width: 768px) {
