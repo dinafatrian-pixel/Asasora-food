@@ -92,9 +92,9 @@ export const CustomerReviewPortal: React.FC<CustomerReviewPortalProps> = ({
               }}
             />
             <div>
-              <h1 className="text-xs sm:text-sm font-black text-[#1B4D28] tracking-tight leading-tight">
+              <div className="text-xs sm:text-sm font-black text-[#1B4D28] tracking-tight leading-tight">
                 PT. ASASORA BIO HEALTHORA
-              </h1>
+              </div>
               <p className="text-[10px] text-gray-500 font-semibold flex items-center gap-1">
                 <span>Catering Halal &amp; Higienis</span>
                 <span className="text-gray-300">•</span>

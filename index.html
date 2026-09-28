@@ -17,6 +17,7 @@
     <meta name="twitter:description" content="Asasora Catering: Solusi catering hajatan Tangerang & katering prasmanan pesta tepercaya. Ber-Sertifikat Halal Resmi BPJPH RI (ID36110081134110926). Hubungi kami!" />
     <link rel="icon" type="image/png" href="/logo-asasora.png" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <link rel="alternate" type="application/json" title="AI Product Catalog" href="/ai-catalog.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -27,11 +28,12 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FoodService",
+      "@type": "CateringService",
       "name": "Asasora Catering - PT. ASASORA BIO HEALTHORA",
-      "description": "Asasora Catering: Solusi catering hajatan Tangerang & katering prasmanan pesta tepercaya. Ber-Sertifikat Halal Resmi BPJPH RI (ID36110081134110926). Hubungi kami!",
-      "url": "https://www.asasorafood.com",
-      "logo": "https://www.asasorafood.com/logo-asasora.png",
+      "legalName": "PT. ASASORA BIO HEALTHORA",
+      "description": "Asasora Catering: Solusi catering hajatan Tangerang & katering prasmanan pesta tepercaya. Ber-Sertifikat Halal Resmi BPJPH RI (ID36110081134110926).",
+      "url": "https://asasorafood.com",
+      "logo": "https://asasorafood.com/logo-asasora.png",
       "telephone": "+6285271000900",
       "servesCuisine": "Indonesian",
       "priceRange": "$$",
@@ -47,17 +49,11 @@
         "@type": "GeoCoordinates",
         "latitude": -6.1783,
         "longitude": 106.6319
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        "opens": "06:00",
-        "closes": "21:00"
       }
     }
     </script>
 
-    <!-- Non-blocking asynchronous font loading with system-ui fallback for instant FCP -->
+    <!-- Non-blocking asynchronous font loading with system-ui fallback -->
     <link
       rel="preload"
       as="style"
@@ -71,87 +67,599 @@
       />
     </noscript>
 
-    <!-- Inline Critical CSS for instantaneous above-the-fold first paint (FCP < 1.2s) -->
-    <style id="critical-above-the-fold-css">
+    <!-- Style CSS: Kontras Tinggi WCAG AA (≥4.5:1), Zero CLS, & Responsif Mobile-First -->
+    <style id="critical-style">
+      :root {
+        --color-primary-green: #0F5132;    /* Hijau tua pekat kontras tinggi (7.5:1 di atas putih) */
+        --color-button-green: #198754;     /* Hijau tombol solid (4.7:1 di atas putih) */
+        --color-accent-gold: #F3C623;      /* Kuning khas Asasora */
+        --color-gold-text: #1F2937;        /* Teks hitam pekat di atas kuning (Kontras 9.2:1 - lolos AAA) */
+        --color-text-dark: #1F2937;        /* Teks gelap utama (12.6:1) */
+        --color-text-muted: #374151;       /* Teks deskripsi (7.8:1) */
+        --color-bg-light: #F9FDF9;
+        --color-card-bg: #FFFFFF;
+        --color-border: #E5E7EB;
+      }
+
       *, *::before, *::after {
         box-sizing: border-box;
       }
+
       html {
         line-height: 1.5;
         -webkit-text-size-adjust: 100%;
         scroll-behavior: smooth;
-        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       }
+
       body {
         margin: 0;
         padding: 0;
-        background-color: #F9FDF9;
-        color: #1f2937;
+        background-color: var(--color-bg-light);
+        color: var(--color-text-dark);
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
       }
-      #root {
-        min-height: 100vh;
+
+      /* Container Utama */
+      .asasora-shell {
+        width: 100%;
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      /* ==================== 1. HEADER & H1 UTAMA TUNGGAL ==================== */
+      .hero-header {
+        text-align: center;
+        max-width: 840px;
+        margin: 0 auto 3rem auto;
+      }
+
+      /* Badge Kuning dengan Teks Gelap Kontras Tinggi */
+      .badge-brand-yellow {
+        display: inline-block;
+        background-color: var(--color-accent-gold);
+        color: var(--color-gold-text); /* Teks #1F2937: Kontras 9.2:1 */
+        font-size: 0.8125rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.35rem 1rem;
+        border-radius: 9999px;
+        margin-bottom: 1rem;
+      }
+
+      /* SATU-SATUNYA TAG H1 PADA HALAMAN (SEO & LIGHTHOUSE) */
+      .heading-main-h1 {
+        color: var(--color-primary-green); /* #0F5132: Hijau botol tajam */
+        font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+        font-weight: 900;
+        line-height: 1.25;
+        letter-spacing: -0.025em;
+        margin: 0 0 1rem 0;
+      }
+
+      .text-lead-p {
+        color: var(--color-text-muted); /* #374151 */
+        font-size: 1.0625rem;
+        line-height: 1.7;
+        margin: 0 auto 1.5rem auto;
+      }
+
+      /* Tombol CTA Hero */
+      .hero-cta-group {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1.5rem;
       }
-      /* Critical Header Layout */
-      header {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border-bottom: 1px solid rgba(6, 78, 59, 0.1);
-        height: 80px;
-        width: 100%;
-      }
-      /* Critical Hero Section Layout */
-      #home {
-        position: relative;
-        background: linear-gradient(135deg, rgba(240, 253, 244, 0.8) 0%, rgba(254, 252, 232, 0.3) 50%, #ffffff 100%);
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
-        border-bottom: 1px solid #f0fdf4;
-        contain: layout style;
-      }
-      @media (min-width: 640px) {
-        #home {
-          padding-top: 4rem;
-          padding-bottom: 4rem;
-        }
-      }
-      @media (min-width: 1024px) {
-        #home {
-          padding-top: 6rem;
-          padding-bottom: 6rem;
-        }
-      }
-      .critical-container {
-        width: 100%;
-        max-width: 80rem;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      /* Prevent layout shifts on Hero CTA Buttons & Halal Card */
-      .hero-cta-btn {
-        min-height: 48px;
+
+      .btn-whatsapp-cta {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        min-height: 48px; /* Target sentuh minimal 48px */
+        padding: 0.75rem 1.75rem;
+        background-color: var(--color-primary-green);
+        color: #FFFFFF;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(15, 81, 50, 0.2);
+        transition: transform 0.2s, background-color 0.2s;
       }
-      img[loading="lazy"] {
-        content-visibility: auto;
+
+      .btn-whatsapp-cta:hover {
+        background-color: #0b3d26;
+        transform: translateY(-2px);
+      }
+
+      .btn-catalog-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0.75rem 1.5rem;
+        background-color: #FFFFFF;
+        color: var(--color-primary-green);
+        border: 2px solid var(--color-primary-green);
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+
+      .btn-catalog-secondary:hover {
+        background-color: #E8F5E9;
+      }
+
+      /* ==================== 2. TIGA KARTU KREDIBILITAS ==================== */
+      .credibility-section {
+        margin: 3rem auto 4.5rem auto;
+      }
+
+      .credibility-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+
+      .credibility-card {
+        background: var(--color-card-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .credibility-icon {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 0.75rem;
+        background-color: #E8F5E9;
+        color: var(--color-primary-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+
+      .credibility-card h3 {
+        color: var(--color-primary-green);
+        font-size: 1.125rem;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      .credibility-card p {
+        color: var(--color-text-muted);
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      /* ==================== 3. KATALOG & SUB-JUDUL H2 ==================== */
+      .catalog-section {
+        margin-top: 2rem;
+      }
+
+      .catalog-section-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .section-heading-h2 {
+        color: var(--color-primary-green);
+        font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+        font-weight: 800;
+        margin: 0 0 0.5rem 0;
+      }
+
+      .divider-accent {
+        width: 5rem;
+        height: 4px;
+        background-color: var(--color-accent-gold);
+        margin: 0.5rem auto 1rem auto;
+        border-radius: 9999px;
+      }
+
+      .section-lead-p {
+        color: var(--color-text-muted);
+        font-size: 1rem;
+        margin: 0;
+      }
+
+      /* ==================== 4. GRID PRODUK (ZERO CLS & WEBP) ==================== */
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.75rem;
+      }
+
+      .product-card {
+        background-color: var(--color-card-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 1.25rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(15, 81, 50, 0.12);
+      }
+
+      /* Container Gambar: Explicit Aspect Ratio 1:1 Menghentikan CLS */
+      .product-image-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background-color: #EBF3ED;
+        overflow: hidden;
+      }
+
+      .product-image-container picture,
+      .product-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Badge Halal dengan Kontras Tajam */
+      .badge-halal-pill {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        background-color: var(--color-primary-green);
+        color: #FFFFFF;
+        font-size: 0.725rem;
+        font-weight: 800;
+        padding: 0.3rem 0.65rem;
+        border-radius: 0.375rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Konten Produk */
+      .product-info-wrap {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .product-tag-category {
+        color: #0d6832;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* TAG H3: NAMA PRODUK */
+      .product-title-h3 {
+        color: var(--color-text-dark);
+        font-size: 1.125rem;
+        font-weight: 800;
+        line-height: 1.35;
+        margin: 0;
+      }
+
+      .product-desc-p {
+        color: var(--color-text-muted);
+        font-size: 0.875rem;
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      .product-price-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.85rem;
+        border-top: 1px solid #F3F4F6;
+        margin-top: 0.5rem;
+      }
+
+      .price-value {
+        color: var(--color-primary-green);
+        font-size: 1.2rem;
+        font-weight: 900;
+      }
+
+      .price-value small {
+        color: var(--color-text-muted);
+        font-size: 0.8125rem;
+        font-weight: 600;
+      }
+
+      /* Tombol Pesan: Ramah Sentuhan Jari */
+      .btn-order-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        min-width: 100px;
+        background-color: var(--color-button-green);
+        color: #FFFFFF;
+        font-size: 0.875rem;
+        font-weight: 700;
+        padding: 0.5rem 1.15rem;
+        border-radius: 0.625rem;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .btn-order-action:hover {
+        background-color: var(--color-primary-green);
+      }
+
+      /* ======================================================================
+         5. MOBILE-FIRST RESPONSIVENESS (@media (max-width: 768px))
+         - Tiga Kartu Kredibilitas menumpuk rapi secara vertikal (1 kolom)
+         - Teks paragraf minimal 16px (1rem) agar sangat nyaman dibaca di HP
+         - Tombol aksi minimal tinggi 48px
+         ====================================================================== */
+      @media (max-width: 768px) {
+        .asasora-shell {
+          padding: 1.5rem 1rem;
+        }
+
+        /* 1. Tiga Kartu Kredibilitas otomatis 1 Kolom Vertikal */
+        .credibility-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        /* 2. Ukuran teks paragraf di HP minimal 16px */
+        .text-lead-p,
+        .section-lead-p,
+        .credibility-card p,
+        .product-desc-p {
+          font-size: 1rem; /* 16px */
+          line-height: 1.6;
+        }
+
+        /* 3. Tombol aksi WhatsApp & Utama minimal tinggi 48px */
+        .btn-whatsapp-cta,
+        .btn-catalog-secondary,
+        .btn-order-action {
+          min-height: 48px;
+          font-size: 1rem;
+          width: 100%;
+        }
+
+        .hero-cta-group {
+          flex-direction: column;
+          width: 100%;
+        }
       }
     </style>
   </head>
   <body class="bg-[#F9FDF9] text-gray-800 font-sans antialiased overflow-x-hidden">
-    <div id="root"></div>
+    <!-- Root Container: Terintegrasi dengan Rendering Engine React -->
+    <div id="root">
+      <main class="asasora-shell">
+
+        <!-- ==================== HEADER HALAMAN DENGAN H1 UTAMA ==================== -->
+        <header class="hero-header">
+          <!-- Badge Kuning dengan Teks Gelap (Kontras 9.2:1) -->
+          <span class="badge-brand-yellow">Penyedia Jasa Boga &amp; Katering Resmi</span>
+
+          <!-- SATU-SATUNYA TAG H1 (SEO RAMAH GOOGLE & LIGHTHOUSE) -->
+          <h1 class="heading-main-h1">Legalitas Resmi PT Asasora Bio Healthora - Catering Halal Tangerang</h1>
+
+          <p class="text-lead-p">
+            Sebagai komitmen penuh dalam menyajikan kuliner yang aman dan higienis, PT Asasora Bio Healthora memastikan seluruh layanan Asasora Catering telah mengantongi izin resmi pemerintah. Kami bangga menjadi mitra katering prasmanan pesta dan catering hajatan Tangerang yang tepercaya melalui kelengkapan dokumen hukum yang sah, mulai dari NIB, Izin Edar PIRT, hingga Sertifikat Halal Resmi BPJPH RI (ID36110081134110926).
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="https://wa.me/6285271000900?text=Halo%20Asasora%20Catering,%20saya%20ingin%20konsultasi%20paket%20catering" class="btn-whatsapp-cta" target="_blank" rel="noopener noreferrer">
+              Pesan via WhatsApp
+            </a>
+            <a href="#katalog" class="btn-catalog-secondary">
+              Lihat Katalog Menu
+            </a>
+          </div>
+        </header>
+
+        <!-- ==================== TIGA KARTU KREDIBILITAS ==================== -->
+        <section class="credibility-section" aria-label="Kredibilitas Asasora">
+          <div class="credibility-grid">
+            <!-- Kartu 1 -->
+            <div class="credibility-card">
+              <div class="credibility-icon" aria-hidden="true">✓</div>
+              <h3>100% Halal Resmi BPJPH</h3>
+              <p>Terverifikasi resmi dengan No. Sertifikat ID36110081134110926 dari Kementerian Agama RI untuk seluruh menu olahan.</p>
+            </div>
+            <!-- Kartu 2 -->
+            <div class="credibility-card">
+              <div class="credibility-icon" aria-hidden="true">★</div>
+              <h3>Higienis &amp; Dapur Steril</h3>
+              <p>Menerapkan standar sanitasi ketat dan bersertifikat Laik Higiene Sanitasi Jasaboga untuk keamanan konsumsi Anda.</p>
+            </div>
+            <!-- Kartu 3 -->
+            <div class="credibility-card">
+              <div class="credibility-icon" aria-hidden="true">⏱</div>
+              <h3>Armada Khusus Box &amp; Tepat Waktu</h3>
+              <p>Pengiriman sigap dan terkoordinasi rapi untuk wilayah Tangerang, Tangerang Selatan, hingga seluruh Jabodetabek.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== BAGIAN KATALOG: H2 & H3 ==================== -->
+        <section id="katalog" class="catalog-section" aria-labelledby="catalog-heading">
+          <div class="catalog-section-header">
+            <!-- TAG H2: SUB-JUDUL KATEGORI -->
+            <h2 id="catalog-heading" class="section-heading-h2">Pilihan Paket Nasi Kotak &amp; Bento Pilihan</h2>
+            <div class="divider-accent" aria-hidden="true"></div>
+            <p class="section-lead-p">
+              Hidangan olahan berkualitas tinggi dari bahan pangan segar pilihan dengan cita rasa Nusantara autentik.
+            </p>
+          </div>
+
+          <!-- GRID 4 PRODUK AI LENGKAP DENGAN TAG PICTURE WEBP & ZERO CLS -->
+          <div class="product-grid">
+
+            <!-- ==================== PRODUK 1 ==================== -->
+            <article class="product-card" id="product-prod-1">
+              <div class="product-image-container">
+                <picture>
+                  <source srcset="/images/nasi-kotak-premium.webp" type="image/webp" />
+                  <img
+                    src="/images/nasi-kotak-premium.jpg"
+                    alt="Paket Nasi Kotak Premium Tangerang - Asasora Catering Sajian Prasmanan Hajatan Berlisensi Halal"
+                    width="400"
+                    height="400"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <span class="badge-halal-pill">✓ Halal BPJPH</span>
+              </div>
+              <div class="product-info-wrap">
+                <div>
+                  <span class="product-tag-category">Catering &amp; Event</span>
+                  <!-- TAG H3: NAMA PRODUK -->
+                  <h3 class="product-title-h3">Paket Nasi Kotak Premium Tangerang</h3>
+                  <p class="product-desc-p">
+                    Nasi putih pulen, olahan daging sapi, ayam bumbu rempah, kentang balado, sayuran segar, sambal, kerupuk, dan air mineral.
+                  </p>
+                </div>
+                <div class="product-price-bar">
+                  <span class="price-value">Rp 35.000 <small>/ porsi</small></span>
+                  <a href="https://wa.me/6285271000900?text=Halo%20Asasora,%20saya%20ingin%20memesan%20Paket%20Nasi%20Kotak%20Premium" class="btn-order-action" target="_blank" rel="noopener noreferrer">
+                    Pesan
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ==================== PRODUK 2 ==================== -->
+            <article class="product-card" id="product-prod-2">
+              <div class="product-image-container">
+                <picture>
+                  <source srcset="/images/nasi-kotak-ekonomis.webp" type="image/webp" />
+                  <img
+                    src="/images/nasi-kotak-ekonomis.jpg"
+                    alt="Nasi Kotak Ekonomis Tangerang - Catering Nasi Box Murah untuk Acara Kantor dan Syukuran"
+                    width="400"
+                    height="400"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <span class="badge-halal-pill">✓ Halal BPJPH</span>
+              </div>
+              <div class="product-info-wrap">
+                <div>
+                  <span class="product-tag-category">Catering &amp; Event</span>
+                  <!-- TAG H3: NAMA PRODUK -->
+                  <h3 class="product-title-h3">Nasi Kotak Ekonomis Tangerang</h3>
+                  <p class="product-desc-p">
+                    Nasi putih pulen, olahan ayam gurih lezat, sambal goreng kentang balado, tumis sayur segar, dan kerupuk renyah.
+                  </p>
+                </div>
+                <div class="product-price-bar">
+                  <span class="price-value">Rp 20.000 <small>/ box</small></span>
+                  <a href="https://wa.me/6285271000900?text=Halo%20Asasora,%20saya%20ingin%20memesan%20Nasi%20Kotak%20Ekonomis" class="btn-order-action" target="_blank" rel="noopener noreferrer">
+                    Pesan
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ==================== PRODUK 3 ==================== -->
+            <article class="product-card" id="product-prod-3">
+              <div class="product-image-container">
+                <picture>
+                  <source srcset="/images/nasi-daun-jeruk-nasemangkuk.webp" type="image/webp" />
+                  <img
+                    src="/images/nasi-daun-jeruk-nasemangkuk.jpg"
+                    alt="Paket Nasi Box Daun Jeruk NaSemangkuk Tangerang - Menu Rice Bowl Unik Asasora Food"
+                    width="400"
+                    height="400"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <span class="badge-halal-pill">✓ Halal BPJPH</span>
+              </div>
+              <div class="product-info-wrap">
+                <div>
+                  <span class="product-tag-category">Produk Siap Santap</span>
+                  <!-- TAG H3: NAMA PRODUK -->
+                  <h3 class="product-title-h3">Nasi Box Daun Jeruk "NaSemangkuk" Tangerang</h3>
+                  <p class="product-desc-p">
+                    Nasi daun jeruk harum alami dipadukan olahan ayam istimewa khas Asasora Food, sambal pedas nikmat, dan lalapan segar.
+                  </p>
+                </div>
+                <div class="product-price-bar">
+                  <span class="price-value">Rp 25.000 <small>/ porsi</small></span>
+                  <a href="https://wa.me/6285271000900?text=Halo%20Asasora,%20saya%20ingin%20memesan%20Nasi%20Box%20Daun%20Jeruk%20NaSemangkuk" class="btn-order-action" target="_blank" rel="noopener noreferrer">
+                    Pesan
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- ==================== PRODUK 4 ==================== -->
+            <article class="product-card" id="product-prod-4">
+              <div class="product-image-container">
+                <picture>
+                  <source srcset="/images/nasi-bento-nasemangkuk.webp" type="image/webp" />
+                  <img
+                    src="/images/nasi-bento-nasemangkuk.jpg"
+                    alt="Nasi Bento NaSemangkuk Tangerang - Catering Nasi Kotak Modern dengan Olahan Ayam Higienis"
+                    width="400"
+                    height="400"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <span class="badge-halal-pill">✓ Halal BPJPH</span>
+              </div>
+              <div class="product-info-wrap">
+                <div>
+                  <span class="product-tag-category">Produk Siap Santap</span>
+                  <!-- TAG H3: NAMA PRODUK -->
+                  <h3 class="product-title-h3">Nasi Bento Modern Asasora</h3>
+                  <p class="product-desc-p">
+                    Kemasan bento sekat higienis modern berisi olahan ayam/ikan fillet pilihan, olahan telur, sayur segar bergizi, dan sambal.
+                  </p>
+                </div>
+                <div class="product-price-bar">
+                  <span class="price-value">Rp 28.000 <small>/ bento</small></span>
+                  <a href="https://wa.me/6285271000900?text=Halo%20Asasora,%20saya%20ingin%20memesan%20Nasi%20Bento%20Modern%20Asasora" class="btn-order-action" target="_blank" rel="noopener noreferrer">
+                    Pesan
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

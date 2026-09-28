@@ -60,7 +60,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
               </div>
 
               {/* Heading */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#2E6F40] leading-tight tracking-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0F5132] leading-tight tracking-tight">
                 {company.heroTitlePrefix || 'PT. ASASORA'}
                 {company.heroTitleHighlight &&
                 company.heroTitleHighlight.toUpperCase() !== 'BIO HEALTHORA' ? (
@@ -69,14 +69,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
               </h1>
 
               {/* Tagline */}
-              <p className="text-base sm:text-xl italic font-semibold text-gray-700">
+              <p className="text-base sm:text-xl italic font-semibold text-gray-800">
                 {lang === 'en'
                   ? t('hero.tagline', '"BPJPH HALAL CERTIFIED PRODUCTS"')
                   : company.tagline}
               </p>
 
               {/* Description */}
-              <p className="text-gray-600 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl whitespace-pre-line">
+              <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl whitespace-pre-line">
                 {lang === 'en'
                   ? t('hero.description', 'High-quality products produced from safe, hygienic, and authentic halal ingredients.')
                   : company.description}
@@ -87,7 +87,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3.5 pt-4 lg:pt-6">
               <button
                 onClick={onOrderClick}
-                className="bg-[#2E6F40] hover:bg-green-800 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition duration-200 text-center text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer group active:scale-95"
+                className="min-h-[48px] bg-[#0F5132] hover:bg-green-900 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition duration-200 text-center text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer group active:scale-95"
               >
                 <span>{t('hero.btn_order', 'Pesan Sekarang')}</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
@@ -98,7 +98,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                 )},%20saya%20ingin%20berkonsultasi%20menu`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold px-6 py-3 rounded-xl shadow-md transition flex items-center justify-center space-x-2.5 text-sm sm:text-base active:scale-95 border border-[#e5b719]"
+                className="min-h-[48px] bg-[#F3C623] hover:bg-[#D1A310] text-[#1F2937] font-extrabold px-6 py-3 rounded-xl shadow-md transition flex items-center justify-center space-x-2.5 text-sm sm:text-base active:scale-95 border border-[#e5b719]"
               >
                 <MinsoraAvatar size="sm" showWaBadge={true} />
                 <span>{t('hero.btn_consult', 'Chat WhatsApp MinSora')}</span>
@@ -208,6 +208,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
           return (
             <div className="mt-8 sm:mt-10 pt-6 sm:pt-7 border-t border-green-100/90 text-left">
               <div
+                id="hero-value-props"
                 className={`grid grid-cols-1 ${
                   rawProps.length === 2
                     ? 'sm:grid-cols-2'

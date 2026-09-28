@@ -41,9 +41,9 @@ export const LegalitasSection: React.FC<LegalitasSectionProps> = ({ documents })
           <span className="text-[#4A9E60] font-bold text-xs sm:text-sm tracking-widest uppercase">
             {t('legality.tag', 'Dokumen Perusahaan')}
           </span>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#2E6F40] mt-2 leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#2E6F40] mt-2 leading-tight tracking-tight">
             {t('legality.title', 'Legalitas Resmi PT Asasora Bio Healthora - Catering Halal Tangerang')}
-          </h1>
+          </h2>
           <div className="w-24 h-1.5 bg-[#F3C623] mx-auto mt-4 rounded-full" />
           <p className="text-gray-600 mt-5 text-sm sm:text-base leading-relaxed">
             {t(

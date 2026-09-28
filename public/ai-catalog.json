@@ -1,0 +1,186 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CateringService",
+  "@id": "https://asasorafood.com/#organization",
+  "name": "Asasora Catering",
+  "legalName": "PT. ASASORA BIO HEALTHORA",
+  "url": "https://asasorafood.com",
+  "telephone": "+6285271000900",
+  "email": "asasorabiohealthora@gmail.com",
+  "priceRange": "$$",
+  "servesCuisine": "Indonesian",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Kota Tangerang",
+    "addressLocality": "Tangerang",
+    "addressRegion": "Banten",
+    "postalCode": "15111",
+    "addressCountry": "ID"
+  },
+  "areaServed": [
+    {
+      "@type": "AdministrativeArea",
+      "name": "Kota Tangerang"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Kabupaten Tangerang"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Tangerang Selatan"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "DKI Jakarta"
+    }
+  ],
+  "hasCredential": {
+    "@type": "EducationalOccupationalCredential",
+    "credentialCategory": "Halal Certificate",
+    "name": "Sertifikat Halal Resmi BPJPH RI",
+    "recognizedBy": {
+      "@type": "GovernmentOrganization",
+      "name": "Badan Penyelenggara Jaminan Produk Halal (BPJPH) Kementerian Agama RI"
+    },
+    "identifier": "ID36110081134110926"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Katalog Menu Katering Asasora",
+    "itemListElement": [
+      {
+        "@type": "Product",
+        "@id": "https://asasorafood.com/#product-1",
+        "name": "Paket Nasi Kotak Premium Tangerang",
+        "description": "Paket nasi box premium lengkap berisi olahan daging sapi, ayam bumbu rempah, kentang balado, sayuran segar, sambal, kerupuk, dan air mineral. Pilihan tepat untuk rapat direksi, seminar, dan pesta hajatan.",
+        "category": "Catering & Event",
+        "image": "https://asasorafood.com/images/nasi-kotak-premium.webp",
+        "offers": {
+          "@type": "Offer",
+          "price": "35000",
+          "priceCurrency": "IDR",
+          "priceValidUntil": "2027-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://asasorafood.com/#katalog?item=prod-1",
+          "eligibleQuantity": {
+            "@type": "QuantitativeValue",
+            "minValue": 10,
+            "unitCode": "C62"
+          }
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "Status Halal",
+            "value": "100% Halal Resmi BPJPH RI (ID36110081134110926)"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Minimal Order",
+            "value": "10 Porsi"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "@id": "https://asasorafood.com/#product-2",
+        "name": "Nasi Kotak Ekonomis Tangerang",
+        "description": "Menu katering nasi kotak murah dan higienis dengan lauk ayam olahan gurih, sambal goreng kentang balado, tumis sayur sehat, dan kerupuk renyah. Sangat diminati untuk syukuran, pengajian, dan makan siang kantor.",
+        "category": "Catering & Event",
+        "image": "https://asasorafood.com/images/nasi-kotak-ekonomis.webp",
+        "offers": {
+          "@type": "Offer",
+          "price": "20000",
+          "priceCurrency": "IDR",
+          "priceValidUntil": "2027-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://asasorafood.com/#katalog?item=prod-2",
+          "eligibleQuantity": {
+            "@type": "QuantitativeValue",
+            "minValue": 20,
+            "unitCode": "C62"
+          }
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "Status Halal",
+            "value": "100% Halal Resmi BPJPH RI (ID36110081134110926)"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Minimal Order",
+            "value": "20 Box"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "@id": "https://asasorafood.com/#product-3",
+        "name": "Nasi Box Daun Jeruk \"NaSemangkuk\" Tangerang",
+        "description": "Hidangan signature rice bowl aroma daun jeruk harum alami dipadukan olahan ayam istimewa, lalapan segar, dan sambal pedas khas Nusantara. Praktis dan lezat siap santap.",
+        "category": "Produk Siap Santap",
+        "image": "https://asasorafood.com/images/nasi-daun-jeruk-nasemangkuk.webp",
+        "offers": {
+          "@type": "Offer",
+          "price": "25000",
+          "priceCurrency": "IDR",
+          "priceValidUntil": "2027-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://asasorafood.com/#katalog?item=prod-3",
+          "eligibleQuantity": {
+            "@type": "QuantitativeValue",
+            "minValue": 20,
+            "unitCode": "C62"
+          }
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "Status Halal",
+            "value": "100% Halal Resmi BPJPH RI (ID36110081134110926)"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Minimal Order",
+            "value": "20 Porsi"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "@id": "https://asasorafood.com/#product-4",
+        "name": "Nasi Bento Modern Asasora",
+        "description": "Sajian bento sekat higienis dengan olahan ayam atau ikan fillet renyah, olahan telur, tumis sayur segar bergizi, dan sambal mantap. Sangat cocok untuk konsumsi training, seminar, dan field trip.",
+        "category": "Produk Siap Santap",
+        "image": "https://asasorafood.com/images/nasi-bento-nasemangkuk.webp",
+        "offers": {
+          "@type": "Offer",
+          "price": "28000",
+          "priceCurrency": "IDR",
+          "priceValidUntil": "2027-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://asasorafood.com/#katalog?item=prod-4",
+          "eligibleQuantity": {
+            "@type": "QuantitativeValue",
+            "minValue": 20,
+            "unitCode": "C62"
+          }
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "Status Halal",
+            "value": "100% Halal Resmi BPJPH RI (ID36110081134110926)"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Minimal Order",
+            "value": "20 Bento"
+          }
+        ]
+      }
+    ]
+  }
+}

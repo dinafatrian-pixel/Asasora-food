@@ -439,12 +439,12 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
             <div className="overflow-y-auto px-5 sm:px-8 py-6 space-y-6">
               {/* Article Headline */}
               <div>
-                <h1
+                <h2
                   id="modal-article-title"
                   className="text-xl sm:text-2xl sm:leading-tight font-black text-gray-900 tracking-tight"
                 >
                   {activeArticle.title}
-                </h1>
+                </h2>
 
                 {/* Author & Date metadata */}
                 <div className="mt-3 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-gray-500 border-b border-gray-100 pb-4">
