@@ -30,10 +30,10 @@ interface WhatsAppChatbotModalProps {
 
 const QUICK_PROMPTS = [
   '🍱 Katering Pabrik & Kantor (B2B)',
-  '👨‍👩‍👧 Katering Rumahan / Syukuran (B2C)',
+  '📦 Kapan Sebaiknya Pesan Nasi Box?',
   '💰 Custom Menu & Budget Fleksibel',
   '🎁 Fasilitas Free Test Food B2B',
-  '📦 Cek Ketersediaan Menu Hari Ini',
+  '👨‍👩‍👧 Katering Rumahan / Syukuran (B2C)',
   '⚠️ Bantuan & Komplain Pesanan',
 ];
 
@@ -113,6 +113,9 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
       if (lower.includes('komplain') || lower.includes('keluhan') || lower.includes('terlambat') || lower.includes('basi') || lower.includes('salah kirim') || lower.includes('kurang') || lower.includes('kecewa')) {
         fallbackText =
           'Aduh, MinSora memohon maaf yang sebesar-besarnya atas ketidaknyamanan yang Kakak alami 🙏.\n\nBoleh tolong informasikan nomor pesanan atau nama pemesan Kakak? Agar masalah ini bisa langsung ditangani detik ini juga, silakan klik tautan prioritas Customer Service berikut ya Kak:\n\n[Hubungi CS Penanganan Prioritas Komplain](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20ingin%20melaporkan%20kendala%20pesanan%20saya)\n\nTim Customer Service kami akan segera menangani kendala Kakak sebagai prioritas utama.';
+      } else if (lower.includes('h-berapa') || lower.includes('h berapa') || lower.includes('h-2') || lower.includes('kapan sebaiknya') || lower.includes('kapan pesan') || lower.includes('kapan order') || (lower.includes('nasi box') && (lower.includes('kapan') || lower.includes('h-') || lower.includes('berapa')))) {
+        fallbackText =
+          'Untuk pemesanan nasi box bisa H-2 ya Kak, atau Kakak bisa order langsung di website www.asasorafood.com dengan menambahkan keterangan kapan mau dikirimnya di form order 😊.\n\nDengan reservasi H-2, tim dapur Asasora Food dapat menyiapkan bahan-bahan segar berkualitas prima dan memastikan pesanan tiba tepat waktu. Mau MinSora bantu rekomendasikan menu nasi box favoritnya sekarang?';
       } else if (lower.includes('pabrik') || lower.includes('shift') || lower.includes('kantor') || lower.includes('b2b') || lower.includes('test food') || lower.includes('invoice') || lower.includes('kontrak')) {
         fallbackText =
           'Wah pas banget Kak! Untuk layanan B2B (Katering Kantor, Pabrik & Shift Karyawan), Asasora Food siap melayani volume porsi besar dengan:\n\n✅ Pengiriman tepat waktu sesuai jadwal shift kerja\n✅ Legalitas lengkap: Invoice resmi PT, Kwitansi & Faktur Pajak ber-NPWP\n✅ Fasilitas sesi "Test Food" GRATIS sebelum kontrak kerja sama dimulai\n✅ Rotasi menu bergizi 30 hari tanpa bosan\n\nUntuk pesanan skala besar disarankan reservasi minimal H-2 ya Kak. Yuk konsultasi langsung dengan Tim Marketing kami:\n\n• [Hubungi Tim Marketing - Katering Pabrik & Shift](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20pabrik/karyawan%20shift)\n• [Hubungi Tim Marketing - Event Kantor & Rapat](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20event%20kantor/rapat)';
