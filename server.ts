@@ -1381,13 +1381,103 @@ async function startServer() {
     }
   });
 
+  // In-memory chat log store with file persistence
+  interface ChatLogItem {
+    id: string;
+    sessionId: string;
+    sender: 'user';
+    message: string;
+    reply: string;
+    timestamp: string;
+    read: boolean;
+    userAgent?: string;
+  }
+
+  const CHAT_LOGS_FILE = path.join(DB_DIR, 'chat-logs.json');
+  let chatLogs: ChatLogItem[] = [];
+
+  try {
+    if (fs.existsSync(CHAT_LOGS_FILE)) {
+      chatLogs = JSON.parse(fs.readFileSync(CHAT_LOGS_FILE, 'utf-8'));
+      if (!Array.isArray(chatLogs)) chatLogs = [];
+    }
+  } catch (e) {
+    chatLogs = [];
+  }
+
+  const saveChatLogs = () => {
+    try {
+      if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
+      fs.writeFileSync(CHAT_LOGS_FILE, JSON.stringify(chatLogs.slice(0, 200), null, 2));
+    } catch (e) {
+      console.warn('[ChatLogs] Save error:', e);
+    }
+  };
+
+  // Connected SSE clients for live chat notifications (Admin pages)
+  const chatSseClients = new Set<Response>();
+
+  const broadcastNewChat = (chatItem: ChatLogItem) => {
+    const data = `data: ${JSON.stringify(chatItem)}\n\n`;
+    for (const client of chatSseClients) {
+      try {
+        client.write(data);
+      } catch (err) {
+        chatSseClients.delete(client);
+      }
+    }
+  };
+
+  // SSE Stream for Live Admin Chat Notifications
+  app.get('/api/chat/stream', (req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders?.();
+
+    // Send initial ping
+    res.write(`data: ${JSON.stringify({ type: 'connected', time: Date.now() })}\n\n`);
+    chatSseClients.add(res);
+
+    req.on('close', () => {
+      chatSseClients.delete(res);
+    });
+  });
+
+  // Get Chat Logs for Admin Monitoring
+  app.get('/api/chat/logs', (req: Request, res: Response) => {
+    const unreadCount = chatLogs.filter((c) => !c.read).length;
+    return res.json({
+      chats: chatLogs.slice(0, 100),
+      unreadCount,
+      total: chatLogs.length,
+    });
+  });
+
+  // Mark Chat Logs as Read
+  app.post('/api/chat/mark-read', (req: Request, res: Response) => {
+    const { id, all } = req.body || {};
+    if (all) {
+      chatLogs.forEach((c) => {
+        c.read = true;
+      });
+    } else if (id) {
+      const target = chatLogs.find((c) => c.id === id);
+      if (target) target.read = true;
+    }
+    saveChatLogs();
+    return res.json({ success: true, unreadCount: chatLogs.filter((c) => !c.read).length });
+  });
+
   // AI WhatsApp MinSora Chatbot Endpoint
   app.post('/api/chat', async (req: Request, res: Response) => {
     try {
-      const { message, history } = req.body;
+      const { message, history, sessionId } = req.body;
       if (!message || typeof message !== 'string') {
         return res.status(400).json({ error: 'Pesan tidak boleh kosong' });
       }
+
+      let replyText = '';
 
       const apiKey = process.env.GEMINI_API_KEY;
       if (apiKey) {
@@ -1452,51 +1542,69 @@ PENTING: Jangan memberikan janji kompensasi otomatis di luar kewenangan Anda seb
             },
           });
 
-          const replyText = aiResponse.text || 'Halo Kak! Ada yang bisa MinSora bantu rencanakan untuk katering kantor atau acara keluarga Kakak hari ini? 😊';
-          return res.json({ reply: replyText });
+          replyText = aiResponse.text || 'Halo Kak! Ada yang bisa MinSora bantu rencanakan untuk katering kantor atau acara keluarga Kakak hari ini? 😊';
         } catch (aiErr: any) {
           console.warn('[Gemini API Fallback]', aiErr?.message);
         }
       }
 
-      // Fallback rule-based response matching MinSora persona
-      const lower = message.toLowerCase();
-      let reply = 'Halo Kak! MinSora di sini, teman kuliner resmi dari Asasora Food 😊.\n\nAda yang bisa MinSora bantu? Kami siap melayani katering kantor & pabrik (B2B) dengan fasilitas Free Test Food, hingga acara syukuran & makan harian keluarga (B2C). Kakak sedang cari menu untuk acara apa nih?';
+      // Fallback rule-based response matching MinSora persona if AI did not produce reply
+      if (!replyText) {
+        const lower = message.toLowerCase();
+        replyText = 'Halo Kak! MinSora di sini, teman kuliner resmi dari Asasora Food 😊.\n\nAda yang bisa MinSora bantu? Kami siap melayani katering kantor & pabrik (B2B) dengan fasilitas Free Test Food, hingga acara syukuran & makan harian keluarga (B2C). Kakak sedang cari menu untuk acara apa nih?';
 
-      // 1. Complaint / Kendala Penanganan
-      if (lower.includes('komplain') || lower.includes('keluhan') || lower.includes('terlambat') || lower.includes('basi') || lower.includes('salah kirim') || lower.includes('kurang') || lower.includes('kecewa')) {
-        reply = 'Aduh, MinSora memohon maaf yang sebesar-besarnya atas ketidaknyamanan yang Kakak alami 🙏.\n\nBoleh tolong informasikan nomor pesanan atau nama pemesan Kakak? Agar masalah ini bisa langsung ditindaklanjuti detik ini juga, silakan klik tautan darurat prioritas berikut ya Kak:\n\n[Hubungi CS Penanganan Prioritas Komplain](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20ingin%20melaporkan%20kendala%20pesanan%20saya)\n\nTim Customer Service kami akan segera menangani kendala Kakak sebagai prioritas utama.';
-      }
-      // 2. Kapan Sebaiknya Pemesanan Nasi Box / H-Berapa
-      else if (lower.includes('h-berapa') || lower.includes('h berapa') || lower.includes('h-2') || lower.includes('kapan sebaiknya') || lower.includes('kapan pesan') || lower.includes('kapan order') || (lower.includes('nasi box') && (lower.includes('kapan') || lower.includes('h-') || lower.includes('berapa')))) {
-        reply = 'Untuk pemesanan nasi box bisa H-2 ya Kak, atau Kakak bisa order langsung di website www.asasorafood.com dengan menambahkan keterangan kapan mau dikirimnya di form order 😊.\n\nDengan reservasi H-2, tim dapur Asasora Food dapat mempersiapkan bahan-bahan segar berkualitas prima dan memastikan pesanan tiba tepat waktu. Mau MinSora bantu rekomendasikan menu nasi box favoritnya sekarang?';
-      }
-      // 2. B2B / Pabrik / Kantor / Shift / Test Food
-      else if (lower.includes('pabrik') || lower.includes('shift') || lower.includes('pt') || lower.includes('kantor') || lower.includes('perusahaan') || lower.includes('corporate') || lower.includes('kontrak') || lower.includes('test food') || lower.includes('invoice') || lower.includes('faktur')) {
-        reply = 'Wah pas banget Kak! Untuk layanan B2B (Katering Kantor, Pabrik & Shift Karyawan), Asasora Food siap melayani volume porsi besar dengan jaminan:\n\n✅ Pengiriman tepat waktu sesuai jadwal shift kerja\n✅ Legalitas lengkap: Invoice resmi PT, Kwitansi & Faktur Pajak ber-NPWP\n✅ Fasilitas sesi "Test Food" GRATIS sebelum kontrak kerja sama dimulai\n✅ Rotasi variasi menu bergizi 30 hari tanpa bosan\n\nUntuk pesanan skala besar disarankan reservasi minimal H-2 ya Kak. Yuk konsultasi langsung dengan Tim Marketing kami:\n\n• [Hubungi Tim Marketing - Katering Pabrik & Shift](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20pabrik/karyawan%20shift)\n• [Hubungi Tim Marketing - Event Kantor & Rapat](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20event%20kantor/rapat)';
-      }
-      // 3. Harga / Bujet / Paket / Menu
-      else if (lower.includes('harga') || lower.includes('biaya') || lower.includes('bujet') || lower.includes('budget') || lower.includes('paket') || lower.includes('murah') || lower.includes('nego')) {
-        reply = 'Di Asasora Food, kami SANGAT FLEKSIBEL soal menu dan budget, Kak! Pilihan lauk dan porsi bisa disesuaikan dengan isi kantong atau pagu anggaran kantor Kakak (mulai dari Rp20.000-an/porsi hingga paket premium).\n\nJadi jangan khawatir ya Kak, yuk diskusikan budget yang Kakak miliki bareng MinSora atau langsung chat ke Customer Service kami agar kami buatkan simulasi menu terbaik:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20paket%20menu%20dan%20budget%20katering)';
-      }
-      // 4. Ketersediaan / Ready Stock
-      else if (lower.includes('ready') || lower.includes('stok') || lower.includes('ketersediaan') || lower.includes('buka') || lower.includes('hari ini')) {
-        reply = 'Jujur nih Kak, demi menjaga kesegaran maksimal dan kualitas bahan makanan terbaik, tidak semua produk selalu ready stock setiap hari di dapur kami 😊.\n\nBoleh tahu Kakak sedang berminat dengan menu apa? Nanti MinSora bantu cek langsung ketersediaannya di dapur hari ini, atau Kakak bisa langsung cek kilat ke CS kami:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20mau%20tanya%20ketersediaan%20menu%20hari%20ini)';
-      }
-      // 5. B2C / Acara Keluarga / Syukuran / Hajatan
-      else if (lower.includes('keluarga') || lower.includes('syukuran') || lower.includes('hajatan') || lower.includes('rumah') || lower.includes('ulang tahun') || lower.includes('nikah') || lower.includes('arisan')) {
-        reply = 'Asyik banget Kak! Untuk acara syukuran, hajatan, ulang tahun, atau kumpul keluarga, Asasora Food menyediakan pilihan menu Nusantara hangat yang fleksibel dan lezat. Tersedia Nasi Tumpeng Mini, Nasi Kotak Daun Jeruk, hingga lauk spesial Paru Balado khas Asasora!\n\nUntuk pesanan hajatan keluarga, yuk ngobrol langsung dengan CS kami agar kami bantu siapkan menu spesial:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20pesanan%20katering%20harian/acara%20keluarga)';
-      }
-      // 6. Pengiriman / Ongkir
-      else if (lower.includes('kirim') || lower.includes('ongkir') || lower.includes('lokasi') || lower.includes('antar') || lower.includes('gojek') || lower.includes('grab')) {
-        reply = 'Untuk pengiriman area lokal Tangerang & Jabodetabek, kami menggunakan layanan ojek online (GrabExpress/Gojek Instant maupun Sameday) agar makanan sampai hangat dan higienis. Khusus produk kering atau frozen food, kami juga bisa kirim ke luar kota lewat ekspedisi kilat (JNE YES/Sicepat) lho Kak!';
-      }
-      // 7. Kualitas / Halal / Daya Tahan
-      else if (lower.includes('halal') || lower.includes('tahan') || lower.includes('awet') || lower.includes('expired') || lower.includes('basi') || lower.includes('higiene') || lower.includes('sertifikat')) {
-        reply = 'Semua hidangan Asasora Food dijamin 100% Halal resmi BPJPH Kemenag (ID36110081134110926) dan bersertifikat Laik Higiene Sanitasi Dinkes! Hidangan siap santap kami sarankan dikonsumsi dalam 4-6 jam di suhu ruang, sedangkan produk frozen food awet 1-2 bulan jika disimpan rapat di dalam freezer. Khusus Paru Balado steril retort bisa tahan berbulan-bulan di suhu ruang tanpa pengawet!';
+        // 1. Complaint / Kendala Penanganan
+        if (lower.includes('komplain') || lower.includes('keluhan') || lower.includes('terlambat') || lower.includes('basi') || lower.includes('salah kirim') || lower.includes('kurang') || lower.includes('kecewa')) {
+          replyText = 'Aduh, MinSora memohon maaf yang sebesar-besarnya atas ketidaknyamanan yang Kakak alami 🙏.\n\nBoleh tolong informasikan nomor pesanan atau nama pemesan Kakak? Agar masalah ini bisa langsung ditindaklanjuti detik ini juga, silakan klik tautan darurat prioritas berikut ya Kak:\n\n[Hubungi CS Penanganan Prioritas Komplain](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20ingin%20melaporkan%20kendala%20pesanan%20saya)\n\nTim Customer Service kami akan segera menangani kendala Kakak sebagai prioritas utama.';
+        }
+        // 2. Kapan Sebaiknya Pemesanan Nasi Box / H-Berapa
+        else if (lower.includes('h-berapa') || lower.includes('h berapa') || lower.includes('h-2') || lower.includes('kapan sebaiknya') || lower.includes('kapan pesan') || lower.includes('kapan order') || (lower.includes('nasi box') && (lower.includes('kapan') || lower.includes('h-') || lower.includes('berapa')))) {
+          replyText = 'Untuk pemesanan nasi box bisa H-2 ya Kak, atau Kakak bisa order langsung di website www.asasorafood.com dengan menambahkan keterangan kapan mau dikirimnya di form order 😊.\n\nDengan reservasi H-2, tim dapur Asasora Food dapat mempersiapkan bahan-bahan segar berkualitas prima dan memastikan pesanan tiba tepat waktu. Mau MinSora bantu rekomendasikan menu nasi box favoritnya sekarang?';
+        }
+        // 3. B2B / Pabrik / Kantor / Shift / Test Food
+        else if (lower.includes('pabrik') || lower.includes('shift') || lower.includes('pt') || lower.includes('kantor') || lower.includes('perusahaan') || lower.includes('corporate') || lower.includes('kontrak') || lower.includes('test food') || lower.includes('invoice') || lower.includes('faktur')) {
+          replyText = 'Wah pas banget Kak! Untuk layanan B2B (Katering Kantor, Pabrik & Shift Karyawan), Asasora Food siap melayani volume porsi besar dengan jaminan:\n\n✅ Pengiriman tepat waktu sesuai jadwal shift kerja\n✅ Legalitas lengkap: Invoice resmi PT, Kwitansi & Faktur Pajak ber-NPWP\n✅ Fasilitas sesi "Test Food" GRATIS sebelum kontrak kerja sama dimulai\n✅ Rotasi variasi menu bergizi 30 hari tanpa bosan\n\nUntuk pesanan skala besar disarankan reservasi minimal H-2 ya Kak. Yuk konsultasi langsung dengan Tim Marketing kami:\n\n• [Hubungi Tim Marketing - Katering Pabrik & Shift](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20pabrik/karyawan%20shift)\n• [Hubungi Tim Marketing - Event Kantor & Rapat](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20event%20kantor/rapat)';
+        }
+        // 4. Harga / Bujet / Paket / Menu
+        else if (lower.includes('harga') || lower.includes('biaya') || lower.includes('bujet') || lower.includes('budget') || lower.includes('paket') || lower.includes('murah') || lower.includes('nego')) {
+          replyText = 'Di Asasora Food, kami SANGAT FLEKSIBEL soal menu dan budget, Kak! Pilihan lauk dan porsi bisa disesuaikan dengan isi kantong atau pagu anggaran kantor Kakak (mulai dari Rp20.000-an/porsi hingga paket premium).\n\nJadi jangan khawatir ya Kak, yuk diskusikan budget yang Kakak miliki bareng MinSora atau langsung chat ke Customer Service kami agar kami buatkan simulasi menu terbaik:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20paket%20menu%20dan%20budget%20katering)';
+        }
+        // 5. Ketersediaan / Ready Stock
+        else if (lower.includes('ready') || lower.includes('stok') || lower.includes('ketersediaan') || lower.includes('buka') || lower.includes('hari ini')) {
+          replyText = 'Jujur nih Kak, demi menjaga kesegaran maksimal dan kualitas bahan makanan terbaik, tidak semua produk selalu ready stock setiap hari di dapur kami 😊.\n\nBoleh tahu Kakak sedang berminat dengan menu apa? Nanti MinSora bantu cek langsung ketersediaannya di dapur hari ini, atau Kakak bisa langsung cek kilat ke CS kami:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20mau%20tanya%20ketersediaan%20menu%20hari%20ini)';
+        }
+        // 6. B2C / Acara Keluarga / Syukuran / Hajatan
+        else if (lower.includes('keluarga') || lower.includes('syukuran') || lower.includes('hajatan') || lower.includes('rumah') || lower.includes('ulang tahun') || lower.includes('nikah') || lower.includes('arisan')) {
+          replyText = 'Asyik banget Kak! Untuk acara syukuran, hajatan, ulang tahun, atau kumpul keluarga, Asasora Food menyediakan pilihan menu Nusantara hangat yang fleksibel dan lezat. Tersedia Nasi Tumpeng Mini, Nasi Kotak Daun Jeruk, hingga lauk spesial Paru Balado khas Asasora!\n\nUntuk pesanan hajatan keluarga, yuk ngobrol langsung dengan CS kami agar kami bantu siapkan menu spesial:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20pesanan%20katering%20harian/acara%20keluarga)';
+        }
+        // 7. Pengiriman / Ongkir
+        else if (lower.includes('kirim') || lower.includes('ongkir') || lower.includes('lokasi') || lower.includes('antar') || lower.includes('gojek') || lower.includes('grab')) {
+          replyText = 'Untuk pengiriman area lokal Tangerang & Jabodetabek, kami menggunakan layanan ojek online (GrabExpress/Gojek Instant maupun Sameday) agar makanan sampai hangat dan higienis. Khusus produk kering atau frozen food, kami juga bisa kirim ke luar kota lewat ekspedisi kilat (JNE YES/Sicepat) lho Kak!';
+        }
+        // 8. Kualitas / Halal / Daya Tahan
+        else if (lower.includes('halal') || lower.includes('tahan') || lower.includes('awet') || lower.includes('expired') || lower.includes('basi') || lower.includes('higiene') || lower.includes('sertifikat')) {
+          replyText = 'Semua hidangan Asasora Food dijamin 100% Halal resmi BPJPH Kemenag (ID36110081134110926) dan bersertifikat Laik Higiene Sanitasi Dinkes! Hidangan siap santap kami sarankan dikonsumsi dalam 4-6 jam di suhu ruang, sedangkan produk frozen food awet 1-2 bulan jika disimpan rapat di dalam freezer. Khusus Paru Balado steril retort bisa tahan berbulan-bulan di suhu ruang tanpa pengawet!';
+        }
       }
 
-      return res.json({ reply });
+      // Save log & broadcast live notification to admin
+      const newLog: ChatLogItem = {
+        id: `chat_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        sessionId: sessionId || `guest_${Date.now().toString(36)}`,
+        sender: 'user',
+        message: message.trim(),
+        reply: replyText,
+        timestamp: new Date().toISOString(),
+        read: false,
+        userAgent: (req.headers['user-agent'] as string) || '',
+      };
+
+      chatLogs.unshift(newLog);
+      if (chatLogs.length > 200) chatLogs.length = 200;
+      saveChatLogs();
+      broadcastNewChat(newLog);
+
+      return res.json({ reply: replyText, logId: newLog.id });
     } catch (err: any) {
       console.error('[API Chat Error]', err);
       return res.status(500).json({ error: 'Gagal memproses pesan chat.' });

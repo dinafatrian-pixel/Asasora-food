@@ -45,6 +45,18 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
   onClose,
   company,
 }) => {
+  const [sessionId] = useState(() => {
+    if (typeof window !== 'undefined') {
+      let s = sessionStorage.getItem('minsora_session_id');
+      if (!s) {
+        s = `guest_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
+        sessionStorage.setItem('minsora_session_id', s);
+      }
+      return s;
+    }
+    return `guest_${Date.now()}`;
+  });
+
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: 'init-1',
@@ -91,6 +103,7 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
         body: JSON.stringify({
           message: query,
           history: messages.slice(-4),
+          sessionId,
         }),
       });
 

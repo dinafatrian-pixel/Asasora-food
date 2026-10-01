@@ -24,6 +24,7 @@ import {
   BarChart3,
   BookOpen,
   Factory,
+  MessageCircle,
 } from 'lucide-react';
 import {
   CompanyInfo,
@@ -53,9 +54,11 @@ import { CompanyProfileTab } from './admin/CompanyProfileTab';
 import { CloudinaryTab } from './admin/CloudinaryTab';
 import { UsersTab } from './admin/UsersTab';
 import { AnalyticsTab } from './admin/AnalyticsTab';
+import { LiveChatTab } from './admin/LiveChatTab';
 
 type AdminTab =
   | 'orders'
+  | 'livechat'
   | 'analytics'
   | 'cloudinary'
   | 'users'
@@ -393,6 +396,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       label: 'Pesanan Masuk',
       icon: <ShoppingBag className="w-3.5 h-3.5" />,
       badge: orders.length,
+    },
+    {
+      id: 'livechat',
+      label: 'Live Chat & Dering Bel',
+      icon: <MessageCircle className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />,
     },
     {
       id: 'analytics',
@@ -738,6 +746,10 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onDeleteOrder={onDeleteOrder}
                   onNotify={handleNotify}
                 />
+              )}
+
+              {activeTab === 'livechat' && (
+                <LiveChatTab adminWhatsApp={company.whatsapp || '6285271000900'} />
               )}
 
               {activeTab === 'analytics' && (

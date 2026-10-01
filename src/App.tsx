@@ -52,6 +52,7 @@ import {
 } from './types';
 import { MessageSquareQuote, ShoppingBag, MessageCircle } from 'lucide-react';
 import { MinsoraAvatar } from './components/MinsoraAvatar';
+import { AdminChatNotifier } from './components/AdminChatNotifier';
 import { useLanguage } from './context/LanguageContext';
 import { initGoogleAnalytics, trackVisitorPing, trackGAEvent, defaultAnalyticsData } from './utils/analytics';
 
@@ -831,34 +832,40 @@ export default function App() {
   // Full-Screen Dedicated AdminSora ERP Portal (When URL is /admin, #admin, or /adminsora)
   if (isAdminRoute) {
     return (
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-[#032e1a] flex flex-col items-center justify-center text-white">
-            <div className="w-12 h-12 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin mb-4" />
-            <p className="text-sm font-bold tracking-wide">Memuat Portal MinSora ERP...</p>
-          </div>
-        }
-      >
-        <AdminSoraApp
-          onNavigateToPublic={() => {
-            setIsAdminRoute(false);
-            try {
-              window.history.pushState({}, '', '/');
-            } catch {
-              window.location.hash = '';
-            }
-          }}
-          onOpenWebAdmin={() => {
-            setIsAdminRoute(false);
-            setIsAdminOpen(true);
-            try {
-              window.history.pushState({}, '', '/');
-            } catch {
-              window.location.hash = '';
-            }
-          }}
+      <>
+        <AdminChatNotifier
+          adminWhatsApp={company.whatsapp || '6285271000900'}
+          alwaysShowMonitor={true}
         />
-      </Suspense>
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-[#032e1a] flex flex-col items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin mb-4" />
+              <p className="text-sm font-bold tracking-wide">Memuat Portal MinSora ERP...</p>
+            </div>
+          }
+        >
+          <AdminSoraApp
+            onNavigateToPublic={() => {
+              setIsAdminRoute(false);
+              try {
+                window.history.pushState({}, '', '/');
+              } catch {
+                window.location.hash = '';
+              }
+            }}
+            onOpenWebAdmin={() => {
+              setIsAdminRoute(false);
+              setIsAdminOpen(true);
+              try {
+                window.history.pushState({}, '', '/');
+              } catch {
+                window.location.hash = '';
+              }
+            }}
+          />
+        </Suspense>
+      </>
     );
   }
 
@@ -1076,6 +1083,13 @@ export default function App() {
         isOpen={isChatbotOpen}
         onClose={() => setIsChatbotOpen(false)}
         company={company}
+      />
+
+      {/* Admin Real-Time Incoming Chat Ringer, Audio Bel, & Screen Notification */}
+      <AdminChatNotifier
+        adminWhatsApp={company.whatsapp || '6285271000900'}
+        onOpenLiveChatModal={() => setIsAdminOpen(true)}
+        alwaysShowMonitor={true}
       />
     </div>
   );
