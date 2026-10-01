@@ -10,6 +10,7 @@ import { LegalitasSection } from './components/LegalitasSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { CustomerReviewPortal } from './components/CustomerReviewPortal';
+import { WhatsAppChatbotModal } from './components/WhatsAppChatbotModal';
 
 // Code Splitting & Dynamic Imports to drastically minimize initial JS payload (reduces FCP & eliminates Long Main-Thread Tasks)
 const OrderFormSection = lazy(() =>
@@ -17,6 +18,9 @@ const OrderFormSection = lazy(() =>
 );
 const AdminModal = lazy(() =>
   import('./components/AdminModal').then((m) => ({ default: m.AdminModal }))
+);
+const AdminSoraApp = lazy(() =>
+  import('./adminsora/AdminSoraApp').then((m) => ({ default: m.AdminSoraApp }))
 );
 import { syncManager } from './utils/syncManager';
 import {
@@ -46,7 +50,7 @@ import {
   Article,
   VisitorAnalytics,
 } from './types';
-import { MessageSquareQuote, ShoppingBag } from 'lucide-react';
+import { MessageSquareQuote, ShoppingBag, MessageCircle } from 'lucide-react';
 import { MinsoraAvatar } from './components/MinsoraAvatar';
 import { useLanguage } from './context/LanguageContext';
 import { initGoogleAnalytics, trackVisitorPing, trackGAEvent, defaultAnalyticsData } from './utils/analytics';
@@ -67,6 +71,20 @@ export default function App() {
     );
   });
 
+  // Check if visitor accessed AdminSora (e.g. /admin, #admin, ?admin=true, /adminsora)
+  const [isAdminRoute, setIsAdminRoute] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const hash = (window.location.hash || '').toLowerCase();
+    const search = (window.location.search || '').toLowerCase();
+    const path = (window.location.pathname || '').toLowerCase();
+    return (
+      path.startsWith('/admin') ||
+      path.includes('adminsora') ||
+      hash.startsWith('#admin') ||
+      search.includes('admin')
+    );
+  });
+
   useEffect(() => {
     const handleUrlReviewCheck = () => {
       if (typeof window === 'undefined') return;
@@ -78,6 +96,13 @@ export default function App() {
         search.includes('review') ||
         path.includes('review');
       setIsReviewOnlyMode(isRev);
+
+      const isAdm =
+        path.startsWith('/admin') ||
+        path.includes('adminsora') ||
+        hash.startsWith('#admin') ||
+        search.includes('admin');
+      setIsAdminRoute(isAdm);
     };
 
     window.addEventListener('hashchange', handleUrlReviewCheck);
@@ -266,6 +291,7 @@ export default function App() {
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   // Real-time synchronization state
   const [syncStatus, setSyncStatus] = useState({
@@ -802,6 +828,40 @@ export default function App() {
 
   const totalCartCount = cartItems.reduce((sum, it) => sum + it.quantity, 0);
 
+  // Full-Screen Dedicated AdminSora ERP Portal (When URL is /admin, #admin, or /adminsora)
+  if (isAdminRoute) {
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-[#032e1a] flex flex-col items-center justify-center text-white">
+            <div className="w-12 h-12 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin mb-4" />
+            <p className="text-sm font-bold tracking-wide">Memuat Portal MinSora ERP...</p>
+          </div>
+        }
+      >
+        <AdminSoraApp
+          onNavigateToPublic={() => {
+            setIsAdminRoute(false);
+            try {
+              window.history.pushState({}, '', '/');
+            } catch {
+              window.location.hash = '';
+            }
+          }}
+          onOpenWebAdmin={() => {
+            setIsAdminRoute(false);
+            setIsAdminOpen(true);
+            try {
+              window.history.pushState({}, '', '/');
+            } catch {
+              window.location.hash = '';
+            }
+          }}
+        />
+      </Suspense>
+    );
+  }
+
   // Dedicated Review Portal (Exclusive view for customers scanning QR Code / NFC)
   if (isReviewOnlyMode) {
     return (
@@ -830,6 +890,7 @@ export default function App() {
         onOpenAdminModal={() => setIsAdminOpen(true)}
         onOpenOrderModal={() => setIsOrderModalOpen(true)}
         onScrollToSection={scrollToSection}
+        onOpenChatbot={() => setIsChatbotOpen(true)}
       />
 
       {/* Main Landmark for Accessibility & SEO */}
@@ -953,32 +1014,69 @@ export default function App() {
             onAddAdminUser={handleAddAdminUser}
             onDeleteAdminUser={handleDeleteAdminUser}
             onResetAdminUsers={handleResetAdminUsers}
+            onOpenAdminSora={() => {
+              setIsAdminOpen(false);
+              try {
+                window.history.pushState({}, '', '/admin');
+              } catch {
+                window.location.hash = '#admin';
+              }
+              setIsAdminRoute(true);
+            }}
           />
         </Suspense>
       )}
 
-      {/* Floating Action Button: WhatsApp MinSora Chat Mascot */}
-      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end pointer-events-auto">
+      {/* Floating Action Buttons: Direct WhatsApp Admin (0852-7100-0900) & MinSora AI */}
+      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 pointer-events-auto select-none">
+        {/* Button 1 (Direct to Admin Phone): WhatsApp Admin 0852-7100-0900 */}
         <a
-          href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
+          href={`https://wa.me/${company.whatsapp || '6285271000900'}?text=${encodeURIComponent('Halo Admin Asasora Food (PT. ASASORA BIO HEALTHORA), saya ingin berkonsultasi pesanan katering.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          id="btn-floating-whatsapp"
-          className="group relative flex items-center gap-2.5 bg-white hover:bg-emerald-50 text-gray-900 pl-1.5 pr-4 py-1.5 rounded-full shadow-2xl transition-all duration-300 border-2 border-[#25D366] hover:border-emerald-600 transform hover:scale-105 active:scale-95 cursor-pointer"
-          title="Chat WhatsApp MinSora (Online)"
+          id="btn-floating-whatsapp-direct"
+          className="group relative flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white px-3.5 py-2 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer border-2 border-white"
+          title="Chat Langsung WhatsApp Admin (0852-7100-0900)"
         >
-          <MinsoraAvatar size="md" showOnlineBadge={true} showWaBadge={true} />
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-black text-gray-900 group-hover:text-emerald-800 transition-colors flex items-center gap-1 leading-tight">
-              <span>{t('float.chat_title', 'Chat MinSora')}</span>
+          <MessageCircle className="w-5 h-5 text-white fill-white shrink-0" />
+          <div className="flex flex-col text-left leading-tight">
+            <span className="text-xs font-black text-white flex items-center gap-1">
+              <span>WA Admin Langsung</span>
             </span>
-            <span className="text-[10px] text-emerald-700 font-bold leading-tight flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-              <span>{t('float.chat_status', 'Online • Bantuan Cepat')}</span>
+            <span className="text-[10px] text-emerald-100 font-bold">
+              0852-7100-0900
             </span>
           </div>
         </a>
+
+        {/* Button 2: Interactive MinSora AI Web Consultation */}
+        <button
+          type="button"
+          onClick={() => setIsChatbotOpen((prev) => !prev)}
+          id="btn-floating-whatsapp-ai"
+          className="group relative flex items-center gap-2 bg-white hover:bg-emerald-50 text-gray-900 pl-1.5 pr-3 py-1.5 rounded-full shadow-lg transition-all duration-300 border-2 border-emerald-600 hover:border-emerald-700 transform hover:scale-105 active:scale-95 cursor-pointer"
+          title="Tanya Asisten AI MinSora (Cek Menu & Simulasi Harga)"
+          aria-label="Tanya Asisten AI MinSora"
+        >
+          <MinsoraAvatar size="sm" showOnlineBadge={true} showWaBadge={true} />
+          <div className="flex flex-col text-left leading-tight">
+            <span className="text-[11px] font-black text-gray-900 group-hover:text-emerald-800 transition-colors flex items-center gap-1">
+              <span>Tanya MinSora AI</span>
+              <span className="text-[8px] bg-amber-400 text-gray-950 font-black px-1 rounded-sm">24 Jam</span>
+            </span>
+            <span className="text-[9px] text-emerald-700 font-bold">
+              Cek Menu &amp; Simulasi Harga
+            </span>
+          </div>
+        </button>
       </div>
+
+      {/* WhatsApp MinSora Interactive AI Chatbot Widget */}
+      <WhatsAppChatbotModal
+        isOpen={isChatbotOpen}
+        onClose={() => setIsChatbotOpen(false)}
+        company={company}
+      />
     </div>
   );
 }

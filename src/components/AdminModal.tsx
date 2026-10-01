@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   BarChart3,
   BookOpen,
+  Factory,
 } from 'lucide-react';
 import {
   CompanyInfo,
@@ -122,6 +123,7 @@ interface AdminModalProps {
   onAddAdminUser?: (user: Omit<AdminUser, 'id'>) => void;
   onDeleteAdminUser?: (userId: string) => void;
   onResetAdminUsers?: () => void;
+  onOpenAdminSora?: () => void;
 }
 
 export const AdminModal: React.FC<AdminModalProps> = ({
@@ -171,6 +173,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   onAddAdminUser,
   onDeleteAdminUser,
   onResetAdminUsers,
+  onOpenAdminSora,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<AdminUser | null>(null);
@@ -540,6 +543,21 @@ export const AdminModal: React.FC<AdminModalProps> = ({
               </div>
             )}
 
+            {onOpenAdminSora && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenAdminSora();
+                }}
+                className="text-xs bg-[#F3C623] hover:bg-[#d8ae1a] text-gray-950 font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+                title="Buka Aplikasi MinSora ERP Full-Screen (Bahan Baku, Batch Produksi, HPP, Buku Kas)"
+              >
+                <Factory className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">AdminSora ERP</span>
+              </button>
+            )}
+
             {isAuthenticated && (
               <button
                 onClick={handleLogout}
@@ -678,6 +696,20 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       )}
                     </button>
                   ))}
+
+                  {onOpenAdminSora && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onOpenAdminSora();
+                      }}
+                      className="px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 cursor-pointer bg-gradient-to-r from-[#032e1a] to-[#087443] text-[#F3C623] hover:text-white shadow-sm border border-emerald-800"
+                    >
+                      <Factory className="w-3.5 h-3.5 text-[#F3C623]" />
+                      <span>Buka MinSora ERP (Full Screen) ↗</span>
+                    </button>
+                  )}
                 </div>
               </div>
 

@@ -305,7 +305,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari nama menu / produk / alat..."
-            className="w-full pl-9 pr-3 py-2 bg-white rounded-xl border border-gray-200 text-xs focus:ring-2 focus:ring-[#2E6F40] outline-none"
+            className="w-full pl-9 pr-3 py-2 bg-white text-gray-900 rounded-xl border border-gray-200 text-xs focus:ring-2 focus:ring-[#2E6F40] outline-none placeholder:text-gray-400 font-medium"
+            style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
           />
         </div>
 
@@ -356,7 +357,7 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
               <div className="sm:col-span-2">
-                <label className="block font-bold text-gray-700 mb-1">
+                <label className="block font-bold text-gray-800 mb-1">
                   Nama Produk / Paket <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -365,25 +366,27 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                   value={newProdName}
                   onChange={(e) => setNewProdName(e.target.value)}
                   placeholder="Contoh: Paket Nasi Box Premium Halal"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-semibold"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] focus:border-[#2E6F40] outline-none font-bold text-sm shadow-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-gray-700 mb-1">Kategori</label>
+                <label className="block font-bold text-gray-800 mb-1">Kategori</label>
                 <select
                   value={newProdCategory}
                   onChange={(e) => setNewProdCategory(e.target.value)}
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] focus:border-[#2E6F40] outline-none font-bold text-sm shadow-xs cursor-pointer"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 >
-                  <option value="catering & event">catering &amp; event</option>
-                  <option value="Produk Siap Santap">Produk Siap Santap</option>
-                  <option value="Snak dan cemilan">Snak dan cemilan</option>
+                  <option value="catering & event" className="bg-white text-gray-900">catering &amp; event</option>
+                  <option value="Produk Siap Santap" className="bg-white text-gray-900">Produk Siap Santap</option>
+                  <option value="Snak dan cemilan" className="bg-white text-gray-900">Snak dan cemilan</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-bold text-gray-700 mb-1">
+                <label className="block font-bold text-gray-800 mb-1">
                   Harga Satuan (Rp) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -391,63 +394,68 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                   required
                   value={newProdPrice}
                   onChange={(e) => setNewProdPrice(parseInt(e.target.value) || 0)}
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-emerald-800 rounded-xl border border-gray-300 font-black text-sm focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  style={{ color: '#0F5132', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-gray-700 mb-1">Satuan</label>
+                <label className="block font-bold text-gray-800 mb-1">Satuan</label>
                 <input
                   type="text"
                   value={newProdUnit}
                   onChange={(e) => setNewProdUnit(e.target.value)}
                   placeholder="Contoh: box / porsi / pax / bulan"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-gray-700 mb-1">Minimal Pemesanan</label>
+                <label className="block font-bold text-gray-800 mb-1">Minimal Pemesanan</label>
                 <input
                   type="number"
                   min={1}
                   value={newProdMin}
                   onChange={(e) => setNewProdMin(parseInt(e.target.value) || 1)}
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-bold text-xs"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-gray-700 mb-1">Badge Promo / Label</label>
+                <label className="block font-bold text-gray-800 mb-1">Badge Promo / Label</label>
                 <input
                   type="text"
                   value={newProdBadge}
                   onChange={(e) => setNewProdBadge(e.target.value)}
                   placeholder="Contoh: Best Seller / Promo Halal"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
               <div className="flex items-center gap-2 pt-5">
-                <label className="flex items-center gap-2 cursor-pointer text-gray-700 font-bold">
+                <label className="flex items-center gap-2 cursor-pointer text-gray-800 font-bold">
                   <input
                     type="checkbox"
                     checked={newProdPopular}
                     onChange={(e) => setNewProdPopular(e.target.checked)}
-                    className="w-4 h-4 text-[#2E6F40] rounded focus:ring-green-500"
+                    className="w-4 h-4 text-[#2E6F40] rounded focus:ring-green-500 cursor-pointer"
                   />
                   <span>Tandai Menu Populer</span>
                 </label>
               </div>
 
               <div className="sm:col-span-3">
-                <label className="block font-bold text-gray-700 mb-1">Deskripsi Menu / Produk</label>
+                <label className="block font-bold text-gray-800 mb-1">Deskripsi Menu / Produk</label>
                 <textarea
                   rows={2}
                   value={newProdDesc}
                   onChange={(e) => setNewProdDesc(e.target.value)}
                   placeholder="Isi menu, komposisi bahan makanan, atau spesifikasi barang..."
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -568,7 +576,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                   onChange={(e) =>
                     setEditingProduct({ ...editingProduct, name: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 font-bold text-sm focus:ring-2 focus:ring-amber-500 outline-none placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -582,11 +591,12 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                       category: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-bold text-sm cursor-pointer"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 >
-                  <option value="catering & event">catering &amp; event</option>
-                  <option value="Produk Siap Santap">Produk Siap Santap</option>
-                  <option value="Snak dan cemilan">Snak dan cemilan</option>
+                  <option value="catering & event" className="bg-white text-gray-900">catering &amp; event</option>
+                  <option value="Produk Siap Santap" className="bg-white text-gray-900">Produk Siap Santap</option>
+                  <option value="Snak dan cemilan" className="bg-white text-gray-900">Snak dan cemilan</option>
                 </select>
               </div>
 
@@ -604,7 +614,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                       price: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-emerald-800 rounded-xl border border-amber-300 font-black text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#0F5132', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -616,7 +627,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                   onChange={(e) =>
                     setEditingProduct({ ...editingProduct, unit: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -632,7 +644,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                       minOrder: parseInt(e.target.value) || 1,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-bold text-xs"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -645,7 +658,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                     setEditingProduct({ ...editingProduct, badge: e.target.value })
                   }
                   placeholder="Contoh: Best Seller / Promo"
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -660,7 +674,7 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                         isPopular: e.target.checked,
                       })
                     }
-                    className="w-4 h-4 text-[#2E6F40] rounded focus:ring-amber-500"
+                    className="w-4 h-4 text-[#2E6F40] rounded focus:ring-amber-500 cursor-pointer"
                   />
                   <span>Tandai Menu Populer</span>
                 </label>
@@ -677,7 +691,8 @@ export const KatalogTab: React.FC<KatalogTabProps> = ({
                       description: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-2.5 bg-white text-gray-900 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-medium text-xs placeholder:text-gray-400"
+                  style={{ color: '#111827', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 

@@ -10,6 +10,7 @@ interface NavbarProps {
   onOpenAdminModal: () => void;
   onOpenOrderModal: () => void;
   onScrollToSection: (sectionId: string) => void;
+  onOpenChatbot?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -18,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdminModal,
   onOpenOrderModal,
   onScrollToSection,
+  onOpenChatbot,
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { lang, setLang, t } = useLanguage();
@@ -135,15 +137,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {/* WhatsApp Chat MinSora */}
-            <a
-              href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold pl-1.5 pr-3 py-1.5 rounded-full shadow-2xs transition flex items-center space-x-1.5 text-xs cursor-pointer active:scale-95 border border-[#e5b719] whitespace-nowrap"
-            >
-              <MinsoraAvatar size="xs" showWaBadge={false} />
-              <span className="text-xs font-bold">{t('nav.whatsapp_chat', 'Chat MinSora')}</span>
-            </a>
+            {onOpenChatbot ? (
+              <button
+                type="button"
+                onClick={onOpenChatbot}
+                className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold pl-1.5 pr-3 py-1.5 rounded-full shadow-2xs transition flex items-center space-x-1.5 text-xs cursor-pointer active:scale-95 border border-[#e5b719] whitespace-nowrap"
+              >
+                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span className="text-xs font-bold">{t('nav.whatsapp_chat', 'Chat MinSora')}</span>
+              </button>
+            ) : (
+              <a
+                href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold pl-1.5 pr-3 py-1.5 rounded-full shadow-2xs transition flex items-center space-x-1.5 text-xs cursor-pointer active:scale-95 border border-[#e5b719] whitespace-nowrap"
+              >
+                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span className="text-xs font-bold">{t('nav.whatsapp_chat', 'Chat MinSora')}</span>
+              </a>
+            )}
 
             {/* Admin Login Modal Trigger */}
             <button
@@ -210,15 +223,29 @@ export const Navbar: React.FC<NavbarProps> = ({
           ))}
 
           <div className="pt-3 border-t border-gray-100 flex flex-col gap-2.5">
-            <a
-              href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold py-3 px-4 rounded-xl shadow-2xs transition flex items-center justify-center space-x-2 text-sm text-center"
-            >
-              <MinsoraAvatar size="xs" showWaBadge={false} />
-              <span>{t('nav.whatsapp_chat', 'Chat WhatsApp MinSora')}</span>
-            </a>
+            {onOpenChatbot ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onOpenChatbot();
+                }}
+                className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold py-3 px-4 rounded-xl shadow-2xs transition flex items-center justify-center space-x-2 text-sm text-center cursor-pointer"
+              >
+                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span>{t('nav.whatsapp_chat', 'Chat WhatsApp MinSora')}</span>
+              </button>
+            ) : (
+              <a
+                href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold py-3 px-4 rounded-xl shadow-2xs transition flex items-center justify-center space-x-2 text-sm text-center"
+              >
+                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span>{t('nav.whatsapp_chat', 'Chat WhatsApp MinSora')}</span>
+              </a>
+            )}
 
             <button
               onClick={() => {

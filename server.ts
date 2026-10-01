@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
+import { GoogleGenAI } from '@google/genai';
 
 const PORT = 3000;
 const DB_DIR = path.join(process.cwd(), 'data');
@@ -1377,6 +1378,90 @@ async function startServer() {
       });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // AI WhatsApp MinSora Chatbot Endpoint
+  app.post('/api/chat', async (req: Request, res: Response) => {
+    try {
+      const { message, history } = req.body;
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ error: 'Pesan tidak boleh kosong' });
+      }
+
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (apiKey) {
+        try {
+          const ai = new GoogleGenAI({ apiKey });
+          const systemInstruction = `Anda adalah MinSora, AI Assistant profesional dan ramah untuk asasorafood.com (PT. Asasora Bio Healthora), penyedia jasa boga/katering terpercaya berbasis di Tangerang.
+
+FOKUS UTAMA BISNIS:
+- Segmen B2B: Katering Kantor, Makan Siang Karyawan, Katering Pabrik & Industri di Tangerang & Jabodetabek.
+- Event Korporat: Seminar, Rapat / Meeting Direksi, Syukuran Kantor, Training, Gathering & Field Trip.
+
+STANDAR & GAYA KOMUNIKASI (AGENTS_md):
+1. Nada bicara: Profesional, solutif, ramah, dan ringkas layaknya customer service WhatsApp yang terpercaya.
+2. Secara alami selipkan kata kunci SEO yang relevan jika konteksnya cocok:
+   - "katering harian karyawan Tangerang"
+   - "catering makan siang kantor"
+   - "nasi kotak seminar Tangerang"
+   - "paket catering syukuran kantor"
+   - "katering dapur higienis"
+3. Nilai Unggul Asasora Food:
+   - Legalitas resmi lengkap berbadan hukum (PT & ber-NPWP).
+   - Jaminan sertifikasi Halal resmi dari BPJPH Kementerian Agama RI (ID36110081134110926).
+   - Cita rasa autentik kuliner Nusantara (Menu andalan: Paru Balado khas Asasora tahan 11 bulan steril vakum, NaSemangkuk daun jeruk gurih Rp20.000, Nasi Bento katering Rp35.000, Nasi Kotak Premium Rp45.000).
+   - Standar dapur steril, bersih, dan higienis bersertifikasi laik higiene sanitasi jasaboga.
+   - Jaminan ketepatan waktu pengiriman armada katering (khusus subuh/pagi H-1).
+4. Berikan simulasi harga atau paket jika ditanya bujet, dan arahkan calon klien (HRD/GA/EO) untuk mengeksplorasi opsi menu Nusantara di website atau konsultasi langsung via WhatsApp resmi di +62 852-7100-0900.`;
+
+          const contents: any[] = [];
+          if (Array.isArray(history)) {
+            for (const item of history.slice(-6)) {
+              if (item.sender === 'user') {
+                contents.push({ role: 'user', parts: [{ text: item.text }] });
+              } else if (item.sender === 'bot') {
+                contents.push({ role: 'model', parts: [{ text: item.text }] });
+              }
+            }
+          }
+          contents.push({ role: 'user', parts: [{ text: message }] });
+
+          const aiResponse = await ai.models.generateContent({
+            model: 'gemini-3.8-flash',
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.7,
+              maxOutputTokens: 800,
+            },
+          });
+
+          const replyText = aiResponse.text || 'Halo! Ada yang bisa MinSora bantu untuk rencana katering kantor Anda? 😊';
+          return res.json({ reply: replyText });
+        } catch (aiErr: any) {
+          console.warn('[Gemini API Fallback]', aiErr?.message);
+        }
+      }
+
+      // Fallback rule-based response
+      const lower = message.toLowerCase();
+      let reply = 'Halo! Saya MinSora dari PT. Asasora Bio Healthora 😊. Kami siap melayani katering harian karyawan Tangerang, nasi kotak seminar, dan katering event higienis ber-Sertifikat Halal BPJPH. Ada yang bisa MinSora bantu rencanakan?';
+
+      if (lower.includes('harga') || lower.includes('biaya') || lower.includes('bujet') || lower.includes('budget') || lower.includes('paket') || lower.includes('menu')) {
+        reply = 'Halo Kak! Paket katering kami sangat fleksibel dan terjangkau:\n\n🍱 Paket Nasi Daun Jeruk "NaSemangkuk": Rp20.000/porsi\n📦 Nasi Kotak Ekonomis: Rp25.000/box\n🍱 Nasi Bento NaSemangkuk: Rp35.000/box\n⭐ Nasi Kotak Premium: Rp45.000/box\n🍲 Paru Sapi Balado Khas Asasora (Retort Steril Vakum): Rp40.000/pcs\n\nBisa disesuaikan dengan alokasi bujet kantor Kakak! Mau coba simulasi pesanan untuk berapa porsi? 😊';
+      } else if (lower.includes('harian') || lower.includes('karyawan') || lower.includes('kantor') || lower.includes('pabrik')) {
+        reply = 'Untuk katering harian karyawan Tangerang dan catering makan siang kantor, kami menyediakan sistem rotasi menu 30 hari variatif agar karyawan tidak bosan, dimasak di katering dapur higienis berstandar Dinkes, dan diantar tepat waktu sebelum jam makan siang. Kami juga melayani invoice resmi dan sistem Term of Payment (TOP) untuk perusahaan ber-NPWP!';
+      } else if (lower.includes('seminar') || lower.includes('meeting') || lower.includes('rapat') || lower.includes('kotak') || lower.includes('event')) {
+        reply = 'Untuk acara meeting dan seminar, kami menyediakan nasi kotak seminar Tangerang dengan kemasan box ivory food grade higienis, lengkap dengan sendok seal, tisu, dan air mineral. Menu favorit antara lain Nasi Daun Jeruk Ayam Suwir dan Nasi Daging Rendang Balado!';
+      } else if (lower.includes('halal') || lower.includes('sertifikat') || lower.includes('pt') || lower.includes('legalitas')) {
+        reply = 'PT. Asasora Bio Healthora 100% legal dan berbadan hukum resmi dengan NIB dan NPWP Badan. Dapur kami telah memiliki Sertifikasi Halal resmi BPJPH Kementerian Agama RI (ID36110081134110926) dan bersertifikat Laik Higiene Sanitasi Jasaboga.';
+      }
+
+      return res.json({ reply });
+    } catch (err: any) {
+      console.error('[API Chat Error]', err);
+      return res.status(500).json({ error: 'Gagal memproses pesan chat.' });
     }
   });
 
