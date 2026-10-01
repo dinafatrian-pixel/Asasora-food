@@ -29,12 +29,16 @@ interface WhatsAppChatbotModalProps {
 }
 
 const QUICK_PROMPTS = [
-  '🍱 Katering Harian Kantor Tangerang',
-  '📦 Nasi Kotak Seminar & Meeting',
-  '💰 Simulasi Harga & Paket Menu',
-  '📜 Sertifikasi Halal BPJPH & Higienis',
-  '🍲 Paru Balado Khas Asasora',
+  '🍱 Katering Pabrik & Kantor (B2B)',
+  '👨‍👩‍👧 Katering Rumahan / Syukuran (B2C)',
+  '💰 Custom Menu & Budget Fleksibel',
+  '🎁 Fasilitas Free Test Food B2B',
+  '📦 Cek Ketersediaan Menu Hari Ini',
+  '⚠️ Bantuan & Komplain Pesanan',
 ];
+
+const INITIAL_MINSORA_GREETING =
+  'Halo Kak! MinSora di sini, teman kuliner & asisten virtual resmi Asasora Food (asasorafood.com) 😊.\n\nSenang banget bisa menyapa Kakak! Lagi butuh katering harian kantor/pabrik (B2B) dengan fasilitas Free Test Food, atau katering lezat untuk acara keluarga & syukuran (B2C) nih Kak? MinSora siap bantu carikan opsi menu yang paling pas dan fleksibel sesuai budget Kakak!';
 
 export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
   isOpen,
@@ -45,7 +49,7 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
     {
       id: 'init-1',
       sender: 'bot',
-      text: 'Halo! Saya MinSora, asisten katering resmi dari PT. Asasora Bio Healthora 😊.\n\nAda yang bisa saya bantu rencanakan untuk katering harian karyawan, nasi kotak seminar, atau event kantor Anda di Tangerang & Jabodetabek?',
+      text: INITIAL_MINSORA_GREETING,
       time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -96,21 +100,34 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
       const botMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
         sender: 'bot',
-        text: data.reply || 'Mohon maaf, MinSora sedang memproses jawaban. Silakan hubungi tim kami via WhatsApp resmi ya Kak.',
+        text: data.reply || 'Halo Kak, ada yang bisa MinSora bantu terkait katering kantor atau acara keluarga Kakak? 😊',
         time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
-      // Offline fallback
-      let fallbackText =
-        'Terima kasih atas pertanyaannya Kak! Untuk respons lebih cepat dan konsultasi menu khusus katering kantor, Kakak bisa langsung terhubung dengan tim customer service kami melalui WhatsApp.';
+      // Offline fallback matching MinSora persona
       const lower = query.toLowerCase();
-      if (lower.includes('harga') || lower.includes('paket') || lower.includes('bujet')) {
+      let fallbackText =
+        'Halo Kak! MinSora di sini 😊. Kami siap melayani katering kantor & pabrik (B2B) dengan Free Test Food, hingga acara syukuran & makan harian keluarga (B2C). Ada yang bisa MinSora bantu rencanakan?';
+
+      if (lower.includes('komplain') || lower.includes('keluhan') || lower.includes('terlambat') || lower.includes('basi') || lower.includes('salah kirim') || lower.includes('kurang') || lower.includes('kecewa')) {
         fallbackText =
-          'Paket katering Asasora sangat terjangkau:\n• Paket NaSemangkuk Daun Jeruk: mulai Rp20.000\n• Nasi Kotak Ekonomis: mulai Rp25.000\n• Nasi Bento NaSemangkuk: mulai Rp35.000\n• Nasi Kotak Premium: mulai Rp45.000\n\nBisa disesuaikan dengan alokasi anggaran kantor Kakak!';
-      } else if (lower.includes('harian') || lower.includes('karyawan') || lower.includes('kantor')) {
+          'Aduh, MinSora memohon maaf yang sebesar-besarnya atas ketidaknyamanan yang Kakak alami 🙏.\n\nBoleh tolong informasikan nomor pesanan atau nama pemesan Kakak? Agar masalah ini bisa langsung ditangani detik ini juga, silakan klik tautan prioritas Customer Service berikut ya Kak:\n\n[Hubungi CS Penanganan Prioritas Komplain](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20ingin%20melaporkan%20kendala%20pesanan%20saya)\n\nTim Customer Service kami akan segera menangani kendala Kakak sebagai prioritas utama.';
+      } else if (lower.includes('pabrik') || lower.includes('shift') || lower.includes('kantor') || lower.includes('b2b') || lower.includes('test food') || lower.includes('invoice') || lower.includes('kontrak')) {
         fallbackText =
-          'Untuk katering harian karyawan Tangerang, kami menyediakan variasi menu rotasi 30 hari, pengantaran tepat waktu dengan armada boks termal higienis, serta dukungan invoice resmi dan TOP untuk instansi/perusahaan.';
+          'Wah pas banget Kak! Untuk layanan B2B (Katering Kantor, Pabrik & Shift Karyawan), Asasora Food siap melayani volume porsi besar dengan:\n\n✅ Pengiriman tepat waktu sesuai jadwal shift kerja\n✅ Legalitas lengkap: Invoice resmi PT, Kwitansi & Faktur Pajak ber-NPWP\n✅ Fasilitas sesi "Test Food" GRATIS sebelum kontrak kerja sama dimulai\n✅ Rotasi menu bergizi 30 hari tanpa bosan\n\nUntuk pesanan skala besar disarankan reservasi minimal H-2 ya Kak. Yuk konsultasi langsung dengan Tim Marketing kami:\n\n• [Hubungi Tim Marketing - Katering Pabrik & Shift](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20pabrik/karyawan%20shift)\n• [Hubungi Tim Marketing - Event Kantor & Rapat](https://wa.me/6285271000900?text=Halo%20Tim%20Marketing%20Asasora,%20saya%20ingin%20konsultasi%20katering%20event%20kantor/rapat)';
+      } else if (lower.includes('harga') || lower.includes('bujet') || lower.includes('budget') || lower.includes('paket') || lower.includes('murah') || lower.includes('biaya')) {
+        fallbackText =
+          'Di Asasora Food, kami SANGAT FLEKSIBEL soal menu dan budget, Kak! Pilihan lauk dan porsi bisa disesuaikan dengan isi kantong atau pagu anggaran kantor Kakak (mulai dari Rp20.000-an/porsi hingga paket premium).\n\nYuk diskusikan budget yang Kakak miliki bareng MinSora atau langsung chat ke Customer Service kami agar kami buatkan simulasi menu terbaik:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20paket%20menu%20dan%20budget%20katering)';
+      } else if (lower.includes('ready') || lower.includes('stok') || lower.includes('ketersediaan') || lower.includes('hari ini')) {
+        fallbackText =
+          'Jujur nih Kak, demi menjaga kesegaran maksimal dan kualitas bahan makanan terbaik, tidak semua produk selalu ready stock setiap hari di dapur kami 😊.\n\nBoleh tahu Kakak sedang berminat dengan menu apa? Nanti MinSora bantu cek langsung ketersediaannya di dapur hari ini, atau Kakak bisa langsung cek kilat ke CS kami:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora,%20saya%20mau%20tanya%20ketersediaan%20menu%20hari%20ini)';
+      } else if (lower.includes('keluarga') || lower.includes('syukuran') || lower.includes('hajatan') || lower.includes('rumah') || lower.includes('b2c')) {
+        fallbackText =
+          'Asyik banget Kak! Untuk acara syukuran, hajatan, ulang tahun, atau kumpul keluarga, Asasora Food menyediakan pilihan menu Nusantara hangat yang fleksibel dan lezat. Tersedia Nasi Tumpeng Mini, Nasi Kotak Daun Jeruk, hingga lauk spesial Paru Balado khas Asasora!\n\nYuk konsultasi langsung dengan Customer Service kami:\n\n[Chat CS Asasora (B2C & Harian)](https://wa.me/6285271000900?text=Halo%20CS%20Asasora%20Food,%20saya%20ingin%20konsultasi%20pesanan%20katering%20harian/acara%20keluarga)';
+      } else if (lower.includes('kirim') || lower.includes('ongkir') || lower.includes('lokasi')) {
+        fallbackText =
+          'Untuk pengiriman area lokal Tangerang & Jabodetabek, kami menggunakan layanan ojek online (GrabExpress/Gojek Instant maupun Sameday) agar makanan sampai hangat dan higienis. Khusus produk kering atau frozen food, kami juga bisa kirim ke luar kota lewat ekspedisi kilat (JNE YES/Sicepat) lho Kak!';
       }
 
       const botMsg: ChatMessage = {
@@ -137,10 +154,50 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
       {
         id: 'init-1',
         sender: 'bot',
-        text: 'Halo! Saya MinSora, asisten katering resmi dari PT. Asasora Bio Healthora 😊.\n\nAda yang bisa saya bantu rencanakan untuk katering harian karyawan, nasi kotak seminar, atau event kantor Anda di Tangerang & Jabodetabek?',
+        text: INITIAL_MINSORA_GREETING,
         time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
       },
     ]);
+  };
+
+  // Helper to parse markdown links [label](url) into interactive buttons
+  const renderFormattedMessage = (rawText: string) => {
+    const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+    const elements: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = linkRegex.exec(rawText)) !== null) {
+      const [fullMatch, linkText, url] = match;
+      const startIndex = match.index;
+
+      if (startIndex > lastIndex) {
+        elements.push(
+          <span key={`text-${lastIndex}`}>{rawText.substring(lastIndex, startIndex)}</span>
+        );
+      }
+
+      elements.push(
+        <a
+          key={`link-${startIndex}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 my-1.5 px-3 py-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-extrabold text-[11px] rounded-xl shadow-xs transition transform hover:scale-[1.02] active:scale-95 cursor-pointer no-underline border border-emerald-600/30"
+        >
+          <span>{linkText}</span>
+          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+        </a>
+      );
+
+      lastIndex = startIndex + fullMatch.length;
+    }
+
+    if (lastIndex < rawText.length) {
+      elements.push(<span key={`text-${lastIndex}`}>{rawText.substring(lastIndex)}</span>);
+    }
+
+    return elements;
   };
 
   // Build direct WhatsApp Link with consultation transcript
@@ -248,7 +305,7 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
                       : 'bg-[#D9FDD3] text-gray-900 rounded-tr-xs border border-emerald-200/60'
                   }`}
                 >
-                  <p>{msg.text}</p>
+                  <div className="leading-relaxed break-words">{renderFormattedMessage(msg.text)}</div>
                   <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-gray-400 font-medium">
                     <span>{msg.time}</span>
                     {!isBot && <CheckCheck className="w-3.5 h-3.5 text-[#53bdeb]" />}
