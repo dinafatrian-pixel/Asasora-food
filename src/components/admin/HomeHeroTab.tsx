@@ -129,7 +129,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Teks Badge Sorotan (Badge Kuning Emas)
               </label>
               <input
@@ -138,13 +138,13 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 onChange={(e) =>
                   setForm({ ...form, badgeText: e.target.value })
                 }
-                placeholder="Contoh: Food Health Partner"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="Contoh: Food & Catering Partner"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Teks Badge Halal (Badge Hijau)
               </label>
               <input
@@ -153,13 +153,13 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 onChange={(e) =>
                   setForm({ ...form, halalBadgeText: e.target.value })
                 }
-                placeholder="Contoh: Sertifikat Halal BPJPH No. ID36110001859011123"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="Contoh: Sertifikat Halal Resmi BPJPH"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Slogan / Tagline Resmi
               </label>
               <input
@@ -168,8 +168,8 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 onChange={(e) =>
                   setForm({ ...form, tagline: e.target.value })
                 }
-                placeholder="Contoh: 'PRODUK TERSERTIFIKASI HALAL BPJPH'"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 italic font-semibold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="Contoh: 'TRADISI RASA INOVASI SELERA'"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
           </div>

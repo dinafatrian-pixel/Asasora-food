@@ -15,7 +15,7 @@ export const getNotificationSettings = (): NotificationSettings => {
       soundEnabled: true,
       vibrationEnabled: true,
       browserNotificationEnabled: true,
-      volume: 0.8,
+      volume: 0.9,
     };
   }
   try {
@@ -26,7 +26,7 @@ export const getNotificationSettings = (): NotificationSettings => {
     soundEnabled: true,
     vibrationEnabled: true,
     browserNotificationEnabled: true,
-    volume: 0.8,
+    volume: 0.9,
   };
 };
 
@@ -37,72 +37,147 @@ export const saveNotificationSettings = (settings: NotificationSettings) => {
   } catch (e) {}
 };
 
+// Global shared AudioContext
+let sharedAudioCtx: AudioContext | null = null;
+
+export const getAudioContext = (): AudioContext | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    if (!sharedAudioCtx) {
+      const AudioContextClass =
+        window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioContextClass) {
+        sharedAudioCtx = new AudioContextClass();
+      }
+    }
+    if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+      sharedAudioCtx.resume().catch(() => {});
+    }
+    return sharedAudioCtx;
+  } catch (e) {
+    return null;
+  }
+};
+
+// Auto-unlock audio on the very first touch/click anywhere on the webpage
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+  };
+  window.addEventListener('click', unlockAudio, { passive: true });
+  window.addEventListener('touchstart', unlockAudio, { passive: true });
+  window.addEventListener('keydown', unlockAudio, { passive: true });
+}
+
+let activeRingtoneTimer: any = null;
+
 /**
- * Synthesizes a loud, crisp, pleasant dual-burst phone bell/chime using Web Audio API.
- * Does not depend on external MP3/WAV files, works on Android, iOS, Windows, Mac, Linux.
+ * Synthesizes a loud, prominent, unmistakable 3-cycle phone bell ringtone
+ * Pattern: "Dring-dring-dring! ... Dring-dring-dring! ... Dring-dring-dring!"
+ * Works across all browsers and devices without any external audio file dependencies.
  */
-export const playNotificationRingtone = (volume = 0.8) => {
+export const playNotificationRingtone = (volume = 0.9) => {
   if (typeof window === 'undefined') return;
   try {
-    const AudioContextClass =
-      window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
 
-    const ctx = new AudioContextClass();
     if (ctx.state === 'suspended') {
       ctx.resume().catch(() => {});
     }
 
     const now = ctx.currentTime;
+    const effectiveVol = Math.max(0.2, Math.min(1.0, volume));
 
-    // Pattern: 2 melodic bursts (C6 -> E6 -> G6 -> C7)
-    // Ting-ting-ting-TIIING!
-    const playBurst = (startTime: number) => {
-      const notes = [
-        { freq: 880, start: startTime, dur: 0.12 },
-        { freq: 1108.73, start: startTime + 0.11, dur: 0.13 },
-        { freq: 1318.51, start: startTime + 0.23, dur: 0.15 },
-        { freq: 1760.0, start: startTime + 0.37, dur: 0.45 },
+    // Play a single bright, melodic bell chime burst
+    const playChimeBurst = (startTime: number) => {
+      // Dual-tone harmonic frequencies for bell richness (High C melody)
+      const chords = [
+        { freq1: 1046.5, freq2: 2093.0, start: startTime, dur: 0.12 },
+        { freq1: 1318.5, freq2: 2637.0, start: startTime + 0.11, dur: 0.13 },
+        { freq1: 1567.98, freq2: 3135.96, start: startTime + 0.23, dur: 0.16 },
+        { freq1: 2093.0, freq2: 4186.0, start: startTime + 0.38, dur: 0.45 },
       ];
 
-      notes.forEach(({ freq, start, dur }) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+      chords.forEach(({ freq1, freq2, start, dur }) => {
+        // Primary oscillator (pure sine)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(freq1, start);
 
-        // Sine with slight triangle harmonics for bell richness
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, start);
+        gain1.gain.setValueAtTime(0, start);
+        gain1.gain.linearRampToValueAtTime(effectiveVol * 0.45, start + 0.015);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, start + dur);
 
-        const targetGain = Math.max(0.1, Math.min(1.0, volume)) * 0.45;
-        gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(targetGain, start + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(start);
+        osc1.stop(start + dur);
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+        // Secondary harmonic oscillator (triangle for bright bell attack)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(freq2, start);
 
-        osc.start(start);
-        osc.stop(start + dur);
+        gain2.gain.setValueAtTime(0, start);
+        gain2.gain.linearRampToValueAtTime(effectiveVol * 0.15, start + 0.01);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, start + dur * 0.7);
+
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(start);
+        osc2.stop(start + dur * 0.7);
       });
     };
 
-    // First burst
-    playBurst(now + 0.05);
-    // Second burst after 0.85s for unmistakable incoming phone ringtone feel
-    playBurst(now + 0.85);
+    // 3 distinct ringing bursts so nobody can miss it:
+    // Ring 1 at 0.05s
+    playChimeBurst(now + 0.05);
+    // Ring 2 at 1.0s
+    playChimeBurst(now + 1.0);
+    // Ring 3 at 2.0s
+    playChimeBurst(now + 2.0);
   } catch (err) {
     console.warn('[AudioRingtone] Play error:', err);
   }
 };
 
 /**
- * Triggers phone vibration if device supports Vibration API (Android / mobile browsers)
+ * Starts continuous ringtone loop that rings every 2.5 seconds until stopped
+ */
+export const startContinuousRingtone = (volume = 0.9) => {
+  stopContinuousRingtone();
+  playNotificationRingtone(volume);
+  vibratePhone();
+
+  activeRingtoneTimer = setInterval(() => {
+    playNotificationRingtone(volume);
+    vibratePhone();
+  }, 2600);
+};
+
+/**
+ * Stops continuous ringtone loop
+ */
+export const stopContinuousRingtone = () => {
+  if (activeRingtoneTimer) {
+    clearInterval(activeRingtoneTimer);
+    activeRingtoneTimer = null;
+  }
+};
+
+/**
+ * Triggers distinct phone vibration sequence (3 long buzzes)
  */
 export const vibratePhone = () => {
   if (typeof window === 'undefined' || !navigator.vibrate) return;
   try {
-    // 3 distinct vibration pulses
-    navigator.vibrate([250, 100, 250, 100, 450]);
+    navigator.vibrate([350, 150, 350, 150, 500]);
   } catch (e) {}
 };
 
@@ -150,12 +225,11 @@ export const showSystemNotification = (
       notif.close();
     };
 
-    // Auto close after 8 seconds
     setTimeout(() => {
       try {
         notif.close();
       } catch (e) {}
-    }, 8000);
+    }, 10000);
   } catch (e) {
     console.warn('[SystemNotification] Error:', e);
   }
@@ -182,9 +256,8 @@ export const flashTabTitle = (alertText = '🔔 (1) Chat Baru Masuk!') => {
   titleFlasherInterval = setInterval(() => {
     document.title = isAlert ? alertText : originalDocumentTitle;
     isAlert = !isAlert;
-  }, 1000);
+  }, 900);
 
-  // Stop flashing when user clicks window or changes tab focus
   const stopFlasher = () => {
     if (titleFlasherInterval) {
       clearInterval(titleFlasherInterval);

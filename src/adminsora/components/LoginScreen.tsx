@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserCredentials } from '../types';
-import { Lock, User, ShieldCheck, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Lock, User, ShieldCheck, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 interface LoginScreenProps {
   credentials: UserCredentials;
@@ -17,6 +17,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -83,7 +84,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1.5">
+            <label className="block text-xs font-black text-gray-800 mb-1.5">
               Username Admin
             </label>
             <div className="relative">
@@ -93,32 +94,60 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Contoh: admin"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#087443] focus:bg-white transition"
+                className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl text-base sm:text-sm font-bold text-gray-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-[#087443] transition placeholder:text-gray-400 placeholder:font-normal shadow-2xs"
+                autoFocus
               />
-              <User className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+              <User className="w-4 h-4 text-emerald-700 absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1.5">
+            <label className="block text-xs font-black text-gray-800 mb-1.5">
               Kata Sandi
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#087443] focus:bg-white transition"
+                placeholder="Masukkan kata sandi"
+                className="w-full pl-10 pr-12 py-3.5 bg-white border-2 border-gray-300 rounded-xl text-base sm:text-sm font-bold text-gray-950 font-mono focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-[#087443] transition placeholder:text-gray-400 placeholder:font-normal shadow-2xs"
               />
-              <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+              <Lock className="w-4 h-4 text-emerald-700 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+                title={showPassword ? 'Sembunyikan Sandi' : 'Lihat Sandi'}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 text-emerald-700" />
+                ) : (
+                  <Eye className="w-4 h-4 text-gray-400" />
+                )}
+              </button>
             </div>
+          </div>
+
+          {/* Quick Autofill Helper */}
+          <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+            <span>Akun default: <strong className="text-gray-700">admin</strong> / <strong className="text-gray-700">admin</strong></span>
+            <button
+              type="button"
+              onClick={() => {
+                setUsername('admin');
+                setPassword('admin');
+              }}
+              className="text-emerald-700 hover:underline font-bold cursor-pointer"
+            >
+              Isi Otomatis
+            </button>
           </div>
 
           <button
             type="submit"
-            className="w-full mt-2 py-3.5 px-4 bg-linear-to-r from-[#087443] to-[#044c2b] hover:from-[#065e36] hover:to-[#033b21] text-white font-bold rounded-xl text-sm transition shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+            className="w-full mt-2 py-3.5 px-4 bg-linear-to-r from-[#087443] to-[#044c2b] hover:from-[#065e36] hover:to-[#033b21] active:from-[#033b21] active:to-[#022514] text-white font-bold rounded-xl text-sm transition shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
           >
             <span>Masuk ke Dashboard AdminSora</span>
             <ArrowRight className="w-4 h-4" />

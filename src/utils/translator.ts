@@ -77,6 +77,8 @@ export const translateText = (text: string | undefined, lang: Language): string 
       'Hygiene and sanitation compliance certification from the Health Ministry of the Republic of Indonesia, ensuring clean processing from food contamination.',
     'Resmi & Aktif': 'Official & Active',
     'Terdaftar & Sah': 'Registered & Valid',
+    'SH-BPJPH': 'Halal Product Assurance Organizing Agency (BPJPH RI)',
+    'Badan Penyelenggara Jaminan Produk Halal (SH-BPJPH)': 'Halal Product Assurance Organizing Agency (SH-BPJPH)',
     'Kemenag RI': 'Ministry of Religious Affairs RI',
     'Kementerian Investasi / BKPM RI': 'Ministry of Investment / BKPM RI',
     'Dinas Kesehatan Republik Indonesia': 'Health Ministry of the Republic of Indonesia',

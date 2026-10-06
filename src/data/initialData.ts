@@ -19,7 +19,7 @@ export const initialCompanyInfo: CompanyInfo = {
   badgeText: 'Food & Catering Partner',
   halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
   halalNumber: 'ID36110081134110926',
-  halalAgency: 'BPJPH Kemenag RI',
+  halalAgency: 'SH-BPJPH',
   logoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329882/asasora/mnswxa7jmq7nzsr0h7fk.png',
   halalLogoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329899/asasora/cz2l79okyiljtn321uzr.jpg',
   heroTitlePrefix: 'PT. ASASORA',
@@ -479,7 +479,7 @@ export const initialLegalDocuments: LegalDocument[] = [
     id: 'leg-1',
     title: 'Sertifikat Halal Resmi BPJPH Republik Indonesia',
     docNumber: 'ID36110001892830823',
-    issuer: 'Badan Penyelenggara Jaminan Produk Halal (BPJPH) Kemenag RI',
+    issuer: 'Badan Penyelenggara Jaminan Produk Halal (SH-BPJPH)',
     description:
       'Menyatakan bahwa produk olahan pangan dan jasa boga PT. ASASORA BIO HEALTHORA telah memenuhi Ketetapan Halal MUI & Standar BPJPH.',
     validUntil: 'Berlaku Selamanya (Sesuai Regulasi)',

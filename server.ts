@@ -26,7 +26,7 @@ const initialData = {
     badgeText: 'Food & Catering Partner',
     halalBadgeText: 'Sertifikat Halal Resmi',
     halalNumber: 'ID36110081134110926',
-    halalAgency: 'Kemenag RI',
+    halalAgency: 'SH - BPJPH',
     logoUrl: '/logo-asasora.png',
     halalLogoUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Halal_Indonesia.svg/512px-Halal_Indonesia.svg.png',
@@ -436,7 +436,7 @@ const initialData = {
       id: 'leg-1',
       title: 'Sertifikat Halal Resmi BPJPH Republik Indonesia',
       docNumber: 'ID36110001892830823',
-      issuer: 'Badan Penyelenggara Jaminan Produk Halal (BPJPH) Kemenag RI',
+      issuer: 'Badan Penyelenggara Jaminan Produk Halal (SH - BPJPH)',
       description:
         'Menyatakan bahwa produk olahan pangan dan jasa boga PT. ASASORA BIO HEALTHORA telah memenuhi Ketetapan Halal MUI & Standar BPJPH.',
       validUntil: 'Berlaku Selamanya (Sesuai Regulasi)',
@@ -1500,7 +1500,7 @@ BASIS PENGETAHUAN PRODUK & RESPONS OTOMATIS:
 - Ketersediaan Produk: Informasikan secara jujur bahwa tidak semua produk selalu ready stock setiap hari demi menjaga kesegaran bahan makanan. Tanyakan menu apa yang sedang Kakak minati agar MinSora bisa langsung bantu cek ketersediaannya hari ini.
 - Kustomisasi Menu & Budget (Keunggulan Utama): Tegaskan bahwa Asasora Food SANGAT FLEKSIBEL. Pilihan menu, variasi lauk, hingga besaran budget bisa disesuaikan dengan isi kantong atau pagu anggaran yang Kakak miliki (berlaku untuk porsi eceran B2C hingga katering skala besar B2B). Yakinkan pelanggan untuk mendiskusikan budget mereka dengan MinSora.
 - Ketentuan Pemesanan: Untuk pesanan dalam jumlah besar (katering harian pabrik, event kantor, atau hajatan besar), pemesanan wajib dilakukan minimal H-2 agar tim dapur dapat mempersiapkan bahan dengan matang.
-- Kualitas & Daya Tahan: Semua hidangan dijamin 100% halal resmi BPJPH Kemenag (ID36110081134110926), higienis bersertifikasi Laik Higiene Sanitasi Dinkes, dan diolah dari bahan segar. Menu siap santap disarankan dikonsumsi dalam 4-6 jam di suhu ruang. Untuk varian frozen food / vacuum pack steril (seperti Paru Balado khas Asasora), awet 1-2 bulan di freezer (atau hingga 11 bulan teknologi retort steril).
+- Kualitas & Daya Tahan: Semua hidangan dijamin 100% halal resmi SH - BPJPH (ID36110081134110926), higienis bersertifikasi Laik Higiene Sanitasi Dinkes, dan diolah dari bahan segar. Menu siap santap disarankan dikonsumsi dalam 4-6 jam di suhu ruang. Untuk varian frozen food / vacuum pack steril (seperti Paru Balado khas Asasora), awet 1-2 bulan di freezer (atau hingga 11 bulan teknologi retort steril).
 - Pengiriman & Lokasi: Menggunakan layanan ojek online (GrabExpress/Gojek) Instant maupun Sameday untuk area lokal Tangerang & Jabodetabek. Khusus produk kering atau frozen food tertentu yang aman di perjalanan, bisa dikirim ke luar kota lewat ekspedisi kilat (JNE YES/Sicepat).
 
 ALUR KONSULTASI & PENGALIHAN (CALL TO ACTION):
@@ -1583,7 +1583,7 @@ PENTING: Jangan memberikan janji kompensasi otomatis di luar kewenangan Anda seb
         }
         // 8. Kualitas / Halal / Daya Tahan
         else if (lower.includes('halal') || lower.includes('tahan') || lower.includes('awet') || lower.includes('expired') || lower.includes('basi') || lower.includes('higiene') || lower.includes('sertifikat')) {
-          replyText = 'Semua hidangan Asasora Food dijamin 100% Halal resmi BPJPH Kemenag (ID36110081134110926) dan bersertifikat Laik Higiene Sanitasi Dinkes! Hidangan siap santap kami sarankan dikonsumsi dalam 4-6 jam di suhu ruang, sedangkan produk frozen food awet 1-2 bulan jika disimpan rapat di dalam freezer. Khusus Paru Balado steril retort bisa tahan berbulan-bulan di suhu ruang tanpa pengawet!';
+          replyText = 'Semua hidangan Asasora Food dijamin 100% Halal resmi SH - BPJPH (ID36110081134110926) dan bersertifikat Laik Higiene Sanitasi Dinkes! Hidangan siap santap kami sarankan dikonsumsi dalam 4-6 jam di suhu ruang, sedangkan produk frozen food awet 1-2 bulan jika disimpan rapat di dalam freezer. Khusus Paru Balado steril retort bisa tahan berbulan-bulan di suhu ruang tanpa pengawet!';
         }
       }
 

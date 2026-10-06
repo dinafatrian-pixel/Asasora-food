@@ -609,11 +609,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+              <form onSubmit={handleLogin} className="space-y-4 bg-gray-50 p-5 sm:p-6 rounded-2xl border border-gray-200 shadow-xs">
                 {/* Username Input */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-gray-500" />
+                  <label className="block text-xs font-black text-gray-800 mb-1.5 flex items-center gap-1.5">
+                    <User className="w-4 h-4 text-[#2E6F40]" />
                     <span>Username Administrator</span>
                   </label>
                   <input
@@ -621,16 +621,16 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                     required
                     value={usernameInput}
                     onChange={(e) => setUsernameInput(e.target.value)}
-                    placeholder="Masukkan username (contoh: admin / asasora)"
-                    className="w-full text-sm font-semibold px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] focus:border-[#2E6F40] outline-none transition"
+                    placeholder="Masukkan username (contoh: admin)"
+                    className="w-full text-base sm:text-sm font-bold text-gray-950 px-4 py-3.5 rounded-xl border-2 border-gray-300 bg-white focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 placeholder:font-normal shadow-2xs"
                     autoFocus
                   />
                 </div>
 
                 {/* Password Input */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-gray-500" />
+                  <label className="block text-xs font-black text-gray-800 mb-1.5 flex items-center gap-1.5">
+                    <Lock className="w-4 h-4 text-[#2E6F40]" />
                     <span>Password Administrator</span>
                   </label>
                   <div className="relative">
@@ -640,26 +640,41 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       value={passwordInput}
                       onChange={(e) => setPasswordInput(e.target.value)}
                       placeholder="Masukkan password akun"
-                      className="w-full text-sm font-semibold pl-4 pr-11 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] focus:border-[#2E6F40] outline-none transition font-mono"
+                      className="w-full text-base sm:text-sm font-bold text-gray-950 pl-4 pr-12 py-3.5 rounded-xl border-2 border-gray-300 bg-white focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 placeholder:font-normal font-mono shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-3 text-gray-400 hover:text-gray-700 cursor-pointer p-0.5"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer"
                       title={showPassword ? 'Sembunyikan Password' : 'Lihat Password'}
                     >
                       {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
+                        <EyeOff className="w-5 h-5 text-[#2E6F40]" />
                       ) : (
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-5 h-5 text-gray-400" />
                       )}
                     </button>
                   </div>
                 </div>
 
+                {/* Quick Autofill Helper for Testing */}
+                <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+                  <span>Akun default: <strong className="text-gray-700">admin</strong> / <strong className="text-gray-700">admin</strong></span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUsernameInput('admin');
+                      setPasswordInput('admin');
+                    }}
+                    className="text-[#2E6F40] hover:underline font-bold cursor-pointer"
+                  >
+                    Isi Otomatis
+                  </button>
+                </div>
+
                 <button
                   type="submit"
-                  className="w-full bg-[#2E6F40] hover:bg-green-800 text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                  className="w-full bg-[#2E6F40] hover:bg-green-800 active:bg-green-950 text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
                   <CheckCircle2 className="w-4 h-4 text-[#F3C623]" />
                   <span>Masuk Panel Administrator</span>

@@ -147,10 +147,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                 <div className="mt-3 sm:mt-3.5">
                   <p className="font-extrabold text-gray-900 text-xs sm:text-sm tracking-tight">
                     {lang === 'en'
-                      ? 'Halal Product Assurance Organizing Agency'
-                      : (company.halalAgency || 'Badan Penyelenggara Jaminan Produk Halal')
-                          .replace(/\(?BPJPH\)?/gi, '')
-                          .trim() || 'Badan Penyelenggara Jaminan Produk Halal'}
+                      ? 'Halal Product Assurance Organizing Agency (SH-BPJPH)'
+                      : (company.halalAgency || 'SH-BPJPH')
+                          .replace(/SH-Kemenag/gi, 'SH-BPJPH')
+                          .replace(/Kemenag RI/gi, 'SH-BPJPH')
+                          .replace(/Kemenag/gi, 'BPJPH')
+                          .trim() || 'SH-BPJPH'}
                   </p>
                   <p className="text-xs sm:text-[13px] text-emerald-700 font-extrabold mt-1 font-mono tracking-wide">
                     No. Reg: {company.halalNumber || 'ID36110081134110926'}

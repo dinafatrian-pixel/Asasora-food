@@ -41,13 +41,21 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
     () => company.heroTitleHighlight || ''
   );
   const [halalBadgeText, setHalalBadgeText] = useState(
-    () => company.halalBadgeText?.replace(/BPJPH/gi, 'Kemenag') || 'Sertifikat Halal Resmi Kemenag'
+    () =>
+      company.halalBadgeText
+        ?.replace(/SH-Kemenag/gi, 'SH-BPJPH')
+        .replace(/Kemenag/gi, 'BPJPH') || 'Sertifikat Halal Resmi BPJPH'
   );
   const [halalNumber, setHalalNumber] = useState(
     () => company.halalNumber || 'ID36110081134110926'
   );
   const [halalAgency, setHalalAgency] = useState(
-    () => company.halalAgency?.replace(/BPJPH/gi, '').trim() || 'Kemenag RI'
+    () =>
+      company.halalAgency
+        ?.replace(/SH-Kemenag/gi, 'SH-BPJPH')
+        .replace(/Kemenag RI/gi, 'SH-BPJPH')
+        .replace(/Kemenag/gi, 'BPJPH')
+        .trim() || 'SH-BPJPH'
   );
 
   const [isSaving, setIsSaving] = useState(false);
@@ -63,9 +71,9 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
       halalLogoUrl: halalLogoUrl.trim() || DEFAULT_HALAL_LOGO,
       heroTitlePrefix: heroPrefix.trim() || 'PT. ASASORA',
       heroTitleHighlight: heroHighlight.trim(),
-      halalBadgeText: halalBadgeText.trim(),
-      halalNumber: halalNumber.trim(),
-      halalAgency: halalAgency.trim(),
+      halalBadgeText: halalBadgeText.trim() || 'Sertifikat Halal Resmi BPJPH',
+      halalNumber: halalNumber.trim() || 'ID36110081134110926',
+      halalAgency: halalAgency.trim() || 'SH-BPJPH',
     };
 
     onUpdateCompany(updated);
@@ -94,9 +102,9 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
     setHalalLogoUrl(DEFAULT_HALAL_LOGO);
     setHeroPrefix('PT. ASASORA');
     setHeroHighlight('');
-    setHalalBadgeText('Sertifikat Halal Resmi');
+    setHalalBadgeText('Sertifikat Halal Resmi BPJPH');
     setHalalNumber('ID36110081134110926');
-    setHalalAgency('Kemenag RI');
+    setHalalAgency('SH-BPJPH');
 
     const updated = {
       ...company,
@@ -104,9 +112,9 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
       halalLogoUrl: DEFAULT_HALAL_LOGO,
       heroTitlePrefix: 'PT. ASASORA',
       heroTitleHighlight: '',
-      halalBadgeText: 'Sertifikat Halal Resmi',
+      halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
       halalNumber: 'ID36110081134110926',
-      halalAgency: 'Kemenag RI',
+      halalAgency: 'SH-BPJPH',
     };
     onUpdateCompany(updated);
     try {
@@ -204,7 +212,7 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 text-xs mb-1.5">
                 Teks Badge Halal
               </label>
               <input
@@ -212,33 +220,33 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
                 value={halalBadgeText}
                 onChange={(e) => setHalalBadgeText(e.target.value)}
                 placeholder="Sertifikat Halal Resmi BPJPH"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 text-xs mb-1.5">
                 No. Registrasi / ID Halal
               </label>
               <input
                 type="text"
                 value={halalNumber}
                 onChange={(e) => setHalalNumber(e.target.value)}
-                placeholder="Contoh: ID3611000000000"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono font-bold text-emerald-800 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="Contoh: ID36110081134110926"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-bold text-emerald-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 text-xs mb-1.5">
                 Lembaga / Penerbit Sertifikat
               </label>
               <input
                 type="text"
                 value={halalAgency}
                 onChange={(e) => setHalalAgency(e.target.value)}
-                placeholder="BPJPH Kemenag RI"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="SH-BPJPH"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
           </div>
@@ -251,7 +259,7 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5">
                 Teks Awalan Nama (Prefix)
               </label>
               <input
@@ -259,11 +267,11 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
                 value={heroPrefix}
                 onChange={(e) => setHeroPrefix(e.target.value)}
                 placeholder="Contoh: PT. ASASORA"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-emerald-900 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5">
                 Teks Sorotan Emas (Highlight)
               </label>
               <input
@@ -271,7 +279,7 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
                 value={heroHighlight}
                 onChange={(e) => setHeroHighlight(e.target.value)}
                 placeholder="Contoh: BIO HEALTHORA"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-amber-700 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-amber-800 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
               />
             </div>
           </div>
@@ -329,14 +337,14 @@ export const LogoBrandTab: React.FC<LogoBrandTabProps> = ({
                     100% Halal Resmi
                   </span>
                   <span className="text-[10px] text-gray-400 font-mono">
-                    {halalNumber || 'ID3611000000000'}
+                    {halalNumber || 'ID36110081134110926'}
                   </span>
                 </div>
                 <div className="font-extrabold text-gray-900 mt-1 text-xs">
-                  {halalBadgeText || 'Sertifikat Halal Resmi'}
+                  {halalBadgeText || 'Sertifikat Halal Resmi BPJPH'}
                 </div>
-                <div className="text-[10px] text-gray-500">
-                  Penerbit: {halalAgency || 'Kemenag RI'}
+                <div className="text-[11px] font-bold text-emerald-800 mt-0.5">
+                  Penerbit: {halalAgency || 'SH-BPJPH'}
                 </div>
               </div>
             </div>

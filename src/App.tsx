@@ -120,6 +120,20 @@ export default function App() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        if (parsed.halalBadgeText) {
+          parsed.halalBadgeText = parsed.halalBadgeText
+            .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
+            .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
+            .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
+            .replace(/Kemenag/gi, 'BPJPH');
+        }
+        if (parsed.halalAgency) {
+          parsed.halalAgency = parsed.halalAgency
+            .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
+            .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
+            .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
+            .replace(/Kemenag/gi, 'BPJPH');
+        }
         return { ...initialCompanyInfo, ...parsed };
       } catch (e) {
         return initialCompanyInfo;

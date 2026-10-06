@@ -11,9 +11,11 @@ import {
   Smile,
   ShieldCheck,
   MessageCircle,
+  Bell,
 } from 'lucide-react';
 import { MinsoraAvatar } from './MinsoraAvatar';
 import { CompanyInfo } from '../types';
+import { playNotificationRingtone, vibratePhone } from '../utils/chatNotifier';
 
 interface ChatMessage {
   id: string;
@@ -96,6 +98,10 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
     setInputText('');
     setIsTyping(true);
 
+    // Play ringtone as reminder alert immediately
+    playNotificationRingtone(0.9);
+    vibratePhone();
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -117,6 +123,18 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
         time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, botMsg]);
+
+      // Broadcast incoming chat alert to admin notifier listeners
+      window.dispatchEvent(
+        new CustomEvent('asasora_new_incoming_chat', {
+          detail: {
+            id: data.logId || `chat_${Date.now()}`,
+            message: query,
+            reply: botMsg.text,
+            timestamp: new Date().toISOString(),
+          },
+        })
+      );
     } catch (err) {
       // Offline fallback matching MinSora persona
       const lower = query.toLowerCase();
@@ -153,6 +171,18 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
         time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, botMsg]);
+
+      // Broadcast fallback
+      window.dispatchEvent(
+        new CustomEvent('asasora_new_incoming_chat', {
+          detail: {
+            id: `chat_${Date.now()}`,
+            message: query,
+            reply: fallbackText,
+            timestamp: new Date().toISOString(),
+          },
+        })
+      );
     } finally {
       setIsTyping(false);
     }
@@ -263,6 +293,16 @@ export const WhatsAppChatbotModal: React.FC<WhatsAppChatbotModalProps> = ({
           </div>
 
           <div className="flex items-center gap-1">
+            <button
+              onClick={() => {
+                playNotificationRingtone(0.9);
+                vibratePhone();
+              }}
+              title="Uji Coba Dering Pengingat (Bel Chat)"
+              className="p-1.5 rounded-full hover:bg-white/10 text-amber-300 transition cursor-pointer flex items-center gap-1"
+            >
+              <Bell className="w-4 h-4 animate-bounce" />
+            </button>
             <button
               onClick={handleResetChat}
               title="Mulai Ulang Percakapan"

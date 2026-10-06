@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import {
   playNotificationRingtone,
+  startContinuousRingtone,
+  stopContinuousRingtone,
   vibratePhone,
   requestNotificationPermission,
   showSystemNotification,
@@ -98,9 +100,13 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
   const triggerNewChatAlert = (chat: ChatLogItem) => {
     setActiveBannerChat(chat);
 
-    // 1. Play phone chime/ringtone
+    // 1. Play continuous ringtone as a distinct reminder alert
     if (settings.soundEnabled) {
-      playNotificationRingtone(settings.volume);
+      startContinuousRingtone(settings.volume);
+      // Auto stop ringing after 8 seconds if admin doesn't dismiss earlier
+      setTimeout(() => {
+        stopContinuousRingtone();
+      }, 8000);
     }
 
     // 2. Vibrate phone
@@ -117,23 +123,46 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
         '🔔 Chat Baru Masuk - MinSora Asasora Food',
         `Pengunjung: "${chat.message}"`,
         () => {
+          stopContinuousRingtone();
           setIsDrawerOpen(true);
         }
       );
     }
   };
 
-  // Setup SSE and polling listener
+  // Setup SSE, in-page broadcast, and polling listener
   useEffect(() => {
     // 1. Initial fetch
     fetchChatLogs();
 
-    // 2. Background polling fallback every 4 seconds
+    // 2. Background polling fallback every 2.5 seconds
     const pollTimer = setInterval(() => {
       fetchChatLogs(true);
-    }, 4000);
+    }, 2500);
 
-    // 3. SSE Connection for real-time instant alerts
+    // 3. Listen to in-page chat events (instant alert when chatting in MinSora modal)
+    const handleInPageChat = (e: any) => {
+      if (e?.detail) {
+        const item: ChatLogItem = {
+          id: e.detail.id || `chat_${Date.now()}`,
+          sessionId: 'local_session',
+          sender: 'user',
+          message: e.detail.message || '',
+          reply: e.detail.reply || '',
+          timestamp: e.detail.timestamp || new Date().toISOString(),
+          read: false,
+        };
+        if (!seenChatIdsRef.current.has(item.id)) {
+          seenChatIdsRef.current.add(item.id);
+          setRecentChats((prev) => [item, ...prev.filter((c) => c.id !== item.id)]);
+          setUnreadCount((prev) => prev + 1);
+          triggerNewChatAlert(item);
+        }
+      }
+    };
+    window.addEventListener('asasora_new_incoming_chat', handleInPageChat);
+
+    // 4. SSE Connection for real-time instant alerts across devices
     let sse: EventSource | null = null;
     try {
       sse = new EventSource('/api/chat/stream');
@@ -155,7 +184,9 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
 
     return () => {
       clearInterval(pollTimer);
+      window.removeEventListener('asasora_new_incoming_chat', handleInPageChat);
       if (sse) sse.close();
+      stopContinuousRingtone();
     };
   }, [fetchChatLogs, settings]);
 
@@ -198,6 +229,7 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
   };
 
   const handleDismissBanner = () => {
+    stopContinuousRingtone();
     setActiveBannerChat(null);
   };
 
@@ -214,13 +246,13 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
               </span>
               <div className="flex items-center gap-1.5 text-xs font-black text-emerald-950">
                 <Bell className="w-4 h-4 text-emerald-600 animate-bounce" />
-                <span>CHAT BARU MASUK DARI PENGUNJUNG!</span>
+                <span>PENGINGAT: CHAT BARU MASUK DARI PENGUNJUNG!</span>
               </div>
             </div>
             <button
               onClick={handleDismissBanner}
               className="text-gray-400 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition"
-              title="Tutup Notifikasi"
+              title="Tutup Notifikasi & Hentikan Dering"
             >
               <X className="w-4 h-4" />
             </button>
@@ -244,19 +276,29 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
           <div className="mt-3 flex items-center gap-2">
             <button
               onClick={() => {
+                stopContinuousRingtone();
                 setActiveBannerChat(null);
                 setIsDrawerOpen(true);
               }}
               className="flex-1 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-black py-2 px-3 rounded-xl shadow-xs transition flex items-center justify-center gap-1.5"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Lihat Percakapan</span>
+              <span>Buka Chat</span>
+            </button>
+
+            <button
+              onClick={handleDismissBanner}
+              className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold py-2 px-2.5 rounded-xl transition flex items-center justify-center gap-1"
+              title="Hentikan Dering Bel"
+            >
+              <span>🔕 Stop Dering</span>
             </button>
 
             <a
               href={`https://wa.me/${adminWhatsApp}?text=${encodeURIComponent(`Halo, saya Admin Asasora Food. Terkait pertanyaan Kakak di web: "${activeBannerChat.message}"`)}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleDismissBanner}
               className="bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-black py-2 px-3 rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 no-underline"
               title="Balas Langsung via WhatsApp"
             >

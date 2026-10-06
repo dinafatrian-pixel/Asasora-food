@@ -6,7 +6,7 @@
     "badgeText": "Food & Catering Partner",
     "halalBadgeText": "Sertifikat Halal Resmi BPJPH",
     "halalNumber": "ID3611000000000",
-    "halalAgency": "BPJPH Kemenag RI",
+    "halalAgency": "SH-BPJPH",
     "logoUrl": "https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329882/asasora/mnswxa7jmq7nzsr0h7fk.png",
     "halalLogoUrl": "https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329899/asasora/cz2l79okyiljtn321uzr.jpg",
     "heroTitlePrefix": "PT. ASASORA",
@@ -398,7 +398,7 @@
       "id": "leg-1",
       "title": "Sertifikat Halal Resmi BPJPH Republik Indonesia",
       "docNumber": "ID36110001892830823",
-      "issuer": "Badan Penyelenggara Jaminan Produk Halal (BPJPH) Kemenag RI",
+      "issuer": "Badan Penyelenggara Jaminan Produk Halal (SH-BPJPH)",
       "description": "Menyatakan bahwa produk olahan pangan dan jasa boga PT. ASASORA BIO HEALTHORA telah memenuhi Ketetapan Halal MUI & Standar BPJPH.",
       "validUntil": "Berlaku Selamanya (Sesuai Regulasi)",
       "status": "TERVERIFIKASI RESMI",
@@ -462,50 +462,50 @@
   "orders": [],
   "adminUsers": [
     {
-      "lastLogin": "2026-09-05T11:31:52.631Z",
-      "isActive": true,
-      "password": "asasora2025",
-      "username": "admin",
-      "id": "user-1",
       "createdAt": "2025-01-01T08:00:00.000Z",
-      "email": "admin@asasora.com",
+      "id": "user-1",
       "name": "Administrator Utama",
-      "role": "Super Admin"
+      "isActive": true,
+      "lastLogin": "2026-10-06T02:11:17.662Z",
+      "password": "asasora2025",
+      "email": "admin@asasora.com",
+      "role": "Super Admin",
+      "username": "admin"
     },
     {
       "isActive": true,
-      "name": "Admin PT. Asasora",
-      "email": "healthoraplus@gmail.com",
       "role": "Admin",
-      "createdAt": "2025-01-10T10:00:00.000Z",
-      "username": "asasora",
       "password": "admin",
-      "lastLogin": "2025-01-10T10:15:00.000Z",
-      "id": "user-2"
+      "email": "healthoraplus@gmail.com",
+      "id": "user-2",
+      "username": "asasora",
+      "createdAt": "2025-01-10T10:00:00.000Z",
+      "name": "Admin PT. Asasora",
+      "lastLogin": "2025-01-10T10:15:00.000Z"
     },
     {
       "lastLogin": "2025-01-15T09:30:00.000Z",
-      "role": "Staff",
+      "id": "user-3",
       "name": "Operator Pesanan & Dapur",
-      "email": "operator@asasora.com",
-      "isActive": true,
-      "password": "admin",
-      "username": "operator",
       "createdAt": "2025-01-15T09:00:00.000Z",
-      "id": "user-3"
+      "username": "operator",
+      "isActive": true,
+      "email": "operator@asasora.com",
+      "password": "admin",
+      "role": "Staff"
     }
   ],
   "analytics": {
-    "totalVisits": 14294,
-    "todayVisits": 8,
+    "totalVisits": 14300,
+    "todayVisits": 6,
     "activeVisitors": 1,
     "uniqueVisitors": 8940,
-    "pageviews": 36534,
+    "pageviews": 36540,
     "ordersCount": 528,
     "waInquiriesCount": 1142,
     "deviceBreakdown": {
       "mobile": 68,
-      "desktop": 29.40000000000002,
+      "desktop": 30.00000000000003,
       "tablet": 4
     },
     "dailyHistory": [
@@ -554,7 +554,7 @@
       {
         "path": "/",
         "title": "Beranda (Home) - PT. ASASORA",
-        "views": 18464
+        "views": 18470
       },
       {
         "path": "/#katalog",
@@ -582,11 +582,11 @@
         "views": 840
       }
     ],
-    "lastUpdated": "2026-09-05T11:09:18.708Z",
-    "lastDay": "2026-09-05"
+    "lastUpdated": "2026-10-06T02:10:56.944Z",
+    "lastDay": "2026-10-06"
   },
-  "version": 14,
-  "updatedAt": "2026-09-05T11:32:25.255Z",
+  "version": 16,
+  "updatedAt": "2026-10-06T02:11:18.405Z",
   "articles": [
     {
       "id": "art-1",

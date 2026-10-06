@@ -112,7 +112,15 @@ export const Footer: React.FC<FooterProps> = ({
 
             <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 bg-emerald-950/60 p-2.5 rounded-xl border border-emerald-800">
               <ShieldCheck className="w-4 h-4 shrink-0" />
-              <span>{lang === 'en' ? t('hero.halal_badge', 'Official BPJPH Halal Certified') : company.halalBadgeText}</span>
+              <span>
+                {lang === 'en'
+                  ? t('hero.halal_badge', 'Official SH - BPJPH Halal Certified')
+                  : (company.halalBadgeText || 'Sertifikat Halal Resmi SH - BPJPH')
+                      .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
+                      .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
+                      .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
+                      .replace(/Kemenag/gi, 'BPJPH')}
+              </span>
             </div>
           </div>
 
