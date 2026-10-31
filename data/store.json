@@ -50,14 +50,14 @@
     },
     "warehouse": {
       "name": "Gudang Asasora Tangerang",
-      "lat": -6.1783,
-      "lng": 106.6319,
+      "lat": -6.1804031,
+      "lng": 106.6565954,
       "address": "Buaran Indah, Kota Tangerang, Banten"
     },
     "warehouseLocation": {
       "name": "Gudang Asasora Tangerang",
-      "lat": -6.1783,
-      "lng": 106.6319,
+      "lat": -6.1804031,
+      "lng": 106.6565954,
       "address": "Buaran Indah, Kota Tangerang, Banten"
     },
     "cloudStorage": {
@@ -70,7 +70,7 @@
     },
     "googleAnalyticsId": "",
     "googleAnalyticsEnabled": true,
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Asasora+Food+Tangerang+Jl+Irigasi+sipon+Tanah+Tinggi+Gg+Jambu+2"
+    "googleMapsUrl": "https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9"
   },
   "products": [
     {

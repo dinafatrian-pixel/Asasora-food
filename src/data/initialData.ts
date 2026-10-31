@@ -32,6 +32,7 @@ export const initialCompanyInfo: CompanyInfo = {
   ],
   address:
     'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 RT 004 RW 06 Kel. Buaran Indah Kec. Tangerang Kota Tangerang Banten 15119',
+  googleMapsUrl: 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9',
   email: 'customerservice@asasorafood.com',
   phone: '+62 852-7100-0900',
   whatsapp: '6285271000900',
@@ -60,14 +61,14 @@ export const initialCompanyInfo: CompanyInfo = {
   },
   warehouse: {
     name: 'Gudang Asasora Tangerang',
-    lat: -6.1783,
-    lng: 106.6319,
+    lat: -6.1804031,
+    lng: 106.6565954,
     address: 'Buaran Indah, Kota Tangerang, Banten',
   },
   warehouseLocation: {
     name: 'Gudang Asasora Tangerang',
-    lat: -6.1783,
-    lng: 106.6319,
+    lat: -6.1804031,
+    lng: 106.6565954,
     address: 'Buaran Indah, Kota Tangerang, Banten',
   },
   cloudStorage: {

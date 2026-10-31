@@ -622,6 +622,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                     value={usernameInput}
                     onChange={(e) => setUsernameInput(e.target.value)}
                     placeholder="Masukkan username (contoh: admin)"
+                    style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                     className="w-full text-base sm:text-sm font-bold text-gray-950 px-4 py-3.5 rounded-xl border-2 border-gray-300 bg-white focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 placeholder:font-normal shadow-2xs"
                     autoFocus
                   />
@@ -640,6 +641,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       value={passwordInput}
                       onChange={(e) => setPasswordInput(e.target.value)}
                       placeholder="Masukkan password akun"
+                      style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                       className="w-full text-base sm:text-sm font-bold text-gray-950 pl-4 pr-12 py-3.5 rounded-xl border-2 border-gray-300 bg-white focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 placeholder:font-normal font-mono shadow-2xs"
                     />
                     <button

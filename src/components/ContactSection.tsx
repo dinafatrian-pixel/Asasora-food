@@ -110,11 +110,7 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                     {company.address}
                   </p>
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      'Asasora Food Tangerang ' +
-                        (company.address ||
-                          'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
-                    )}`}
+                    href={company.googleMapsUrl || 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 mt-2.5 px-3 py-1.5 bg-[#2E6F40] hover:bg-[#245732] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer"
@@ -195,11 +191,7 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                     </span>
                   </div>
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      'Asasora Food Tangerang ' +
-                        (company.address ||
-                          'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
-                    )}`}
+                    href={company.googleMapsUrl || 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[11px] font-bold text-[#2E6F40] hover:text-[#1b4426] flex items-center gap-1 cursor-pointer"
@@ -210,8 +202,8 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                 </div>
                 <div className="w-full h-44 sm:h-52 rounded-xl overflow-hidden border border-green-100">
                   <iframe
-                    title="Google Maps Lokasi Asasora Food Tangerang"
-                    src="https://maps.google.com/maps?q=-6.1783,106.6319&hl=id&z=16&output=embed"
+                    title="Google Maps Lokasi ASASORA CATERING TANGERANG"
+                    src="https://maps.google.com/maps?q=ASASORA+CATERING+TANGERANG@-6.1804031,106.6565954&hl=id&z=17&output=embed"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}

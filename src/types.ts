@@ -179,6 +179,7 @@ export interface CompanyInfo {
   heroSubtitle?: string;
   heroValueProps?: { title: string; subtitle: string }[];
   address: string;
+  googleMapsUrl?: string;
   email: string;
   phone: string;
   whatsapp: string;

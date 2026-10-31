@@ -59,6 +59,7 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
       email: form.email?.trim() || 'healthoraplus@gmail.com',
       website: form.website?.trim() || 'www.asasorfood.com',
       address: form.address?.trim() || '',
+      googleMapsUrl: form.googleMapsUrl?.trim() || 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9',
       description: form.description?.trim() || '',
       operationalHours,
       operationalDays,
@@ -194,7 +195,7 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
             <div className="sm:col-span-2">
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Nama Badan Hukum / Perusahaan <span className="text-red-500">*</span>
               </label>
               <input
@@ -202,12 +203,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 required
                 value={form.name || ''}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-gray-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 No. WhatsApp Admin / MinSora (Format 62...) <span className="text-red-500">*</span>
               </label>
               <input
@@ -216,15 +218,16 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.whatsapp || ''}
                 onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
                 placeholder="6281234567890"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono font-bold text-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
-              <span className="text-[10px] text-gray-500 mt-1 block">
+              <span className="text-[10px] text-gray-600 font-semibold mt-1 block">
                 Nomor ini yang akan menerima pesanan WhatsApp &amp; invoice instan.
               </span>
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 No. Telepon Kantor (Opsional)
               </label>
               <input
@@ -232,12 +235,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.phone || ''}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="021-..."
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Email Resmi Perusahaan
               </label>
               <input
@@ -245,12 +249,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.email || ''}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="healthoraplus@gmail.com"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Alamat Website Resmi
               </label>
               <input
@@ -258,32 +263,49 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.website || ''}
                 onChange={(e) => setForm({ ...form, website: e.target.value })}
                 placeholder="www.asasorfood.com"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-medium text-emerald-900"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Alamat Kantor &amp; Dapur Utama
               </label>
               <input
                 type="text"
                 value={form.address || ''}
                 onChange={(e) => setForm({ ...form, address: e.target.value })}
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
+                Link Google Maps Resmi (URL Lokasi)
+              </label>
+              <input
+                type="url"
+                value={form.googleMapsUrl || ''}
+                onChange={(e) => setForm({ ...form, googleMapsUrl: e.target.value })}
+                placeholder="https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Deskripsi Singkat / Profil Perusahaan (Footer &amp; Meta)
               </label>
               <textarea
-                rows={2}
+                rows={3}
                 value={form.description || ''}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none text-xs"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none text-sm font-semibold text-gray-950 shadow-2xs"
                 placeholder="Deskripsi singkat profil PT. Asasora..."
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
           </div>
@@ -359,7 +381,7 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs pt-1">
             <div className="sm:col-span-2">
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Jam Operasional Utama / Label Tampilan <span className="text-red-500">*</span>
               </label>
               <input
@@ -368,15 +390,16 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.operationalHours || ''}
                 onChange={(e) => setForm({ ...form, operationalHours: e.target.value })}
                 placeholder="Contoh: Senin - Minggu (06.00 - 21.00 WIB)"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
-              <span className="text-[10px] text-gray-500 mt-1 block">
+              <span className="text-[10px] text-gray-600 font-semibold mt-1 block">
                 Teks ini ditampilkan di halaman Kontak, kartu layanan, dan informasi jam operasional website.
               </span>
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Hari Kerja / Buka Pelayanan
               </label>
               <input
@@ -384,12 +407,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.operationalDays || ''}
                 onChange={(e) => setForm({ ...form, operationalDays: e.target.value })}
                 placeholder="Contoh: Senin - Minggu (Setiap Hari)"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Jam Layanan Chat &amp; Admin (MinSora)
               </label>
               <input
@@ -397,12 +421,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.operationalTime || ''}
                 onChange={(e) => setForm({ ...form, operationalTime: e.target.value })}
                 placeholder="Contoh: 06.00 - 21.00 WIB"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono text-emerald-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Jadwal Jam Pengiriman Armada &amp; Katering
               </label>
               <input
@@ -410,12 +435,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.deliveryHours || ''}
                 onChange={(e) => setForm({ ...form, deliveryHours: e.target.value })}
                 placeholder="Contoh: 06.00 - 20.00 WIB (Katering Subuh H-1)"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Catatan / Ketentuan Khusus Pemesanan
               </label>
               <input
@@ -423,7 +449,8 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                 value={form.operationalNote || ''}
                 onChange={(e) => setForm({ ...form, operationalNote: e.target.value })}
                 placeholder="Contoh: Melayani katering subuh dengan konfirmasi H-1"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
           </div>
@@ -461,7 +488,7 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Nama Bank <span className="text-red-500">*</span>
               </label>
               <input
@@ -479,12 +506,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                   })
                 }
                 placeholder="Contoh: BCA (Bank Central Asia)"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-gray-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Nomor Rekening <span className="text-red-500">*</span>
               </label>
               <input
@@ -502,12 +530,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                   })
                 }
                 placeholder="Contoh: 8831294819"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono font-bold text-blue-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-black text-blue-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">
                 Atas Nama Rekening <span className="text-red-500">*</span>
               </label>
               <input
@@ -525,7 +554,8 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                   })
                 }
                 placeholder="Contoh: PT ASASORA BIO HEALTHORA"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-gray-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
           </div>
@@ -540,7 +570,7 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
             <div>
-              <label className="block font-bold text-gray-700 mb-1">Nama Lokasi Dapur / Gudang</label>
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">Nama Lokasi Dapur / Gudang</label>
               <input
                 type="text"
                 value={form.warehouse?.name || ''}
@@ -554,12 +584,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                     },
                   })
                 }
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-semibold"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">Latitude Gudang</label>
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">Latitude Gudang</label>
               <input
                 type="number"
                 step="any"
@@ -574,12 +605,13 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                     },
                   })
                 }
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">Longitude Gudang</label>
+              <label className="block font-black text-gray-800 mb-1.5 text-xs">Longitude Gudang</label>
               <input
                 type="number"
                 step="any"
@@ -594,7 +626,8 @@ export const CompanyProfileTab: React.FC<CompanyProfileTabProps> = ({
                     },
                   })
                 }
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-bold text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
           </div>

@@ -973,7 +973,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Contoh: Ibu Rina S."
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-semibold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -987,13 +988,14 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="Contoh: HR Manager PT. Bank BCA"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
                 />
               </div>
 
               <div>
                 <label className="block font-bold text-gray-700 mb-1">Bintang Rating (1-5)</label>
-                <div className="flex items-center gap-1 bg-white p-1.5 rounded-xl border border-gray-300">
+                <div className="flex items-center gap-1 bg-white p-1.5 rounded-xl border-2 border-gray-300">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
@@ -1023,7 +1025,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Ceritakan kepuasan rasa makanan, ketepatan waktu pengiriman, atau pelayanan katering Asasora..."
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -1098,7 +1101,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   onChange={(e) =>
                     setEditingReview({ ...editingReview, name: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -1110,13 +1114,14 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   onChange={(e) =>
                     setEditingReview({ ...editingReview, role: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
               <div>
                 <label className="block font-bold text-gray-800 mb-1">Bintang Rating (1-5)</label>
-                <div className="flex items-center gap-1 bg-white p-1.5 rounded-xl border border-amber-300">
+                <div className="flex items-center gap-1 bg-white p-1.5 rounded-xl border-2 border-gray-300">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
@@ -1149,7 +1154,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
                   onChange={(e) =>
                     setEditingReview({ ...editingReview, comment: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 

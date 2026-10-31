@@ -120,11 +120,7 @@ export const Footer: React.FC<FooterProps> = ({
               </p>
 
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  'Asasora Food Tangerang ' +
-                    (company.address ||
-                      'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
-                )}`}
+                href={company.googleMapsUrl || 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs transition duration-150 border border-emerald-600/50 shadow-xs cursor-pointer"

@@ -320,7 +320,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Contoh: 5 Tips Memilih Katering Makan Siang Kantor di Tangerang"
-                  className="w-full text-xs sm:text-sm font-semibold p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs sm:text-sm font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -333,7 +334,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full text-xs font-semibold p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                    style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                    className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
                   >
                     {CATEGORY_PRESETS.map((c) => (
                       <option key={c} value={c}>
@@ -355,7 +357,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                 value={excerpt}
                 onChange={(e) => setExcerpt(e.target.value)}
                 placeholder="Tuliskan 1-2 kalimat ringkas yang memikat calon klien (HRD/GA/EO)..."
-                className="w-full text-xs font-medium p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none shadow-2xs"
               />
             </div>
 
@@ -375,7 +378,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Tuliskan ulasan, penjelasan menu, tips higienitas, atau panduan pemesanan katering secara lengkap di sini..."
-                className="w-full text-xs sm:text-sm font-sans p-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none leading-relaxed"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs sm:text-sm font-bold font-sans p-3 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-[#2E6F40]/20 outline-none leading-relaxed shadow-2xs"
               />
             </div>
 
@@ -412,7 +416,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   type="text"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -424,7 +429,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   type="text"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -437,7 +443,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   value={readTime}
                   onChange={(e) => setReadTime(e.target.value)}
                   placeholder="Contoh: 4 menit baca"
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -470,7 +477,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                 value={tagsInput}
                 onChange={(e) => setTagsInput(e.target.value)}
                 placeholder="katering harian karyawan Tangerang, catering makan siang kantor, Halal BPJPH"
-                className="w-full text-xs font-medium p-2.5 rounded-xl border border-gray-300 bg-white"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950"
               />
             </div>
 
@@ -528,7 +536,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   onChange={(e) =>
                     setEditingArticle({ ...editingArticle, title: e.target.value })
                   }
-                  className="w-full text-xs sm:text-sm font-semibold p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs sm:text-sm font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -541,7 +550,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   onChange={(e) =>
                     setEditingArticle({ ...editingArticle, category: e.target.value })
                   }
-                  className="w-full text-xs font-semibold p-2.5 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 >
                   {!CATEGORY_PRESETS.some((c) => c.toLowerCase() === editingArticle.category.toLowerCase()) && (
                     <option value={editingArticle.category}>
@@ -567,7 +577,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                 onChange={(e) =>
                   setEditingArticle({ ...editingArticle, excerpt: e.target.value })
                 }
-                className="w-full text-xs font-medium p-2.5 rounded-xl border border-gray-300 bg-white"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950 shadow-2xs"
               />
             </div>
 
@@ -582,7 +593,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                 onChange={(e) =>
                   setEditingArticle({ ...editingArticle, content: e.target.value })
                 }
-                className="w-full text-xs sm:text-sm font-sans p-3 rounded-xl border border-gray-300 bg-white leading-relaxed"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs sm:text-sm font-bold font-sans p-3 rounded-xl border-2 border-gray-300 bg-white text-gray-950 leading-relaxed shadow-2xs"
               />
             </div>
 
@@ -606,7 +618,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   onChange={(e) =>
                     setEditingArticle({ ...editingArticle, author: e.target.value })
                   }
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -620,7 +633,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   onChange={(e) =>
                     setEditingArticle({ ...editingArticle, date: e.target.value })
                   }
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -634,7 +648,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                   onChange={(e) =>
                     setEditingArticle({ ...editingArticle, readTime: e.target.value })
                   }
-                  className="w-full text-xs p-2 rounded-lg border border-gray-300"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full text-xs font-bold p-2 rounded-lg border-2 border-gray-300 text-gray-950 bg-white"
                 />
               </div>
 
@@ -676,7 +691,8 @@ export const ArticlesTab: React.FC<ArticlesTabProps> = ({
                     .filter(Boolean);
                   setEditingArticle({ ...editingArticle, tags });
                 }}
-                className="w-full text-xs font-medium p-2.5 rounded-xl border border-gray-300 bg-white"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                className="w-full text-xs font-bold p-2.5 rounded-xl border-2 border-gray-300 bg-white text-gray-950"
               />
             </div>
 

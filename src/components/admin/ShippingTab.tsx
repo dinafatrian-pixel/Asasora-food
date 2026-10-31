@@ -105,7 +105,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                   onChange={(e) =>
                     setEditingMethod({ ...editingMethod, name: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -123,7 +124,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                       baseFare: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -141,7 +143,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                       perKmRate: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-bold text-[#2E6F40] focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -156,7 +159,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                       minDistance: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -171,7 +175,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                       maxDistance: parseInt(e.target.value) || 100,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -187,7 +192,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                     })
                   }
                   placeholder="Contoh: 30-45 Menit"
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -203,7 +209,8 @@ export const ShippingTab: React.FC<ShippingTabProps> = ({
                     })
                   }
                   placeholder="Kapasitas armada, box thermal, mobil berpendingin..."
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
             </div>

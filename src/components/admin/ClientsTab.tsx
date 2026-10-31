@@ -219,7 +219,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Contoh: PT. Telkom Indonesia Tbk"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-semibold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -230,7 +231,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   value={type}
                   onChange={(e) => setType(e.target.value)}
                   placeholder="Contoh: BUMN / Rumah Sakit / Korporat"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -303,7 +305,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   onChange={(e) =>
                     setEditingClient({ ...editingClient, name: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -315,7 +318,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   onChange={(e) =>
                     setEditingClient({ ...editingClient, type: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 

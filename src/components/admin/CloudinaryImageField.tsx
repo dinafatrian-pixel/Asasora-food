@@ -453,7 +453,8 @@ export const CloudinaryImageField: React.FC<CloudinaryImageFieldProps> = ({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full text-xs p-2.5 pl-8 bg-gray-50 hover:bg-white focus:bg-white rounded-xl border border-gray-300 font-mono text-gray-700 focus:ring-2 focus:ring-[#2E6F40] focus:border-[#2E6F40] outline-none transition"
+                className="w-full text-xs p-3 pl-8 bg-white rounded-xl border-2 border-gray-300 font-mono font-bold text-gray-950 focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none transition shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
               <ImageIcon className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3" />
             </div>

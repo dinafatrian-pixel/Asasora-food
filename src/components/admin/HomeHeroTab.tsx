@@ -99,7 +99,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-900 mb-1.5 text-xs">
                 Judul Utama Beranda (Depan)
               </label>
               <input
@@ -109,12 +109,13 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                   setForm({ ...form, heroTitlePrefix: e.target.value })
                 }
                 placeholder="Contoh: PT. ASASORA"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-emerald-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
             <div>
-              <label className="block font-bold text-gray-700 mb-1">
+              <label className="block font-black text-gray-900 mb-1.5 text-xs">
                 Teks Highlight Emas (Opsional)
               </label>
               <input
@@ -123,8 +124,9 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 onChange={(e) =>
                   setForm({ ...form, heroTitleHighlight: e.target.value })
                 }
-                placeholder="Contoh: FOOD HEALTHORA (kosongkan jika tidak perlu)"
-                className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-[#D1A310] focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                placeholder="Contoh: BIO HEALTHORA (kosongkan jika tidak perlu)"
+                className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-black text-gray-950 text-sm focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
@@ -140,6 +142,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 }
                 placeholder="Contoh: Food & Catering Partner"
                 className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
@@ -155,6 +158,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 }
                 placeholder="Contoh: Sertifikat Halal Resmi BPJPH"
                 className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
 
@@ -170,24 +174,26 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                 }
                 placeholder="Contoh: 'TRADISI RASA INOVASI SELERA'"
                 className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 text-gray-950 font-bold text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none transition placeholder:text-gray-400 shadow-2xs"
+                style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
               />
             </div>
           </div>
         </div>
 
         {/* Home Description */}
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 space-y-2">
-          <label className="block font-extrabold text-xs text-gray-800 uppercase tracking-wider">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-gray-300 space-y-2 shadow-2xs">
+          <label className="block font-black text-xs text-gray-900 uppercase tracking-wider">
             Deskripsi Pengantar Beranda
           </label>
           <textarea
-            rows={3}
+            rows={4}
             value={form.description}
             onChange={(e) =>
               setForm({ ...form, description: e.target.value })
             }
             placeholder="Tuliskan deskripsi lengkap pengantar PT. Asasora..."
-            className="w-full text-xs p-3 bg-gray-50 rounded-xl border border-gray-300 focus:bg-white focus:ring-2 focus:ring-[#2E6F40] outline-none leading-relaxed"
+            className="w-full text-sm font-semibold p-3.5 bg-white rounded-xl border-2 border-gray-300 text-gray-950 focus:border-[#2E6F40] focus:ring-4 focus:ring-emerald-500/20 outline-none leading-relaxed transition shadow-2xs placeholder:text-gray-400"
+            style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
           />
         </div>
 
@@ -233,7 +239,7 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
 
                 <div className="space-y-1.5 text-xs">
                   <div>
-                    <label className="block text-[10px] text-gray-500 font-semibold">
+                    <label className="block text-[10px] text-gray-600 font-bold mb-1">
                       Label Subtitle (Kecil)
                     </label>
                     <input
@@ -242,13 +248,14 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                       onChange={(e) =>
                         handlePropChange(idx, 'subtitle', e.target.value)
                       }
-                      className="w-full p-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs text-justify"
+                      className="w-full p-2 bg-white rounded-lg border-2 border-gray-300 text-xs font-bold text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                      style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                       placeholder="Contoh: Bahan Baku"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-gray-500 font-semibold">
-                      Judul Utama (Tebal Hijau)
+                    <label className="block text-[10px] text-gray-600 font-bold mb-1">
+                      Judul Utama (Tebal)
                     </label>
                     <input
                       type="text"
@@ -256,7 +263,8 @@ export const HomeHeroTab: React.FC<HomeHeroTabProps> = ({
                       onChange={(e) =>
                         handlePropChange(idx, 'title', e.target.value)
                       }
-                      className="w-full p-1.5 bg-gray-50 rounded-lg border border-gray-200 text-xs font-bold text-[#2E6F40]"
+                      className="w-full p-2 bg-white rounded-lg border-2 border-gray-300 text-xs font-black text-gray-950 focus:border-[#2E6F40] focus:ring-2 focus:ring-emerald-500/20 outline-none shadow-2xs"
+                      style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                       placeholder="Contoh: 100% Halal Resmi"
                     />
                   </div>

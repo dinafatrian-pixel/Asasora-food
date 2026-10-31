@@ -247,7 +247,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Contoh: Dapur Higienis & Peralatan Stainless"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-semibold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -256,7 +257,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value as any)}
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none font-semibold"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none font-bold text-gray-950 text-sm shadow-2xs cursor-pointer"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 >
                   <option value="event">🏢 Even Perusahaan</option>
                   <option value="dapur">🍳 Fasilitas Dapur &amp; Produksi</option>
@@ -284,7 +286,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                   placeholder="Keterangan singkat dokumentasi..."
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
             </div>
@@ -394,7 +397,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   onChange={(e) =>
                     setEditingItem({ ...editingItem, title: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -408,7 +412,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                       category: e.target.value as any,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none font-semibold"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 outline-none font-bold text-gray-950 text-sm shadow-2xs cursor-pointer"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 >
                   <option value="event">🏢 Even Perusahaan</option>
                   <option value="dapur">🍳 Fasilitas Dapur &amp; Produksi</option>
@@ -439,7 +444,8 @@ export const GalleryTab: React.FC<GalleryTabProps> = ({
                   onChange={(e) =>
                     setEditingItem({ ...editingItem, caption: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
             </div>

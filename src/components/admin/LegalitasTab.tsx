@@ -231,7 +231,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Contoh: Sertifikat Laik Higiene Sanitasi Jasaboga"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-semibold focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -245,7 +246,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={docNumber}
                   onChange={(e) => setDocNumber(e.target.value)}
                   placeholder="Contoh: 443.51/012/DINKES/2023"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-mono font-bold text-emerald-900 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-mono font-black text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -256,7 +258,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={issuer}
                   onChange={(e) => setIssuer(e.target.value)}
                   placeholder="Contoh: Dinas Kesehatan Kab. Tangerang"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -267,7 +270,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={validUntil}
                   onChange={(e) => setValidUntil(e.target.value)}
                   placeholder="Contoh: Berlaku s/d 2028 / Selamanya"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -278,7 +282,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                   placeholder="Contoh: TERVERIFIKASI RESMI"
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 font-bold text-emerald-800 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -291,7 +296,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                   placeholder="Contoh: Standar higienis dapur katering, kelayakan air, dan sanitasi pengolahan makanan."
-                  className="w-full p-2.5 bg-white rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#2E6F40] outline-none"
+                  className="w-full p-3 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 text-sm focus:ring-4 focus:ring-emerald-500/20 focus:border-[#2E6F40] outline-none shadow-2xs"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
                 />
               </div>
 
@@ -364,7 +370,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   onChange={(e) =>
                     setEditingDoc({ ...editingDoc, title: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-semibold focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -379,7 +386,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   onChange={(e) =>
                     setEditingDoc({ ...editingDoc, docNumber: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-mono font-bold text-emerald-900 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-mono font-black text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -391,7 +399,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   onChange={(e) =>
                     setEditingDoc({ ...editingDoc, issuer: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -403,7 +412,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   onChange={(e) =>
                     setEditingDoc({ ...editingDoc, validUntil: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -415,7 +425,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                   onChange={(e) =>
                     setEditingDoc({ ...editingDoc, status: e.target.value })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 font-bold text-emerald-800 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 
@@ -430,7 +441,8 @@ export const LegalitasTab: React.FC<LegalitasTabProps> = ({
                       description: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-white rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none"
+                  style={{ color: '#030712', backgroundColor: '#FFFFFF' }}
+                  className="w-full p-2.5 bg-white rounded-xl border-2 border-gray-300 font-bold text-gray-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none shadow-2xs"
                 />
               </div>
 

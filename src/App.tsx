@@ -158,6 +158,10 @@ export default function App() {
         .replace(/Kemenag/gi, 'BPJPH');
     }
 
+    if (!copy.googleMapsUrl || copy.googleMapsUrl.includes('google.com/maps/search/?api=1')) {
+      copy.googleMapsUrl = 'https://maps.app.goo.gl/oKYoeRJDKYtfqWqQ9';
+    }
+
     return copy;
   };
 

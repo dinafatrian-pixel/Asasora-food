@@ -186,3 +186,34 @@ div[data-netlify-badge],
   font-variant-numeric: tabular-nums;
 }
 
+/* ==========================================================================
+   PENULISAN FORM ADMIN & UMUM (TEKS TERLIHAT JELAS & KONTRAS TINGGI)
+   Menjamin setiap karakter/huruf yang diketik di kotak isian input, textarea,
+   dan select terlihat jelas dan pekat (tidak transparan, tidak pudar/putih).
+   ========================================================================== */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+textarea,
+select {
+  color: #030712 !important; /* Tailwind gray-950 pekat */
+  -webkit-text-fill-color: #030712 !important;
+  caret-color: #0F5132 !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"])::placeholder,
+textarea::placeholder {
+  color: #6B7280 !important; /* Tailwind gray-500 jelas */
+  -webkit-text-fill-color: #6B7280 !important;
+  opacity: 1 !important;
+}
+
+/* Dukungan input berlatar gelap */
+input.text-white,
+textarea.text-white,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #F3C623 !important;
+}
+
+
