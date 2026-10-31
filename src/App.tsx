@@ -50,7 +50,6 @@ import {
   Article,
   VisitorAnalytics,
 } from './types';
-import { MessageSquareQuote, ShoppingBag, MessageCircle } from 'lucide-react';
 import { MinsoraAvatar } from './components/MinsoraAvatar';
 import { AdminChatNotifier } from './components/AdminChatNotifier';
 import { useLanguage } from './context/LanguageContext';
@@ -1085,44 +1084,23 @@ export default function App() {
         </Suspense>
       )}
 
-      {/* Floating Action Buttons: Direct WhatsApp Admin (0852-7100-0900) & MinSora AI */}
-      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 pointer-events-auto select-none">
-        {/* Button 1 (Direct to Admin Phone): WhatsApp Admin 0852-7100-0900 */}
-        <a
-          href={`https://wa.me/${company.whatsapp || '6285271000900'}?text=${encodeURIComponent('Halo Admin Asasora Food (PT. ASASORA BIO HEALTHORA), saya ingin berkonsultasi pesanan katering.')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          id="btn-floating-whatsapp-direct"
-          className="group relative flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white px-3.5 py-2 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer border-2 border-white"
-          title="Chat Langsung WhatsApp Admin (0852-7100-0900)"
-        >
-          <MessageCircle className="w-5 h-5 text-white fill-white shrink-0" />
-          <div className="flex flex-col text-left leading-tight">
-            <span className="text-xs font-black text-white flex items-center gap-1">
-              <span>WA Admin Langsung</span>
-            </span>
-            <span className="text-[10px] text-emerald-100 font-bold">
-              0852-7100-0900
-            </span>
-          </div>
-        </a>
-
-        {/* Button 2: Interactive MinSora AI Web Consultation */}
+      {/* Floating Action Button: Dedicated MinSora AI Consultation Only */}
+      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end pointer-events-auto select-none">
         <button
           type="button"
           onClick={() => setIsChatbotOpen((prev) => !prev)}
           id="btn-floating-whatsapp-ai"
-          className="group relative flex items-center gap-2 bg-white hover:bg-emerald-50 text-gray-900 pl-1.5 pr-3 py-1.5 rounded-full shadow-lg transition-all duration-300 border-2 border-emerald-600 hover:border-emerald-700 transform hover:scale-105 active:scale-95 cursor-pointer"
+          className="group relative flex items-center gap-2.5 bg-white hover:bg-emerald-50 text-gray-900 pl-2 pr-4 py-2 rounded-full shadow-2xl transition-all duration-300 border-2 border-emerald-600 hover:border-emerald-700 transform hover:scale-105 active:scale-95 cursor-pointer"
           title="Tanya Asisten AI MinSora (Cek Menu & Simulasi Harga)"
           aria-label="Tanya Asisten AI MinSora"
         >
           <MinsoraAvatar size="sm" showOnlineBadge={true} showWaBadge={true} />
           <div className="flex flex-col text-left leading-tight">
-            <span className="text-[11px] font-black text-gray-900 group-hover:text-emerald-800 transition-colors flex items-center gap-1">
+            <span className="text-xs font-black text-gray-900 group-hover:text-emerald-800 transition-colors flex items-center gap-1.5">
               <span>Tanya MinSora AI</span>
-              <span className="text-[8px] bg-amber-400 text-gray-950 font-black px-1 rounded-sm">24 Jam</span>
+              <span className="text-[9px] bg-amber-400 text-gray-950 font-black px-1.5 py-0.5 rounded-sm">24 Jam</span>
             </span>
-            <span className="text-[9px] text-emerald-700 font-bold">
+            <span className="text-[10px] text-emerald-700 font-bold">
               Cek Menu &amp; Simulasi Harga
             </span>
           </div>
@@ -1136,11 +1114,11 @@ export default function App() {
         company={company}
       />
 
-      {/* Admin Real-Time Incoming Chat Ringer, Audio Bel, & Screen Notification */}
+      {/* Admin Real-Time Incoming Chat Ringer, Audio Bel, & Screen Notification (Background only, no floating monitor chip) */}
       <AdminChatNotifier
         adminWhatsApp={company.whatsapp || '6285271000900'}
         onOpenLiveChatModal={() => setIsAdminOpen(true)}
-        alwaysShowMonitor={true}
+        alwaysShowMonitor={false}
       />
     </div>
   );

@@ -309,60 +309,7 @@ export const AdminChatNotifier: React.FC<AdminChatNotifierProps> = ({
         </div>
       )}
 
-      {/* 2. FLOATING ADMIN MONITOR CHIP (Top-Right or Bottom Status) */}
-      {alwaysShowMonitor && (
-        <div className="fixed bottom-24 right-5 z-40 pointer-events-auto">
-          <div className="bg-white/95 backdrop-blur-md border border-emerald-200/90 rounded-full shadow-lg px-2.5 py-1.5 flex items-center gap-2 text-xs">
-            {/* Live radar indicator */}
-            <button
-              onClick={() => setIsDrawerOpen(true)}
-              className="flex items-center gap-1.5 text-gray-800 hover:text-emerald-800 font-bold transition group"
-              title="Buka Pantauan Live Chat Pengunjung"
-            >
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
-              </span>
-              <span className="text-[11px] font-black text-emerald-950">
-                Pantau Chat
-              </span>
-              {unreadCount > 0 && (
-                <span className="bg-red-500 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full animate-pulse">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            <span className="w-px h-3.5 bg-gray-200" />
-
-            {/* Sound Toggle Button */}
-            <button
-              onClick={handleToggleSound}
-              className={`p-1 rounded-full transition ${
-                settings.soundEnabled
-                  ? 'text-emerald-700 hover:bg-emerald-50'
-                  : 'text-gray-400 hover:bg-gray-100'
-              }`}
-              title={settings.soundEnabled ? 'Dering Suara Aktif (Klik untuk Mute)' : 'Dering Suara Mute (Klik untuk Aktifkan)'}
-            >
-              {settings.soundEnabled ? (
-                <Volume2 className="w-3.5 h-3.5" />
-              ) : (
-                <VolumeX className="w-3.5 h-3.5" />
-              )}
-            </button>
-
-            {/* Test Ringtone Button */}
-            <button
-              onClick={handleTestSound}
-              className="text-[10px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full transition border border-emerald-200"
-              title="Klik untuk Menguji Bunyi Dering Bel"
-            >
-              Tes Dering
-            </button>
-          </div>
-        </div>
-      )}
+      {/* 2. FLOATING ADMIN MONITOR CHIP REMOVED - Admin monitoring is exclusively available inside Admin Panel / LiveChatTab */}
 
       {/* 3. LIVE CHAT DRAWER / MONITOR MODAL */}
       {isDrawerOpen && (
