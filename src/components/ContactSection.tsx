@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Mail, Phone, MessageSquare, Send, CheckCircle2, Clock } from 'lucide-react';
+import { MapPin, Mail, Phone, MessageSquare, Send, CheckCircle2, Clock, Navigation, ExternalLink } from 'lucide-react';
 import { CompanyInfo } from '../types';
 import { MinsoraAvatar } from './MinsoraAvatar';
 import { useLanguage } from '../context/LanguageContext';
@@ -102,13 +102,27 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                 <div className="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center text-[#2E6F40] shrink-0 border border-green-200">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-extrabold text-[#2E6F40] text-sm sm:text-base">
-                    {t('contact.address_label', 'Alamat Kantor')}
+                    {t('contact.address_label', 'Alamat Kantor & Dapur')}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mt-0.5" id="disp-address">
                     {company.address}
                   </p>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      'Asasora Food Tangerang ' +
+                        (company.address ||
+                          'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 mt-2.5 px-3 py-1.5 bg-[#2E6F40] hover:bg-[#245732] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    <span>{lang === 'en' ? 'Directions on Google Maps' : 'Petunjuk Rute di Google Maps'}</span>
+                    <ExternalLink className="w-3 h-3 opacity-80" />
+                  </a>
                 </div>
               </div>
 
@@ -168,6 +182,43 @@ Mohon info penawaran harga & ketersediaannya. Terima kasih!`;
                       * {company.operationalNote}
                     </p>
                   )}
+                </div>
+              </div>
+
+              {/* Google Maps Asasora Interactive Map Card */}
+              <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-green-200 shadow-2xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#2E6F40]" />
+                    <span className="font-extrabold text-xs sm:text-sm text-[#2E6F40]">
+                      {lang === 'en' ? 'Google Maps Location' : 'Peta Lokasi Google Maps Asasora Food'}
+                    </span>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      'Asasora Food Tangerang ' +
+                        (company.address ||
+                          'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] font-bold text-[#2E6F40] hover:text-[#1b4426] flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>{lang === 'en' ? 'View Large Map' : 'Perbesar Peta'}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <div className="w-full h-44 sm:h-52 rounded-xl overflow-hidden border border-green-100">
+                  <iframe
+                    title="Google Maps Lokasi Asasora Food Tangerang"
+                    src="https://maps.google.com/maps?q=-6.1783,106.6319&hl=id&z=16&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
               </div>
             </div>

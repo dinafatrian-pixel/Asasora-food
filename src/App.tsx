@@ -114,27 +114,60 @@ export default function App() {
     };
   }, []);
 
+  // Helper to sanitize company info from any legacy blurb or outdated text
+  const cleanCompany = (c: any): CompanyInfo => {
+    if (!c || typeof c !== 'object') return initialCompanyInfo;
+    const copy = { ...initialCompanyInfo, ...c };
+
+    if (copy.heroTitlePrefix === 'Selamat datang di Asasora' || copy.heroTitleHighlight === 'CATERING') {
+      copy.heroTitlePrefix = 'PT. ASASORA';
+      copy.heroTitleHighlight = 'BIO HEALTHORA';
+    }
+
+    if (
+      typeof copy.description === 'string' &&
+      (copy.description.includes('Selamat Datang di Asasora Food') ||
+        copy.description.includes('Solusi Kuliner Terbaik di Tangerang') ||
+        copy.description.includes('ayo segera hubungi Asasora Cateringa'))
+    ) {
+      copy.description =
+        'Produk boga & katering berkualitas yang dihasilkan dari olahan pangan yang aman, higienis serta bersertifikasi Halal resmi BPJPH.';
+    }
+
+    if (
+      typeof copy.halalBadgeText === 'string' &&
+      (copy.halalBadgeText.includes('Asasora Food Tangerang menyediakan layanan katering kantor') ||
+        copy.halalBadgeText.includes('nasi box, snack box rapat'))
+    ) {
+      copy.halalBadgeText = 'Sertifikat Halal Resmi SH - BPJPH';
+    }
+
+    if (copy.halalBadgeText) {
+      copy.halalBadgeText = copy.halalBadgeText
+        .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
+        .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
+        .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
+        .replace(/Kemenag/gi, 'BPJPH');
+    }
+
+    if (copy.halalAgency) {
+      copy.halalAgency = copy.halalAgency
+        .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
+        .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
+        .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
+        .replace(/Kemenag/gi, 'BPJPH');
+    }
+
+    return copy;
+  };
+
   // Local storage synced states
   const [company, setCompany] = useState<CompanyInfo>(() => {
     const saved = localStorage.getItem('asasora_company');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.halalBadgeText) {
-          parsed.halalBadgeText = parsed.halalBadgeText
-            .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
-            .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
-            .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
-            .replace(/Kemenag/gi, 'BPJPH');
-        }
-        if (parsed.halalAgency) {
-          parsed.halalAgency = parsed.halalAgency
-            .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
-            .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
-            .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
-            .replace(/Kemenag/gi, 'BPJPH');
-        }
-        return { ...initialCompanyInfo, ...parsed };
+        return cleanCompany(parsed);
       } catch (e) {
         return initialCompanyInfo;
       }
@@ -339,7 +372,7 @@ export default function App() {
       isApplyingRemoteRef.current = true;
 
       if (incomingData.company) {
-        setCompany((prev) => ({ ...prev, ...incomingData.company }));
+        setCompany((prev) => cleanCompany({ ...prev, ...incomingData.company }));
       }
       if (Array.isArray(incomingData.products) && incomingData.products.length > 0) {
         setProducts(incomingData.products);

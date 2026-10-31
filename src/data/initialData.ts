@@ -17,13 +17,13 @@ export const initialCompanyInfo: CompanyInfo = {
   tagline: '"TRADISI RASA INOVASI SELERA"',
   description: 'Produk berkualitas yang di hasil kan dari pangan yang aman serta halal.',
   badgeText: 'Food & Catering Partner',
-  halalBadgeText: 'Sertifikat Halal Resmi BPJPH',
+  halalBadgeText: 'Sertifikat Halal Resmi SH - BPJPH',
   halalNumber: 'ID36110081134110926',
-  halalAgency: 'SH-BPJPH',
+  halalAgency: 'SH - BPJPH',
   logoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329882/asasora/mnswxa7jmq7nzsr0h7fk.png',
   halalLogoUrl: 'https://res.cloudinary.com/xhzjg0n0/image/upload/f_auto,q_auto/v1788329899/asasora/cz2l79okyiljtn321uzr.jpg',
   heroTitlePrefix: 'PT. ASASORA',
-  heroTitleHighlight: 'BIOHEALTHORA',
+  heroTitleHighlight: 'BIO HEALTHORA',
   heroSubtitle:
     'Penyedia resmi Food Service higienis bersertifikasi Halal BPJPH, aneka katering nasi kotak, prasmanan, dan makanan olahan siap saji terpercaya se-Jabodetabek.',
   heroValueProps: [
@@ -31,7 +31,7 @@ export const initialCompanyInfo: CompanyInfo = {
     { title: 'Cek Ongkir Otomatis', subtitle: 'Armada Khusus Box' },
   ],
   address:
-    'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 RT 004 RW 06 Kel. Buaran Indah Kec. Tangerang Kota Tangerang Banten',
+    'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 RT 004 RW 06 Kel. Buaran Indah Kec. Tangerang Kota Tangerang Banten 15119',
   email: 'customerservice@asasorafood.com',
   phone: '+62 852-7100-0900',
   whatsapp: '6285271000900',

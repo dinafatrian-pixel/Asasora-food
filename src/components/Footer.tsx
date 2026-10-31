@@ -11,6 +11,9 @@ import {
   Zap,
   BarChart3,
   Sparkles,
+  MapPin,
+  Navigation,
+  ExternalLink,
 } from 'lucide-react';
 import { CompanyInfo, VisitorAnalytics } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -79,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({
     <footer role="contentinfo" className="bg-gray-900 text-white border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Brand Col */}
+          {/* Brand Col & Alamat Google Maps Asasora */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <img
@@ -96,30 +99,49 @@ export const Footer: React.FC<FooterProps> = ({
               />
               <div>
                 <span className="text-base font-black text-white block leading-none">
-                  {company.heroTitlePrefix || 'PT. ASASORA'}
+                  PT. ASASORA
                 </span>
                 <span className="text-[10px] font-bold text-[#F3C623] uppercase tracking-wider">
-                  {company.heroTitleHighlight || 'Bio Healthora'}
+                  BIO HEALTHORA
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-gray-400 leading-relaxed">
-              {lang === 'en'
-                ? t('hero.description', 'High-quality products produced from safe, hygienic, and authentic halal ingredients.')
-                : company.description}
-            </p>
+            {/* Alamat Google Maps Asasora */}
+            <div className="bg-gray-800/90 p-3.5 rounded-xl border border-gray-700/80 space-y-2.5 text-xs">
+              <div className="flex items-center gap-2 text-[#F3C623] font-bold text-xs uppercase tracking-wider">
+                <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{lang === 'en' ? 'Kitchen & Office Location' : 'Alamat Google Maps Asasora'}</span>
+              </div>
 
+              <p className="text-gray-300 text-xs leading-relaxed">
+                {company.address ||
+                  'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 RT 004 RW 06 Kel. Buaran Indah Kec. Tangerang Kota Tangerang Banten 15119'}
+              </p>
+
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  'Asasora Food Tangerang ' +
+                    (company.address ||
+                      'Jl. Irigasi sipon Tanah Tinggi Gg. Jambu 2 Buaran Indah Tangerang')
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs transition duration-150 border border-emerald-600/50 shadow-xs cursor-pointer"
+              >
+                <Navigation className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? 'Open in Google Maps' : 'Buka di Google Maps'}</span>
+                <ExternalLink className="w-3 h-3 ml-0.5 opacity-80" />
+              </a>
+            </div>
+
+            {/* Halal Badge */}
             <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 bg-emerald-950/60 p-2.5 rounded-xl border border-emerald-800">
               <ShieldCheck className="w-4 h-4 shrink-0" />
               <span>
                 {lang === 'en'
-                  ? t('hero.halal_badge', 'Official SH - BPJPH Halal Certified')
-                  : (company.halalBadgeText || 'Sertifikat Halal Resmi SH - BPJPH')
-                      .replace(/SH\s*[-–—]?\s*Kemenag/gi, 'SH - BPJPH')
-                      .replace(/SH\s+Kemenag/gi, 'SH - BPJPH')
-                      .replace(/Kemenag\s*RI/gi, 'SH - BPJPH')
-                      .replace(/Kemenag/gi, 'BPJPH')}
+                  ? 'Official SH - BPJPH Halal Certified'
+                  : 'Sertifikat Halal Resmi SH - BPJPH'}
               </span>
             </div>
           </div>
