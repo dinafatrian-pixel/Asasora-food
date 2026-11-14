@@ -11,6 +11,7 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { CustomerReviewPortal } from './components/CustomerReviewPortal';
 import { WhatsAppChatbotModal } from './components/WhatsAppChatbotModal';
+import { PortalErpSkeleton, ModalSkeletonFallback } from './components/SkeletonShimmer';
 
 // Code Splitting & Dynamic Imports to drastically minimize initial JS payload (reduces FCP & eliminates Long Main-Thread Tasks)
 const OrderFormSection = lazy(() =>
@@ -887,14 +888,7 @@ export default function App() {
           adminWhatsApp={company.whatsapp || '6285271000900'}
           alwaysShowMonitor={true}
         />
-        <Suspense
-          fallback={
-            <div className="min-h-screen bg-[#032e1a] flex flex-col items-center justify-center text-white">
-              <div className="w-12 h-12 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin mb-4" />
-              <p className="text-sm font-bold tracking-wide">Memuat Portal MinSora ERP...</p>
-            </div>
-          }
-        >
+        <Suspense fallback={<PortalErpSkeleton />}>
           <AdminSoraApp
             onNavigateToPublic={() => {
               setIsAdminRoute(false);
@@ -939,7 +933,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 flex flex-col selection:bg-[#2E6F40] selection:text-white font-sans">
+    <div className="min-h-screen bg-[#F7F8F6] text-stone-900 flex flex-col selection:bg-[#0F5132] selection:text-white font-sans">
       {/* Global Navigation */}
       <Navbar
         company={company}
@@ -963,6 +957,7 @@ export default function App() {
           products={products}
           orders={orders}
           company={company}
+          isLoading={syncStatus.isSyncing && products.length === 0}
           onAddToCart={handleAddToCart}
           onInstantCheckout={handleInstantCheckout}
           onOpenOrderModal={() => setIsOrderModalOpen(true)}
@@ -993,7 +988,7 @@ export default function App() {
 
       {/* Formulir Pesanan Resmi Modal (Loaded asynchronously on demand) */}
       {isOrderModalOpen && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<ModalSkeletonFallback />}>
           <OrderFormSection
             isOpen={isOrderModalOpen}
             onClose={() => setIsOrderModalOpen(false)}
@@ -1021,7 +1016,7 @@ export default function App() {
 
       {/* Admin Panel Modal (Loaded asynchronously on demand) */}
       {isAdminOpen && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<ModalSkeletonFallback />}>
           <AdminModal
             isOpen={isAdminOpen}
             onClose={() => setIsAdminOpen(false)}
@@ -1090,17 +1085,17 @@ export default function App() {
           type="button"
           onClick={() => setIsChatbotOpen((prev) => !prev)}
           id="btn-floating-whatsapp-ai"
-          className="group relative flex items-center gap-2.5 bg-white hover:bg-emerald-50 text-gray-900 pl-2 pr-4 py-2 rounded-full shadow-2xl transition-all duration-300 border-2 border-emerald-600 hover:border-emerald-700 transform hover:scale-105 active:scale-95 cursor-pointer"
+          className="group btn-micro relative flex items-center gap-2.5 bg-white hover:bg-[#FAFBF9] text-stone-900 pl-2.5 pr-4 py-2 rounded-full border-2 border-[#0F5132] cursor-pointer"
           title="Tanya Asisten AI MinSora (Cek Menu & Simulasi Harga)"
           aria-label="Tanya Asisten AI MinSora"
         >
           <MinsoraAvatar size="sm" showOnlineBadge={true} showWaBadge={true} />
           <div className="flex flex-col text-left leading-tight">
-            <span className="text-xs font-black text-gray-900 group-hover:text-emerald-800 transition-colors flex items-center gap-1.5">
+            <span className="text-xs font-extrabold text-stone-900 group-hover:text-[#0F5132] transition-colors flex items-center gap-1.5">
               <span>Tanya MinSora AI</span>
-              <span className="text-[9px] bg-amber-400 text-gray-950 font-black px-1.5 py-0.5 rounded-sm">24 Jam</span>
+              <span className="text-[9px] bg-[#F3C623] text-stone-900 font-black px-1.5 py-0.5 rounded">24 Jam</span>
             </span>
-            <span className="text-[10px] text-emerald-700 font-bold">
+            <span className="text-[10px] text-[#0F5132] font-bold">
               Cek Menu &amp; Simulasi Harga
             </span>
           </div>

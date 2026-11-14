@@ -1,12 +1,9 @@
 import React from 'react';
 import {
   ShieldCheck,
-  MessageCircle,
   ChevronRight,
-  Sparkles,
   FileCheck2,
   CheckCircle2,
-  ExternalLink,
 } from 'lucide-react';
 import { CompanyInfo } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -34,49 +31,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
   return (
     <section
       id="home"
-      className="relative bg-gradient-to-br from-green-50/80 via-yellow-50/30 to-white py-10 sm:py-16 lg:py-24 overflow-hidden border-b border-green-50"
+      className="bg-[#F7F8F6] py-12 sm:py-20 lg:py-24 border-b border-stone-200"
     >
-      {/* Subtle decorative background circles */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 bg-green-100/50 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-yellow-100/40 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main 2-Column Row: Left Hero Content & Right Halal Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
           {/* Left Column: Hero Content & CTA */}
           <div className="lg:col-span-7 flex flex-col justify-between text-center lg:text-left">
-            {/* Top Content Block: Badges, Title, Tagline, Description */}
-            <div className="space-y-4 sm:space-y-5">
-              {/* Badges */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
-                <span className="inline-flex items-center gap-1.5 bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-700" />
+            {/* Top Content Block: Editorial Kicker, Title, Tagline, Description */}
+            <div className="space-y-5">
+              {/* Quiet Editorial Kicker (Zero-Pill) */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs font-bold uppercase tracking-[0.12em] text-[#0F5132]">
+                <span>
                   {lang === 'en' ? 'Food & Catering Partner' : company.badgeText || 'Food & Catering Partner'}
                 </span>
-                <div className="inline-flex items-center space-x-1.5 bg-emerald-100 text-emerald-900 text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-300 shadow-xs">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                  <span>{lang === 'en' ? t('hero.halal_badge', 'Official BPJPH Halal Certified') : company.halalBadgeText || t('hero.halal_badge', 'Sertifikat Halal Resmi BPJPH')}</span>
-                </div>
+                <span className="text-stone-300" aria-hidden="true">·</span>
+                <span className="inline-flex items-center gap-1.5 text-stone-700">
+                  <ShieldCheck className="w-4 h-4 text-[#0F5132]" strokeWidth={1.75} />
+                  <span>
+                    {lang === 'en'
+                      ? t('hero.halal_badge', 'Official BPJPH Halal Certified')
+                      : company.halalBadgeText || t('hero.halal_badge', 'Sertifikat Halal Resmi BPJPH')}
+                  </span>
+                </span>
               </div>
 
               {/* Heading */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0F5132] leading-tight tracking-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-black text-[#0F5132] leading-[1.08] tracking-tight">
                 {company.heroTitlePrefix || 'PT. ASASORA'}
                 {company.heroTitleHighlight &&
                 company.heroTitleHighlight.toUpperCase() !== 'BIO HEALTHORA' ? (
-                  <span className="text-[#D1A310]"> {company.heroTitleHighlight}</span>
+                  <span className="text-stone-900"> {company.heroTitleHighlight}</span>
                 ) : null}
               </h1>
 
               {/* Tagline */}
-              <p className="text-base sm:text-xl italic font-semibold text-gray-800">
+              <p className="text-base sm:text-lg font-semibold text-stone-700 tracking-tight">
                 {lang === 'en'
                   ? t('hero.tagline', '"BPJPH HALAL CERTIFIED PRODUCTS"')
                   : company.tagline}
               </p>
 
               {/* Description */}
-              <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl whitespace-pre-line">
+              <p className="text-stone-600 text-sm sm:text-base lg:text-[17px] leading-relaxed max-w-2xl whitespace-pre-line mx-auto lg:mx-0">
                 {lang === 'en'
                   ? t('hero.description', 'High-quality products produced from safe, hygienic, and authentic halal ingredients.')
                   : company.description}
@@ -84,13 +81,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
             </div>
 
             {/* Bottom Content Block: Action CTA Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3.5 pt-4 lg:pt-6">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3.5 pt-8">
               <button
                 onClick={onOrderClick}
-                className="min-h-[48px] bg-[#0F5132] hover:bg-green-900 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition duration-200 text-center text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer group active:scale-95"
+                className="btn-micro min-h-[48px] bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold px-7 py-3.5 rounded-xl border border-[#0b3d26] text-center text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer group"
               >
                 <span>{t('hero.btn_order', 'Pesan Sekarang')}</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
               </button>
               <a
                 href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20${encodeURIComponent(
@@ -98,7 +95,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                 )},%20saya%20ingin%20berkonsultasi%20menu`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-h-[48px] bg-[#F3C623] hover:bg-[#D1A310] text-[#1F2937] font-extrabold px-6 py-3 rounded-xl shadow-md transition flex items-center justify-center space-x-2.5 text-sm sm:text-base active:scale-95 border border-[#e5b719]"
+                className="btn-micro min-h-[48px] bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold px-6 py-3 rounded-xl border border-[#D9AE14] flex items-center justify-center space-x-2.5 text-sm sm:text-base"
               >
                 <MinsoraAvatar size="sm" showWaBadge={true} />
                 <span>{t('hero.btn_consult', 'Chat WhatsApp MinSora')}</span>
@@ -106,46 +103,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
             </div>
           </div>
 
-          {/* Right Column: Halal Certification & Showcase Card (Home 2) */}
+          {/* Right Column: Halal Certification & Showcase Card */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="w-full max-w-sm bg-gradient-to-b from-white via-emerald-50/20 to-amber-50/20 p-4 sm:p-5 rounded-2xl border border-emerald-200/90 shadow-lg relative overflow-hidden backdrop-blur-xs group hover:border-emerald-300 transition duration-300 flex flex-col justify-between h-full">
-              {/* Background ambient glow */}
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-200/30 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-200/30 rounded-full blur-2xl pointer-events-none" />
-
-              {/* Card Top Pill Badge */}
-              <div className="flex items-center justify-between gap-2 border-b border-emerald-100 pb-2.5 mb-2 sm:pb-3 sm:mb-2.5">
-                <div className="inline-flex items-center gap-1.5 bg-[#1B4D28] text-white text-[10px] sm:text-[11px] font-black px-3 py-1 rounded-full shadow-xs tracking-wide">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#F3C623]" />
+            <div className="card-hover w-full max-w-sm bg-white p-6 rounded-2xl border border-stone-200 hover:border-[#0F5132]/50 flex flex-col justify-between h-full">
+              {/* Card Top Header */}
+              <div className="flex items-center justify-between gap-2 border-b border-stone-200 pb-3.5">
+                <div className="inline-flex items-center gap-2 text-[#0F5132] text-[11px] font-extrabold uppercase tracking-[0.1em]">
+                  <ShieldCheck className="w-4 h-4 text-[#0F5132]" strokeWidth={1.75} />
                   <span>{t('hero.card_halal_tag', 'TERSERTIFIKASI HALAL RESMI')}</span>
                 </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 border border-stone-200 bg-stone-50 px-2 py-0.5 rounded">
+                  Terverifikasi
+                </span>
               </div>
 
               {/* Central Logo Container */}
-              <div className="flex flex-col items-center text-center my-auto py-2 sm:py-3">
-                <div className="relative p-3.5 sm:p-5 bg-white rounded-3xl shadow-sm border-2 border-emerald-100/90 group-hover:shadow-md group-hover:border-emerald-300 transition duration-300">
+              <div className="flex flex-col items-center text-center my-auto py-6">
+                <div className="relative p-5 bg-[#FAFBF9] rounded-2xl border border-stone-200">
                   <picture>
                     <source srcSet={halalLogo} type="image/svg+xml" />
                     <img
                       src={halalLogo}
                       alt="Logo Sertifikat Halal Resmi"
-                      width={200}
-                      height={200}
+                      width={180}
+                      height={180}
                       fetchPriority="high"
                       decoding="async"
-                      className="h-32 sm:h-40 lg:h-44 w-auto max-w-[200px] object-contain transition duration-300 group-hover:scale-105"
+                      className="h-32 sm:h-36 lg:h-40 w-auto max-w-[180px] object-contain"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = DEFAULT_HALAL_LOGO;
                       }}
                     />
                   </picture>
-                  <div className="absolute -bottom-1.5 -right-1.5 bg-[#F3C623] text-gray-900 p-1.5 rounded-full shadow-md border-2 border-white">
-                    <CheckCircle2 className="w-4 h-4 text-green-950" />
+                  <div className="absolute -bottom-2 -right-2 bg-[#F3C623] text-stone-900 p-1.5 rounded-lg border border-stone-200">
+                    <CheckCircle2 className="w-4 h-4 text-stone-900" strokeWidth={2} />
                   </div>
                 </div>
 
-                <div className="mt-3 sm:mt-3.5">
-                  <p className="font-extrabold text-gray-900 text-xs sm:text-sm tracking-tight">
+                <div className="mt-4 space-y-1">
+                  <p className="font-extrabold text-stone-900 text-sm tracking-tight">
                     {lang === 'en'
                       ? 'Halal Product Assurance Organizing Agency (SH-BPJPH)'
                       : (company.halalAgency || 'SH-BPJPH')
@@ -154,21 +150,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                           .replace(/Kemenag/gi, 'BPJPH')
                           .trim() || 'SH-BPJPH'}
                   </p>
-                  <p className="text-xs sm:text-[13px] text-emerald-700 font-extrabold mt-1 font-mono tracking-wide">
+                  <p className="text-xs sm:text-[13px] text-[#0F5132] font-bold font-mono tracking-wide tabular-nums">
                     No. Reg: {company.halalNumber || 'ID36110081134110926'}
                   </p>
                 </div>
               </div>
 
-              {/* Bottom: Trust Badges & Verify Button */}
-              <div className="space-y-2.5 pt-2 border-t border-emerald-100">
-                <div className="grid grid-cols-1 gap-1.5">
-                  <div className="flex items-center gap-2 text-[11px] text-gray-700 font-medium bg-white/80 p-1.5 rounded-lg border border-emerald-50">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              {/* Bottom: Trust Points & Verify Button */}
+              <div className="space-y-3 pt-4 border-t border-stone-200">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs text-stone-700 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#0F5132] shrink-0" strokeWidth={1.75} />
                     <span>{t('hero.card_trust1', '100% Bahan Baku & Dapur Halal')}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-gray-700 font-medium bg-white/80 p-1.5 rounded-lg border border-emerald-50">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <div className="flex items-center gap-2 text-xs text-stone-700 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#0F5132] shrink-0" strokeWidth={1.75} />
                     <span>{t('hero.card_trust2', 'Standar Sanitasi & Uji Higiene')}</span>
                   </div>
                 </div>
@@ -177,9 +173,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                 <button
                   type="button"
                   onClick={scrollToLegalitas}
-                  className="w-full bg-emerald-50 hover:bg-emerald-100 text-[#2E6F40] text-xs font-bold py-2 rounded-xl border border-emerald-200 transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs active:scale-98"
+                  className="btn-micro w-full bg-[#F7F8F6] hover:bg-stone-100 text-[#0F5132] text-xs font-bold py-2.5 rounded-xl border border-stone-200 hover:border-[#0F5132]/40 flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <FileCheck2 className="w-3.5 h-3.5" />
+                  <FileCheck2 className="w-3.5 h-3.5" strokeWidth={1.75} />
                   <span>{t('hero.card_btn_verify', 'Verifikasi Dokumen Legalitas')}</span>
                 </button>
               </div>
@@ -208,7 +204,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                 ];
 
           return (
-            <div className="mt-8 sm:mt-10 pt-6 sm:pt-7 border-t border-green-100/90 text-left">
+            <div className="mt-10 sm:mt-14 pt-8 border-t border-stone-200 text-left">
               <div
                 id="hero-value-props"
                 className={`grid grid-cols-1 ${
@@ -217,17 +213,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ company, onOrderClick 
                     : rawProps.length >= 4
                     ? 'sm:grid-cols-2 lg:grid-cols-4'
                     : 'sm:grid-cols-3'
-                } gap-3 sm:gap-4`}
+                } gap-4 sm:gap-6`}
               >
                 {rawProps.map((prop, idx) => (
                   <div
                     key={idx}
-                    className="bg-white/85 backdrop-blur-xs p-3.5 rounded-xl border border-green-100/90 shadow-2xs hover:border-green-200 hover:shadow-xs transition"
+                    className="card-hover bg-white p-5 rounded-xl border border-stone-200 hover:border-[#0F5132]/50"
                   >
-                    <div className="text-[11px] text-gray-500 font-medium leading-tight text-justify">
+                    <div className="text-xs text-stone-500 font-medium leading-snug">
                       {lang === 'en' ? t(`hero.vp${idx + 1}_desc`, prop.subtitle) : prop.subtitle}
                     </div>
-                    <div className="text-xs sm:text-sm font-bold text-[#2E6F40] mt-0.5">
+                    <div className="text-sm sm:text-base font-bold text-[#0F5132] mt-1 tracking-tight">
                       {lang === 'en' ? t(`hero.vp${idx + 1}_title`, prop.title) : prop.title}
                     </div>
                   </div>

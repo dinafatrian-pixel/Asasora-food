@@ -10,15 +10,17 @@ import {
   MessageCircle,
   CheckCircle2,
   Heart,
+  X,
 } from 'lucide-react';
 import { Product, Order, CompanyInfo } from '../types';
 import { formatRupiah } from '../utils/distance';
 import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedProduct, translateText } from '../utils/translator';
 import { syncManager } from '../utils/syncManager';
+import { ProductCatalogSkeletonGrid } from './SkeletonShimmer';
 
 /**
- * Konversi URL gambar ke format .webp terkompresi optimal (menghemat ~702 KiB bandwidth)
+ * Konversi URL gambar ke format .webp terkompresi optimal
  */
 export const getOptimizedWebpUrl = (url: string, width?: number): string => {
   if (!url) return '';
@@ -35,6 +37,7 @@ interface ProductCatalogSectionProps {
   products: Product[];
   orders?: Order[];
   company?: CompanyInfo;
+  isLoading?: boolean;
   onAddToCart: (product: Product, quantity?: number) => void;
   onInstantCheckout: (product: Product) => void;
   onOpenOrderModal?: () => void;
@@ -44,6 +47,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   products,
   orders = [],
   company,
+  isLoading = false,
   onAddToCart,
   onInstantCheckout,
   onOpenOrderModal,
@@ -55,6 +59,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   const [copiedProductId, setCopiedProductId] = useState<string | null>(null);
   const [toastNotification, setToastNotification] = useState<string | null>(null);
   const [highlightedProductId, setHighlightedProductId] = useState<string | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   // Likes state stored in localStorage for user persistence
   const [likedProductIds, setLikedProductIds] = useState<Record<string, boolean>>(() => {
@@ -127,7 +132,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
     }
   }, [products]);
 
-  // Toggle Like with sound/animation feedback, toast, and ONLINE CLOUD SYNC
+  // Toggle Like with immediate feedback, toast, and ONLINE CLOUD SYNC
   const handleToggleLike = async (e: React.MouseEvent, productId: string, productName: string) => {
     e.stopPropagation();
     e.preventDefault();
@@ -146,7 +151,6 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
       console.error('Failed to save liked state', err);
     }
 
-    // Immediate Optimistic Update for instant visual feedback
     const currentCount = likeCounts[productId] ?? 50;
     const optimisticCount = newStatus ? currentCount + 1 : Math.max(0, currentCount - 1);
     setLikeCounts((prev) => ({
@@ -154,12 +158,11 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
       [productId]: optimisticCount,
     }));
 
-    // Trigger toast
     setToastNotification(
       newStatus
         ? lang === 'en'
-          ? `You liked "${productName}" ❤️`
-          : `Anda menyukai "${productName}" ❤️`
+          ? `Added "${productName}" to favorites`
+          : `Anda menyukai "${productName}"`
         : lang === 'en'
           ? `Removed "${productName}" from favorites`
           : `Batal menyukai "${productName}"`
@@ -168,7 +171,6 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
       setToastNotification(null);
     }, 2000);
 
-    // Online Persistence: sync immediately to Cloud Firestore & Express API
     try {
       const serverLikes = await syncManager.toggleProductLike(productId, newStatus);
       if (typeof serverLikes === 'number') {
@@ -186,12 +188,11 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   const categories = React.useMemo(() => {
     const defaultCategories = [
       { id: 'all', label: t('catalog.cat_all', 'Semua Produk') },
-      { id: 'catering & event', label: lang === 'en' ? 'Catering & Events' : 'catering & event' },
+      { id: 'catering & event', label: lang === 'en' ? 'Catering & Events' : 'Catering & Event' },
       { id: 'Produk Siap Santap', label: lang === 'en' ? 'Ready-to-Eat Products' : 'Produk Siap Santap' },
-      { id: 'Snak dan cemilan', label: lang === 'en' ? 'Snacks & Refreshments' : 'Snak dan cemilan' },
+      { id: 'Snak dan cemilan', label: lang === 'en' ? 'Snacks & Refreshments' : 'Snack & Cemilan' },
     ];
 
-    // Add any extra custom categories that exist in products
     const extraCategories: { id: string; label: string }[] = [];
     products.forEach((p) => {
       const cat = p.category?.trim();
@@ -261,7 +262,6 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
     }, 120);
   };
 
-  // SEO Alt Text helper according to specific product guidelines
   const getProductAltText = (prod: Product): string => {
     if (prod.altText && prod.altText.trim().length > 0) {
       return prod.altText;
@@ -287,12 +287,11 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   const handleShareWhatsApp = (product: Product) => {
     const shareUrl = getProductShareUrl(product.id);
     const companyName = company?.name || 'PT. ASASORA';
-    const text = `Halo! Saya merekomendasikan produk halal & higienis dari *${companyName}*:\n\n🍱 *${product.name}*\n💰 *Harga:* ${formatRupiah(product.price)} / ${product.unit}\n📋 *Deskripsi:* ${product.description}\n\n👉 *Buka & Pesan Langsung di Sini:*\n${shareUrl}`;
+    const text = `Halo! Saya merekomendasikan produk halal & higienis dari *${companyName}*:\n\n*${product.name}*\nHarga: ${formatRupiah(product.price)} / ${product.unit}\nDeskripsi: ${product.description}\n\nBuka & Pesan Langsung di Sini:\n${shareUrl}`;
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
-  // Fallback copy implementation
   const fallbackCopyText = (text: string) => {
     const el = document.createElement('textarea');
     el.value = text;
@@ -309,7 +308,6 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
     document.body.removeChild(el);
   };
 
-  // Handle Copy Direct Link to Clipboard
   const handleCopyLink = (product: Product) => {
     const shareUrl = getProductShareUrl(product.id);
     const triggerSuccess = () => {
@@ -338,7 +336,6 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
     }
   };
 
-  // Deep Link handling: automatically scroll & highlight shared product when page is opened via link
   useEffect(() => {
     const checkUrlForProduct = () => {
       try {
@@ -413,11 +410,11 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
   };
 
   return (
-    <section id="katalog" className="py-16 sm:py-24 bg-green-50/40 relative">
+    <section id="katalog" className="py-16 sm:py-24 bg-white border-b border-stone-200 relative">
       {/* Toast Floating Notification */}
       {toastNotification && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#2E6F40] text-white px-5 py-2.5 rounded-full shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2 border-2 border-white animate-in fade-in slide-in-from-bottom-4">
-          <CheckCircle2 className="w-4 h-4 text-[#F3C623]" />
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#0F5132] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border border-[#0b3d26] animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <CheckCircle2 className="w-4 h-4 text-[#F3C623]" strokeWidth={1.75} />
           <span>{toastNotification}</span>
         </div>
       )}
@@ -425,13 +422,13 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40">
-            {t('catalog.tag', 'Pilihan Produk')}
+          <span className="text-[#0F5132] text-xs font-bold uppercase tracking-[0.14em]">
+            {t('catalog.tag', 'Katalog Resmi')}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-[#2E6F40] mt-3">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-900 mt-2 tracking-tight">
             {t('catalog.title', 'Pilihan Produk')}
           </h2>
-          <p className="text-xs sm:text-sm text-gray-500 mt-2 leading-relaxed">
+          <p className="text-sm sm:text-base text-stone-600 mt-3 leading-relaxed">
             {t(
               'catalog.subtitle',
               'Setiap hidangan diolah dari bahan segar pilihan, dijamin 100% Halal BPJPH dan diproses dengan standar higienis jasaboga.'
@@ -440,17 +437,17 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center md:justify-start">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition duration-200 cursor-pointer ${
+                className={`btn-micro px-4 py-2 rounded-lg text-xs sm:text-sm font-bold cursor-pointer border ${
                   selectedCategory === cat.id
-                    ? 'bg-[#2E6F40] text-white shadow-sm'
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                    ? 'bg-[#0F5132] text-white border-[#0F5132]'
+                    : 'bg-[#FAFBF9] text-stone-700 hover:bg-stone-100 hover:border-stone-300 border-stone-200'
                 }`}
               >
                 {cat.label}
@@ -460,7 +457,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
 
           {/* Search Input with Explicit Accessible Label */}
           <div className="w-full md:w-80">
-            <div className="relative w-full">
+            <div className="relative w-full group/search">
               <label htmlFor="catalog-search" className="sr-only">
                 {t('catalog.search_placeholder', 'Cari produk katering atau camilan...')}
               </label>
@@ -470,9 +467,22 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                 placeholder={t('catalog.search_placeholder', 'Cari produk katering atau camilan...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#2E6F40] shadow-2xs"
+                className="w-full pl-10 pr-9 py-2.5 bg-[#FAFBF9] border border-stone-200 rounded-lg text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F5132]/30 focus:border-[#0F5132] transition-all duration-150"
               />
-              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
+              <Search
+                className="w-4 h-4 text-stone-400 group-focus-within/search:text-[#0F5132] group-focus-within/search:scale-110 transition-all duration-150 absolute left-3.5 top-3"
+                strokeWidth={1.75}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Hapus pencarian"
+                  className="btn-micro btn-icon-only absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-stone-400 hover:text-stone-700 hover:bg-stone-100 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" strokeWidth={1.75} />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -482,209 +492,223 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
           className="product-catalog-grid-wrap min-h-[520px] w-full"
           style={{ minHeight: '520px', containIntrinsicSize: 'auto 520px' }}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((rawProduct) => {
-              const product = getLocalizedProduct(rawProduct, lang);
-              const isAdded = addedProductId === product.id;
-              const isCopied = copiedProductId === product.id;
-              const isHighlighted = highlightedProductId === product.id;
-              const soldCount = getProductSoldCount(product.id, rawProduct.name);
-              const isLiked = !!likedProductIds[product.id];
-              const productLikes = likeCounts[product.id] ?? 50;
+          {isLoading ? (
+            <ProductCatalogSkeletonGrid count={8} />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((rawProduct) => {
+                const product = getLocalizedProduct(rawProduct, lang);
+                const isAdded = addedProductId === product.id;
+                const isCopied = copiedProductId === product.id;
+                const isHighlighted = highlightedProductId === product.id;
+                const soldCount = getProductSoldCount(product.id, rawProduct.name);
+                const isLiked = !!likedProductIds[product.id];
+                const productLikes = likeCounts[product.id] ?? 50;
+                const isImageLoaded = !!loadedImages[product.id];
 
-              return (
-                <div
-                  key={product.id}
-                  id={`product-${product.id}`}
-                  className={`bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-md transition duration-300 flex flex-col group relative ${
-                    isHighlighted
-                      ? 'border-[#2E6F40] ring-4 ring-emerald-300 shadow-xl'
-                      : 'border-gray-200'
-                  }`}
-                >
-                  {/* Product Image & Badges (Rasio 1:1 / 400x400px responsif dengan penguncian dimensi mutlak & WebP) */}
+                return (
                   <div
-                    className="catalog-product-img-box relative aspect-square w-full bg-gray-100 overflow-hidden"
-                    style={{ aspectRatio: '1 / 1', minHeight: '260px' }}
+                    key={product.id}
+                    id={`product-${product.id}`}
+                    className={`card-hover bg-white rounded-xl overflow-hidden border flex flex-col group relative ${
+                      isHighlighted
+                        ? 'border-[#0F5132] ring-2 ring-[#0F5132]/30'
+                        : 'border-stone-200 hover:border-[#0F5132]/50'
+                    }`}
                   >
-                    <picture className="w-full h-full block">
-                      {/* Sumber Gambar WebP Terkompres Khusus Smartphone (w_360 ~25 KB) */}
-                      <source
-                        media="(max-width: 768px)"
-                        srcSet={getOptimizedWebpUrl(product.image, 360)}
-                        type="image/webp"
-                      />
-                      {/* Sumber Gambar WebP Resolusi Penuh untuk Desktop / Layar Lebar */}
-                      <source
-                        media="(min-width: 769px)"
-                        srcSet={getOptimizedWebpUrl(product.image, 600)}
-                        type="image/webp"
-                      />
-                      {/* Tag img fallback mutlak format .webp dengan ukuran terkunci */}
-                      <img
-                        src={getOptimizedWebpUrl(product.image, 400)}
-                        alt={getProductAltText(product)}
-                        width={400}
-                        height={400}
-                        loading="lazy"
-                        decoding="async"
-                        style={{ aspectRatio: '1 / 1' }}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
-                    </picture>
+                    {/* Product Image & Badges (Rasio 1:1) with Skeleton Shimmer */}
+                    <div
+                      className="catalog-product-img-box relative aspect-square w-full overflow-hidden border-b border-stone-100 skeleton-shimmer"
+                      style={{ aspectRatio: '1 / 1', minHeight: '260px' }}
+                    >
+                      <picture className="w-full h-full block">
+                        <source
+                          media="(max-width: 768px)"
+                          srcSet={getOptimizedWebpUrl(product.image, 360)}
+                          type="image/webp"
+                        />
+                        <source
+                          media="(min-width: 769px)"
+                          srcSet={getOptimizedWebpUrl(product.image, 600)}
+                          type="image/webp"
+                        />
+                        <img
+                          src={getOptimizedWebpUrl(product.image, 400)}
+                          alt={getProductAltText(product)}
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          decoding="async"
+                          onLoad={() =>
+                            setLoadedImages((prev) =>
+                              prev[product.id] ? prev : { ...prev, [product.id]: true }
+                            )
+                          }
+                          onError={() =>
+                            setLoadedImages((prev) =>
+                              prev[product.id] ? prev : { ...prev, [product.id]: true }
+                            )
+                          }
+                          style={{ aspectRatio: '1 / 1' }}
+                          className={`w-full h-full object-cover group-hover:scale-[1.04] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            isImageLoaded ? 'opacity-100' : 'opacity-0'
+                          }`}
+                        />
+                      </picture>
 
-                  {/* Halal Badge */}
-                  <span className="absolute top-2.5 left-2.5 bg-emerald-600/90 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">
-                    <span>✓</span> {t('catalog.badge_halal', 'Halal BPJPH')}
-                  </span>
-
-                  {/* Top Right Badges: Terjual Count & Tombol Like Hati */}
-                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
-                    {/* Terjual Count Badge */}
-                    {soldCount > 0 && (
-                      <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1 backdrop-blur-xs">
-                        <Flame className="w-3 h-3 text-red-600 fill-red-600" />
-                        <span>{soldCount} {t('catalog.sold', 'Terjual')}</span>
+                      {/* Halal Badge */}
+                      <span className="absolute top-2.5 left-2.5 bg-[#0F5132] text-white text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1 border border-[#0b3d26] z-10">
+                        <Check className="w-3 h-3 text-[#F3C623]" strokeWidth={2.5} />
+                        <span>{t('catalog.badge_halal', 'Halal BPJPH')}</span>
                       </span>
-                    )}
 
-                    {/* Tombol Like (Heart / Hati) */}
-                    <button
-                      type="button"
-                      onClick={(e) => handleToggleLike(e, product.id, product.name)}
-                      aria-label={isLiked ? t('catalog.liked', 'Disukai') : t('catalog.like', 'Suka')}
-                      title={isLiked ? `${t('catalog.liked', 'Disukai')} (${productLikes})` : `${t('catalog.like', 'Suka')} (${productLikes})`}
-                      className={`group/like flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black transition-all duration-200 cursor-pointer shadow-xs active:scale-90 select-none ${
-                        isLiked
-                          ? 'bg-rose-500 text-white shadow-rose-200 ring-1 ring-rose-400'
-                          : 'bg-white/90 hover:bg-white text-gray-700 hover:text-rose-600 border border-gray-200/80 backdrop-blur-xs'
-                      }`}
-                    >
-                      <Heart
-                        className={`w-3 h-3 transition-transform duration-200 group-hover/like:scale-110 ${
-                          isLiked
-                            ? 'text-white fill-white'
-                            : 'text-rose-500 hover:fill-rose-500/20'
-                        }`}
-                      />
-                      <span>{productLikes}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Product Body */}
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                  <div>
-                    <h3 className="font-extrabold text-gray-900 text-sm sm:text-base group-hover:text-[#2E6F40] transition leading-snug">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-gray-600 mt-1.5 leading-relaxed whitespace-pre-line">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="text-xs text-gray-400 font-semibold">{t('catalog.price_label', 'Harga Menu')}</div>
-                    <div className="text-base sm:text-lg font-black text-[#2E6F40]">
-                      {formatRupiah(product.price)}{' '}
-                      <span className="text-[11px] font-normal text-gray-500">
-                        / {product.unit}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons: Tambah ke Keranjang & Order Cepat */}
-                  <div className="pt-2 grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleAddWithFeedback(rawProduct)}
-                      className={`w-full py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 transition cursor-pointer active:scale-95 ${
-                        isAdded
-                          ? 'bg-emerald-600 text-white'
-                          : 'bg-[#2E6F40] hover:bg-green-800 text-white shadow-xs'
-                      }`}
-                    >
-                      {isAdded ? (
-                        <>
-                          <Check className="w-3.5 h-3.5" />
-                          <span>{t('catalog.btn_added', 'Ditambahkan!')}</span>
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>{t('catalog.btn_add_cart', '+ Keranjang')}</span>
-                        </>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onInstantCheckout(rawProduct)}
-                      className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-xs transition cursor-pointer active:scale-95"
-                    >
-                      <ShoppingCart className="w-3.5 h-3.5 text-green-900" />
-                      <span>{t('catalog.btn_order_now', 'Pesan Sekarang')}</span>
-                    </button>
-                  </div>
-
-                  {/* Secondary Share Action Bar: Share WhatsApp & Copy Link */}
-                  <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-semibold text-gray-500 flex items-center gap-1">
-                      <Share2 className="w-3 h-3 text-gray-400" />
-                      <span>{t('catalog.share_label', 'Bagikan')}:</span>
-                    </span>
-
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => handleShareWhatsApp(rawProduct)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg border border-emerald-200 hover:border-emerald-300 transition cursor-pointer active:scale-95 shadow-2xs"
-                        title="Bagikan produk ini via WhatsApp"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" />
-                        <span>WhatsApp</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleCopyLink(rawProduct)}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold rounded-lg border transition cursor-pointer active:scale-95 shadow-2xs ${
-                          isCopied
-                            ? 'bg-[#2E6F40] text-white border-[#2E6F40]'
-                            : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200 hover:border-gray-300'
-                        }`}
-                        title="Salin link langsung ke produk ini"
-                      >
-                        {isCopied ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-[#F3C623]" />
-                            <span>{t('catalog.btn_copied', 'Tersalin!')}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Link2 className="w-3.5 h-3.5 text-gray-500" />
-                            <span>{t('catalog.btn_copy_link', 'Salin Link')}</span>
-                          </>
+                      {/* Top Right Badges: Terjual Count & Tombol Like Hati */}
+                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+                        {soldCount > 0 && (
+                          <span className="bg-[#F3C623] text-stone-900 text-[10px] font-extrabold px-2 py-1 rounded-md flex items-center gap-1 border border-[#D9AE14] tabular-nums">
+                            <Flame className="w-3 h-3 text-stone-900" strokeWidth={2} />
+                            <span>{soldCount} {t('catalog.sold', 'Terjual')}</span>
+                          </span>
                         )}
-                      </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => handleToggleLike(e, product.id, product.name)}
+                          aria-label={isLiked ? t('catalog.liked', 'Disukai') : t('catalog.like', 'Suka')}
+                          title={isLiked ? `${t('catalog.liked', 'Disukai')} (${productLikes})` : `${t('catalog.like', 'Suka')} (${productLikes})`}
+                          className={`group/like btn-micro flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold cursor-pointer select-none border tabular-nums ${
+                            isLiked
+                              ? 'bg-rose-600 text-white border-rose-700'
+                              : 'bg-white hover:bg-stone-50 text-stone-700 hover:text-rose-600 border-stone-200'
+                          }`}
+                        >
+                          <Heart
+                            className={`w-3 h-3 transition-transform duration-150 group-hover/like:scale-125 group-active/like:scale-90 ${
+                              isLiked
+                                ? 'text-white fill-white'
+                                : 'text-rose-500'
+                            }`}
+                            strokeWidth={1.75}
+                          />
+                          <span>{productLikes}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Product Body */}
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                      <div>
+                        <h3 className="font-bold text-stone-900 text-sm sm:text-base group-hover:text-[#0F5132] transition-colors duration-200 leading-snug">
+                          {product.name}
+                        </h3>
+                        <p className="text-xs text-stone-600 mt-1.5 leading-relaxed whitespace-pre-line">
+                          {product.description}
+                        </p>
+                      </div>
+
+                      <div>
+                        <div className="text-[11px] text-stone-500 font-medium">{t('catalog.price_label', 'Harga Menu')}</div>
+                        <div className="text-base sm:text-lg font-extrabold text-[#0F5132] tabular-nums">
+                          {formatRupiah(product.price)}{' '}
+                          <span className="text-xs font-normal text-stone-500">
+                            / {product.unit}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons: Tambah ke Keranjang & Order Cepat */}
+                      <div className="pt-1 grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAddWithFeedback(rawProduct)}
+                          className={`group/add btn-micro w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center space-x-1.5 cursor-pointer border ${
+                            isAdded
+                              ? 'bg-emerald-700 text-white border-emerald-800'
+                              : 'bg-[#0F5132] hover:bg-[#0b3d26] text-white border-[#0b3d26]'
+                          }`}
+                        >
+                          {isAdded ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 transition-transform duration-150 scale-110" strokeWidth={2} />
+                              <span>{t('catalog.btn_added', 'Ditambahkan!')}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-3.5 h-3.5 transition-transform duration-200 group-hover/add:rotate-90" strokeWidth={2} />
+                              <span>{t('catalog.btn_add_cart', 'Keranjang')}</span>
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => onInstantCheckout(rawProduct)}
+                          className="group/buy btn-micro w-full bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold py-2.5 px-3 rounded-lg text-xs flex items-center justify-center space-x-1.5 border border-[#D9AE14] cursor-pointer"
+                        >
+                          <ShoppingCart className="w-3.5 h-3.5 text-stone-900 transition-transform duration-150 group-hover/buy:translate-x-0.5" strokeWidth={1.75} />
+                          <span>{t('catalog.btn_order_now', 'Pesan Sekarang')}</span>
+                        </button>
+                      </div>
+
+                      {/* Secondary Share Action Bar: Share WhatsApp & Copy Link */}
+                      <div className="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-medium text-stone-500 flex items-center gap-1">
+                          <Share2 className="w-3 h-3 text-stone-400" strokeWidth={1.75} />
+                          <span>{t('catalog.share_label', 'Bagikan')}:</span>
+                        </span>
+
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleShareWhatsApp(rawProduct)}
+                            className="group/wa btn-micro inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#F7F8F6] hover:bg-stone-100 text-[#0F5132] text-[11px] font-semibold rounded-md border border-stone-200 cursor-pointer"
+                            title="Bagikan produk ini via WhatsApp"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5 text-[#0F5132] transition-transform duration-150 group-hover/wa:scale-110" strokeWidth={1.75} />
+                            <span>WhatsApp</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleCopyLink(rawProduct)}
+                            className={`group/copy btn-micro inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-md border cursor-pointer ${
+                              isCopied
+                                ? 'bg-[#0F5132] text-white border-[#0F5132]'
+                                : 'bg-[#F7F8F6] hover:bg-stone-100 text-stone-700 border-stone-200'
+                            }`}
+                            title="Salin link langsung ke produk ini"
+                          >
+                            {isCopied ? (
+                              <>
+                                <Check className="w-3.5 h-3.5 text-[#F3C623]" strokeWidth={2} />
+                                <span>{t('catalog.btn_copied', 'Tersalin!')}</span>
+                              </>
+                            ) : (
+                              <>
+                                <Link2 className="w-3.5 h-3.5 text-stone-500 transition-transform duration-150 group-hover/copy:rotate-[-10deg]" strokeWidth={1.75} />
+                                <span>{t('catalog.btn_copy_link', 'Salin Link')}</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-3xl border border-green-100 p-8 max-w-md mx-auto">
-            <div className="w-12 h-12 bg-green-100 text-[#2E6F40] rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">
-              ?
+                );
+              })}
             </div>
-            <h4 className="font-bold text-gray-800 text-base">
+          )}
+        </div>
+
+        {!isLoading && filteredProducts.length === 0 && (
+          <div className="text-center py-12 bg-[#FAFBF9] rounded-2xl border border-stone-200 p-8 max-w-md mx-auto mt-6">
+            <div className="w-12 h-12 bg-white border border-stone-200 text-[#0F5132] rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold">
+              <Search className="w-5 h-5" strokeWidth={1.75} />
+            </div>
+            <h4 className="font-bold text-stone-900 text-base">
               {t('catalog.not_found', 'Produk tidak ditemukan')}
             </h4>
-            <p className="text-xs text-gray-500 mt-1 mb-4">
+            <p className="text-xs text-stone-500 mt-1 mb-4">
               {t('catalog.not_found_sub', 'Coba cari dengan kata kunci lain atau pilih kategori "Semua Produk".')}
             </p>
             <button
@@ -692,7 +716,7 @@ export const ProductCatalogSection: React.FC<ProductCatalogSectionProps> = ({
                 setSelectedCategory('all');
                 setSearchQuery('');
               }}
-              className="bg-[#2E6F40] text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer"
+              className="btn-micro bg-[#0F5132] hover:bg-[#0b3d26] text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer"
             >
               {t('catalog.reset_filter', 'Reset Filter')}
             </button>

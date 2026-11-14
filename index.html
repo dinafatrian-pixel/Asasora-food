@@ -73,12 +73,12 @@
         --color-primary-green: #0F5132;    /* Hijau tua pekat kontras tinggi (7.5:1 di atas putih) */
         --color-button-green: #198754;     /* Hijau tombol solid (4.7:1 di atas putih) */
         --color-accent-gold: #F3C623;      /* Kuning khas Asasora */
-        --color-gold-text: #1F2937;        /* Teks hitam pekat di atas kuning (Kontras 9.2:1 - lolos AAA) */
-        --color-text-dark: #1F2937;        /* Teks gelap utama (12.6:1) */
-        --color-text-muted: #374151;       /* Teks deskripsi (7.8:1) */
-        --color-bg-light: #F9FDF9;
+        --color-gold-text: #18181B;        /* Teks hitam pekat di atas kuning (Kontras 9.2:1 - lolos AAA) */
+        --color-text-dark: #18181B;        /* Teks gelap utama (12.6:1) */
+        --color-text-muted: #57534E;       /* Teks deskripsi */
+        --color-bg-light: #F7F8F6;
         --color-card-bg: #FFFFFF;
-        --color-border: #E5E7EB;
+        --color-border: #E7E5E4;
       }
 
       *, *::before, *::after {
@@ -120,28 +120,28 @@
       .badge-brand-yellow {
         display: inline-block;
         background-color: var(--color-accent-gold);
-        color: var(--color-gold-text); /* Teks #1F2937: Kontras 9.2:1 */
-        font-size: 0.8125rem;
+        color: var(--color-gold-text);
+        font-size: 0.75rem;
         font-weight: 800;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        padding: 0.35rem 1rem;
-        border-radius: 9999px;
+        padding: 0.35rem 0.9rem;
+        border-radius: 0.5rem;
         margin-bottom: 1rem;
       }
 
       /* SATU-SATUNYA TAG H1 PADA HALAMAN (SEO & LIGHTHOUSE) */
       .heading-main-h1 {
-        color: var(--color-primary-green); /* #0F5132: Hijau botol tajam */
+        color: var(--color-primary-green);
         font-size: clamp(1.85rem, 4.5vw, 2.75rem);
         font-weight: 900;
-        line-height: 1.25;
-        letter-spacing: -0.025em;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
         margin: 0 0 1rem 0;
       }
 
       .text-lead-p {
-        color: var(--color-text-muted); /* #374151 */
+        color: var(--color-text-muted);
         font-size: 1.0625rem;
         line-height: 1.7;
         margin: 0 auto 1.5rem auto;
@@ -161,7 +161,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 48px; /* Target sentuh minimal 48px */
+        min-height: 48px;
         padding: 0.75rem 1.75rem;
         background-color: var(--color-primary-green);
         color: #FFFFFF;
@@ -169,13 +169,12 @@
         font-weight: 700;
         border-radius: 0.75rem;
         text-decoration: none;
-        box-shadow: 0 4px 12px rgba(15, 81, 50, 0.2);
-        transition: transform 0.2s, background-color 0.2s;
+        border: 1px solid #0B3D25;
+        transition: background-color 0.2s;
       }
 
       .btn-whatsapp-cta:hover {
         background-color: #0b3d26;
-        transform: translateY(-2px);
       }
 
       .btn-catalog-secondary {
@@ -186,7 +185,7 @@
         padding: 0.75rem 1.5rem;
         background-color: #FFFFFF;
         color: var(--color-primary-green);
-        border: 2px solid var(--color-primary-green);
+        border: 1px solid var(--color-primary-green);
         font-size: 1rem;
         font-weight: 700;
         border-radius: 0.75rem;
@@ -195,7 +194,7 @@
       }
 
       .btn-catalog-secondary:hover {
-        background-color: #E8F5E9;
+        background-color: #F0F5F1;
       }
 
       /* ==================== 2. TIGA KARTU KREDIBILITAS ==================== */
@@ -214,7 +213,6 @@
         border: 1px solid var(--color-border);
         border-radius: 1rem;
         padding: 1.5rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
         text-align: left;
         display: flex;
         flex-direction: column;
@@ -225,7 +223,7 @@
         width: 2.75rem;
         height: 2.75rem;
         border-radius: 0.75rem;
-        background-color: #E8F5E9;
+        background-color: #F0F5F1;
         color: var(--color-primary-green);
         display: flex;
         align-items: center;
@@ -267,11 +265,10 @@
       }
 
       .divider-accent {
-        width: 5rem;
-        height: 4px;
-        background-color: var(--color-accent-gold);
+        width: 3.5rem;
+        height: 3px;
+        background-color: var(--color-primary-green);
         margin: 0.5rem auto 1rem auto;
-        border-radius: 9999px;
       }
 
       .section-lead-p {
@@ -290,17 +287,15 @@
       .product-card {
         background-color: var(--color-card-bg);
         border: 1px solid var(--color-border);
-        border-radius: 1.25rem;
+        border-radius: 1rem;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition: border-color 0.2s ease;
       }
 
       .product-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(15, 81, 50, 0.12);
+        border-color: rgba(15, 81, 50, 0.45);
       }
 
       /* Container Gambar: Explicit Aspect Ratio 1:1 Menghentikan CLS */
@@ -308,7 +303,7 @@
         position: relative;
         width: 100%;
         aspect-ratio: 1 / 1;
-        background-color: #EBF3ED;
+        background-color: #F0F2EF;
         overflow: hidden;
       }
 
@@ -331,7 +326,6 @@
         font-weight: 800;
         padding: 0.3rem 0.65rem;
         border-radius: 0.375rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
       }
 
       /* Konten Produk */
@@ -345,7 +339,7 @@
       }
 
       .product-tag-category {
-        color: #0d6832;
+        color: #0F5132;
         font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -373,7 +367,7 @@
         align-items: center;
         justify-content: space-between;
         padding-top: 0.85rem;
-        border-top: 1px solid #F3F4F6;
+        border-top: 1px solid #E7E5E4;
         margin-top: 0.5rem;
       }
 
@@ -396,7 +390,7 @@
         justify-content: center;
         min-height: 48px;
         min-width: 100px;
-        background-color: var(--color-button-green);
+        background-color: var(--color-primary-green);
         color: #FFFFFF;
         font-size: 0.875rem;
         font-weight: 700;
@@ -409,36 +403,30 @@
       }
 
       .btn-order-action:hover {
-        background-color: var(--color-primary-green);
+        background-color: #0b3d26;
       }
 
       /* ======================================================================
          5. MOBILE-FIRST RESPONSIVENESS (@media (max-width: 768px))
-         - Tiga Kartu Kredibilitas menumpuk rapi secara vertikal (1 kolom)
-         - Teks paragraf minimal 16px (1rem) agar sangat nyaman dibaca di HP
-         - Tombol aksi minimal tinggi 48px
          ====================================================================== */
       @media (max-width: 768px) {
         .asasora-shell {
           padding: 1.5rem 1rem;
         }
 
-        /* 1. Tiga Kartu Kredibilitas otomatis 1 Kolom Vertikal */
         .credibility-grid {
           grid-template-columns: 1fr;
           gap: 1rem;
         }
 
-        /* 2. Ukuran teks paragraf di HP minimal 16px */
         .text-lead-p,
         .section-lead-p,
         .credibility-card p,
         .product-desc-p {
-          font-size: 1rem; /* 16px */
+          font-size: 1rem;
           line-height: 1.6;
         }
 
-        /* 3. Tombol aksi WhatsApp & Utama minimal tinggi 48px */
         .btn-whatsapp-cta,
         .btn-catalog-secondary,
         .btn-order-action {
@@ -454,7 +442,7 @@
       }
     </style>
   </head>
-  <body class="bg-[#F9FDF9] text-gray-800 font-sans antialiased overflow-x-hidden">
+  <body class="bg-[#F7F8F6] text-stone-900 font-sans antialiased overflow-x-hidden">
     <!-- Root Container: Tempat Rendering Utama React SPA -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

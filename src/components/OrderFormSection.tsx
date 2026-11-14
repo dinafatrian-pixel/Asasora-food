@@ -17,7 +17,6 @@ import {
   Loader2,
   ExternalLink,
   MessageSquare,
-  Sparkles,
   ReceiptText,
   Clock,
   ShieldCheck,
@@ -337,14 +336,14 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
     if (dist > 40) {
       setLocationStatus(
         lang === 'en'
-          ? `📍 Pinpoint active (${dist} km). Distance exceeds 40 km max instant courier limit.`
-          : `📍 Titik koordinat aktif (${dist} km). Jarak melebihi batas 40 km kurir instan reguler.`
+          ? `Pinpoint active (${dist} km). Distance exceeds 40 km max instant courier limit.`
+          : `Titik koordinat aktif (${dist} km). Jarak melebihi batas 40 km kurir instan reguler.`
       );
     } else {
       setLocationStatus(
         lang === 'en'
-          ? `📍 Accurate pinpoint verified: ${dist} km from Asasora Tangerang Hub.`
-          : `📍 Titik koordinat valid: ${dist} km dari Gudang Asasora Tangerang.`
+          ? `Accurate pinpoint verified: ${dist} km from Asasora Tangerang Hub.`
+          : `Titik koordinat valid: ${dist} km dari Gudang Asasora Tangerang.`
       );
     }
 
@@ -444,8 +443,8 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
 
         setLocationStatus(
           lang === 'en'
-            ? `✅ GPS locked! Calculated distance: ${dist} km (${matched?.name || 'Kurir'})`
-            : `✅ GPS terkunci! Jarak terhitung: ${dist} Km • Rp ${(matched ? matched.calculatedFare : 0).toLocaleString('id-ID')} (${matched?.name || 'Kurir'})`
+            ? `GPS locked! Calculated distance: ${dist} km (${matched?.name || 'Kurir'})`
+            : `GPS terkunci! Jarak terhitung: ${dist} Km • Rp ${(matched ? matched.calculatedFare : 0).toLocaleString('id-ID')} (${matched?.name || 'Kurir'})`
         );
       },
       (error) => {
@@ -501,8 +500,8 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
       if (!queryToSearch || queryToSearch.length < 2) {
         setLocationStatus(
           lang === 'en'
-            ? '⚠️ Please enter your delivery destination address in Step 1 or search box.'
-            : '⚠️ Mohon masukkan alamat tujuan pengiriman di Langkah 1 atau kolom pencarian.'
+            ? 'Please enter your delivery destination address in Step 1 or search box.'
+            : 'Mohon masukkan alamat tujuan pengiriman di Langkah 1 atau kolom pencarian.'
         );
         return;
       }
@@ -551,14 +550,14 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
       if (dist > 40) {
         setLocationStatus(
           lang === 'en'
-            ? `📍 Jarak ${dist} Km melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
-            : `📍 Jarak ${dist} Km ke ${resolved.locationName} melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
+            ? `Jarak ${dist} Km melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
+            : `Jarak ${dist} Km ke ${resolved.locationName} melebihi batas 40 km kurir instan. Pengiriman katering luar kota dilayani via WhatsApp admin.`
         );
       } else {
         setLocationStatus(
           lang === 'en'
-            ? `✅ Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
-            : `✅ Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
+            ? `Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
+            : `Ongkir berhasil dihitung: ${dist} Km ke ${resolved.locationName} • Rp ${matched?.calculatedFare.toLocaleString('id-ID')} (${matched?.name})`
         );
       }
     } catch (err) {
@@ -774,7 +773,7 @@ export const OrderFormSection: React.FC<OrderFormSectionProps> = ({
 - Jarak Titik: ${distanceKm} Km (Koordinat: ${destLat}, ${destLng})
 - Rincian Pesanan: ${cartItems.map((i) => `${i.name} (${i.quantity} ${i.unit})`).join(', ') || 'Belum dipilih'}
 
-Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 🙏`;
+Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih!`;
     return `https://wa.me/${company.whatsapp || '6285271000900'}?text=${encodeURIComponent(text)}`;
   };
 
@@ -783,32 +782,32 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
   return (
     <div
       id="pemesanan-baru"
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 sm:py-6 overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-stone-950/75 flex items-center justify-center p-2 sm:p-4 sm:py-6 overflow-y-auto animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl shadow-2xl border-2 border-emerald-600 max-w-4xl w-full my-auto flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-150 relative"
+        className="bg-white rounded-2xl border border-stone-300 max-w-4xl w-full my-auto flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-150 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Header with Title & Close/Exit Button */}
-        <div className="px-5 py-4 sm:px-7 sm:py-4.5 bg-gradient-to-r from-emerald-950 via-[#2E6F40] to-emerald-800 text-white flex items-center justify-between shrink-0 shadow-sm border-b border-emerald-700">
+        <div className="px-5 py-4 sm:px-7 sm:py-4.5 bg-[#0F5132] text-white flex items-center justify-between shrink-0 border-b border-[#0b3d26]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 border border-white/30">
-              <ShoppingBag className="w-5 h-5 text-[#F3C623]" />
+            <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0 border border-white/25">
+              <ShoppingBag className="w-5 h-5 text-[#F3C623]" strokeWidth={1.75} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-black text-base sm:text-xl leading-tight text-white">
+                <h3 className="font-extrabold text-base sm:text-xl leading-tight text-white tracking-tight">
                   {t('order.header_title', 'Formulir Order Online & Keranjang')}
                 </h3>
                 {cartItems.length > 0 && (
-                  <span className="bg-[#F3C623] text-gray-900 text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-2xs">
+                  <span className="bg-[#F3C623] text-stone-900 text-[11px] font-black px-2 py-0.5 rounded tabular-nums">
                     {cartItems.reduce((acc, it) => acc + it.quantity, 0)} {lang === 'en' ? 'Items' : 'Porsi'}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-emerald-200 font-medium line-clamp-1">
-                {company.name || 'PT. ASASORA BIO HEALTHORA'} &bull; {lang === 'en' ? 'Courier Automation & Official Invoice' : 'Otomatisasi Kurir & Invoice Resmi'}
+              <p className="text-xs text-stone-200 font-medium line-clamp-1">
+                {company.name || 'PT. ASASORA BIO HEALTHORA'} · {lang === 'en' ? 'Courier Automation & Official Invoice' : 'Otomatisasi Kurir & Invoice Resmi'}
               </p>
             </div>
           </div>
@@ -817,39 +816,39 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
           <button
             type="button"
             onClick={onClose}
-            className="bg-white/20 hover:bg-red-500 hover:text-white text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 border border-white/30"
+            className="bg-white/15 hover:bg-red-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-white/25"
             title={lang === 'en' ? 'Close (Esc)' : 'Tutup / Keluar (Esc)'}
             aria-label={lang === 'en' ? 'Close order form' : 'Tutup formulir pesanan'}
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" strokeWidth={1.75} />
             <span className="hidden sm:inline">{lang === 'en' ? 'Close' : 'Tutup'}</span>
           </button>
         </div>
 
         {/* Scrollable Form Content */}
-        <div id="order-form-modal-body" className="p-5 sm:p-8 overflow-y-auto space-y-6">
+        <div id="order-form-modal-body" className="p-5 sm:p-8 overflow-y-auto space-y-6 bg-[#FAFBF9]">
           {createdOrder ? (
             /* DEDICATED INVOICE RESMI SCREEN */
             <div className="space-y-6 animate-in fade-in duration-300" id="checkout-invoice-panel">
               {/* Congratulatory Top Card */}
-              <div className="bg-gradient-to-r from-emerald-950 via-[#2E6F40] to-emerald-800 text-white p-5 sm:p-6 rounded-2xl shadow-lg border border-emerald-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="bg-[#0F5132] text-white p-5 sm:p-6 rounded-2xl border border-[#0b3d26] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0 shadow-inner">
-                    <CheckCircle2 className="w-7 h-7 text-[#F3C623]" />
+                  <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-6 h-6 text-[#F3C623]" strokeWidth={1.75} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-2xs">
-                        ✓ Invoice Resmi Berhasil Diterbitkan
+                      <span className="bg-[#F3C623] text-stone-900 text-[10px] font-black uppercase px-2.5 py-0.5 rounded">
+                        Invoice Resmi Berhasil Diterbitkan
                       </span>
-                      <span className="text-xs text-emerald-200 font-mono font-bold">
+                      <span className="text-xs text-stone-200 font-mono font-bold tabular-nums">
                         {createdOrder.invoiceNumber || createdOrder.id}
                       </span>
                     </div>
-                    <h4 className="text-lg sm:text-xl font-black text-white mt-1">
+                    <h4 className="text-lg sm:text-xl font-extrabold text-white mt-1 tracking-tight">
                       Pesanan Anda Siap &amp; Menunggu Pembayaran
                     </h4>
-                    <p className="text-xs text-emerald-100/90 leading-relaxed">
+                    <p className="text-xs text-stone-200 leading-relaxed">
                       Lakukan transfer sesuai total nominal ke Rekening BCA di bawah ini atau unduh berkas PDF resmi.
                     </p>
                   </div>
@@ -862,9 +861,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                       setCreatedOrder(null);
                       setFormError(null);
                     }}
-                    className="w-full sm:w-auto bg-white/15 hover:bg-white/25 text-white text-xs font-black px-4 py-2.5 rounded-xl border border-white/30 transition cursor-pointer active:scale-95 flex items-center justify-center gap-2 shadow-xs"
+                    className="w-full sm:w-auto bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-4 py-2.5 rounded-lg border border-white/25 transition-colors cursor-pointer flex items-center justify-center gap-2"
                   >
-                    <ArrowLeft className="w-4 h-4" />
+                    <ArrowLeft className="w-4 h-4" strokeWidth={1.75} />
                     <span>Buat Pesanan Baru / Ubah Formulir</span>
                   </button>
                 </div>
@@ -880,15 +879,14 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
           ) : (
             <>
               {/* Header Subtitle Banner */}
-              <div className="text-center pb-2 border-b border-gray-100">
-                <span className="bg-[#F3C623]/25 text-yellow-900 text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-[#F3C623]/40 inline-flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-800" />
+              <div className="text-center pb-4 border-b border-stone-200">
+                <span className="text-[#0F5132] text-xs font-bold uppercase tracking-[0.14em]">
                   {t('order.tag', 'Formulir Pesanan Resmi')}
                 </span>
-                <h4 className="text-xl sm:text-2xl font-black text-[#2E6F40] mt-2">
+                <h4 className="text-xl sm:text-2xl font-extrabold text-stone-900 mt-1.5 tracking-tight">
                   {t('order.title', 'Keranjang Belanja & Otomatisasi Kurir')}
                 </h4>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-xl mx-auto leading-relaxed">
+                <p className="text-xs sm:text-sm text-stone-600 mt-1.5 max-w-xl mx-auto leading-relaxed">
                   {t(
                     'order.subtitle',
                     'Pilih menu katering, tentukan titik lokasi koordinat, pilih armada kurir (Gojek / Grab / Lalamove / Toko), lalu buat order untuk mendapatkan Invoice Resmi otomatis.'
@@ -897,27 +895,27 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
               </div>
 
               {formError && (
-                <div className="mb-6 bg-red-50 border-2 border-red-300 text-red-800 px-4 py-3.5 rounded-2xl text-xs sm:text-sm flex items-center gap-3 shadow-2xs">
-                  <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
+                <div className="mb-6 bg-red-50 border border-red-300 text-red-800 px-4 py-3.5 rounded-xl text-xs sm:text-sm flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-600" strokeWidth={1.75} />
                   <div className="flex-1 font-semibold">{formError}</div>
                 </div>
               )}
 
               <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); handleCreateOrder(); }}>
                 {/* 1. INFORMASI PELANGGAN */}
-                <div className="space-y-4 border-b border-gray-100 pb-8">
-                  <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
-                    <UserCheck className="w-5 h-5 mr-2 text-[#4A9E60]" />
+                <div className="space-y-4 border-b border-stone-200 pb-8">
+                  <h4 className="font-extrabold text-[#0F5132] text-lg sm:text-xl flex items-center">
+                    <UserCheck className="w-5 h-5 mr-2 text-[#0F5132]" strokeWidth={1.75} />
                     <span>{t('order.step1', '1. Informasi Pelanggan')}</span>
                   </h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                      <label className="block text-xs sm:text-sm font-bold text-stone-700 mb-1.5 flex items-center justify-between">
                         <span>
                           {t('order.name', 'Nama Lengkap')} <span className="text-red-500">*</span>
                         </span>
-                        <span className="text-[10px] text-gray-400 font-semibold">XSS Sanitized</span>
+                        <span className="text-[10px] text-stone-400 font-semibold">XSS Sanitized</span>
                       </label>
                       <input
                         id="input-customer-name"
@@ -929,25 +927,25 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                           if (formError) setFormError(null);
                         }}
                         placeholder={t('order.name_placeholder', 'Contoh: Budi Santoso')}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-[#0F5132] focus:outline-none text-sm bg-white text-stone-900"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                      <label className="block text-xs sm:text-sm font-bold text-stone-700 mb-1.5 flex items-center justify-between">
                         <span>
                           {t('order.phone', 'Nomor WhatsApp / Telepon')} <span className="text-red-500">*</span>
                         </span>
                         {phoneValidation && (
                           <span
-                            className={`text-[10px] font-black px-2 py-0.5 rounded-md ${
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
                               phoneValidation.isValid
-                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                                : 'bg-amber-100 text-amber-900 border border-amber-300'
+                                ? 'bg-emerald-50 text-[#0F5132] border-emerald-200'
+                                : 'bg-amber-50 text-amber-900 border-amber-200'
                             }`}
                           >
                             {phoneValidation.isValid
-                              ? `✓ Valid (${phoneValidation.cleanNumber.length} digit)`
+                              ? `Valid (${phoneValidation.cleanNumber.length} digit)`
                               : `Min. 9 digit (${whatsapp.replace(/\D/g, '').length}/9)`}
                           </span>
                         )}
@@ -959,13 +957,13 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         value={whatsapp}
                         onChange={(e) => handlePhoneInputChange(e.target.value)}
                         placeholder={t('order.phone_placeholder', 'Contoh: 081234567890 (Hanya Angka)')}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:outline-none text-sm bg-white shadow-2xs font-mono ${
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:outline-none text-sm bg-white text-stone-900 font-mono tabular-nums ${
                           whatsapp && phoneValidation && !phoneValidation.isValid
                             ? 'border-amber-400 focus:ring-amber-500'
-                            : 'border-gray-200 focus:ring-[#2E6F40]'
+                            : 'border-stone-300 focus:ring-[#0F5132]'
                         }`}
                       />
-                      <p className="text-[10px] text-gray-500 mt-1">
+                      <p className="text-[10px] text-stone-500 mt-1">
                         {lang === 'en'
                           ? 'Only numbers accepted (min. 9 digits). Used for instant delivery WhatsApp notification.'
                           : 'Hanya angka yang diterima (min. 9 digit). Digunakan untuk konfirmasi pesanan & kurir via WhatsApp.'}
@@ -974,9 +972,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                   </div>
 
                   <div>
-                    <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                    <label className="block text-xs sm:text-sm font-bold text-stone-700 mb-1.5 flex items-center justify-between">
                       <span>{t('order.email', 'Email (Untuk Lampiran Invoice)')}</span>
-                      <span className="text-[10px] text-gray-400 font-semibold">Format RFC 5322 Validated</span>
+                      <span className="text-[10px] text-stone-400 font-semibold">Format RFC 5322 Validated</span>
                     </label>
                     <input
                       id="input-email"
@@ -987,16 +985,16 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         if (formError) setFormError(null);
                       }}
                       placeholder={t('order.email_placeholder', 'Contoh: budi.santoso@email.com (opsional)')}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                      className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-[#0F5132] focus:outline-none text-sm bg-white text-stone-900"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+                    <label className="block text-xs sm:text-sm font-bold text-stone-700 mb-1.5 flex items-center justify-between">
                       <span>
                         {t('order.address', 'Alamat Kirim Lengkap')} <span className="text-red-500">*</span>
                       </span>
-                      <span className="text-[10px] text-gray-400 font-semibold">Sanitized Address</span>
+                      <span className="text-[10px] text-stone-400 font-semibold">Sanitized Address</span>
                     </label>
                     <textarea
                       id="input-address"
@@ -1015,20 +1013,20 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         'order.address_placeholder',
                         'Jalan, Nomor Rumah, RT/RW, Kelurahan, Kecamatan, Kota, Kode Pos'
                       )}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-sm bg-white shadow-2xs"
+                      className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-[#0F5132] focus:outline-none text-sm bg-white text-stone-900"
                     />
                   </div>
                 </div>
 
                 {/* 2. DAFTAR PRODUK PILIHAN (KERANJANG & KATALOG MENU) */}
-                <div id="section-keranjang" className="space-y-4 border-b border-gray-100 pb-8">
+                <div id="section-keranjang" className="space-y-4 border-b border-stone-200 pb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
-                  <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
-                    <ShoppingCart className="w-5 h-5 mr-2 text-[#4A9E60]" />
+                  <h4 className="font-extrabold text-[#0F5132] text-lg sm:text-xl flex items-center">
+                    <ShoppingCart className="w-5 h-5 mr-2 text-[#0F5132]" strokeWidth={1.75} />
                     <span>{t('order.step2', '2. Daftar Produk Pilihan & Menu Katalog')}</span>
                   </h4>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-stone-500 mt-0.5">
                     {lang === 'en'
                       ? 'Select dishes directly from catalog or adjust items in your basket.'
                       : 'Pilih menu langsung dari katalog resmi atau sesuaikan porsi pada daftar keranjang.'}
@@ -1039,13 +1037,13 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                   <button
                     type="button"
                     onClick={() => setShowCatalogMenuPicker(!showCatalogMenuPicker)}
-                    className={`flex-1 sm:flex-none text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-2xs border cursor-pointer ${
+                    className={`flex-1 sm:flex-none text-xs font-bold px-3.5 py-2 rounded-lg transition-colors flex items-center justify-center space-x-1.5 border cursor-pointer ${
                       showCatalogMenuPicker
-                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
-                        : 'bg-white hover:bg-emerald-50 text-[#2E6F40] border-emerald-300'
+                        ? 'bg-[#0F5132]/10 text-[#0F5132] border-[#0F5132]/30'
+                        : 'bg-white hover:bg-[#FAFBF9] text-[#0F5132] border-stone-300'
                     }`}
                   >
-                    <Utensils className="w-4 h-4 text-[#2E6F40]" />
+                    <Utensils className="w-4 h-4 text-[#0F5132]" strokeWidth={1.75} />
                     <span>{showCatalogMenuPicker ? (lang === 'en' ? 'Tutup Menu' : 'Tutup Menu Katalog') : (lang === 'en' ? 'Buka Katalog Menu' : 'Pilih Menu dari Katalog')}</span>
                     {showCatalogMenuPicker ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
@@ -1053,9 +1051,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                   <button
                     type="button"
                     onClick={onAddCustomCartItem}
-                    className="flex-1 sm:flex-none bg-[#2E6F40] hover:bg-green-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer"
+                    className="flex-1 sm:flex-none bg-[#0F5132] hover:bg-[#0b3d26] text-white text-xs font-bold px-3.5 py-2 rounded-lg transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-4 h-4" strokeWidth={1.75} />
                     <span>{t('order.add_more', 'Tambah Baris')}</span>
                   </button>
                 </div>
@@ -1063,17 +1061,17 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
               {/* Interactive Catalog Menu Browser Panel */}
               {(showCatalogMenuPicker || cartItems.length === 0) && (
-                <div className="bg-emerald-900/5 border-2 border-emerald-200/80 rounded-2xl p-4 sm:p-5 space-y-4 shadow-inner animate-in fade-in duration-200">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-emerald-200/60">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-[#2E6F40] text-white flex items-center justify-center font-bold text-xs">
-                        <Utensils className="w-4 h-4" />
+                <div className="bg-white border border-stone-200 rounded-xl p-4 sm:p-5 space-y-4 animate-in fade-in duration-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-200">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-[#0F5132] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                        <Utensils className="w-4 h-4" strokeWidth={1.75} />
                       </div>
                       <div>
-                        <h5 className="font-extrabold text-sm text-[#2E6F40]">
+                        <h5 className="font-extrabold text-sm text-[#0F5132]">
                           {lang === 'en' ? 'Live Product Menu Catalog' : 'Katalog Menu Siap Pesan'}
                         </h5>
-                        <p className="text-[11px] text-gray-600">
+                        <p className="text-[11px] text-stone-600">
                           {lang === 'en'
                             ? 'Click any item below to add it directly to your order.'
                             : 'Klik tombol "+ Tambah" pada menu di bawah untuk langsung memasukkannya ke pesanan.'}
@@ -1088,23 +1086,23 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         value={catalogSearchTerm}
                         onChange={(e) => setCatalogSearchTerm(e.target.value)}
                         placeholder={lang === 'en' ? 'Search menu / dishes...' : 'Cari nama menu / porsi...'}
-                        className="w-full bg-white border border-emerald-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2E6F40]"
+                        className="w-full bg-white border border-stone-300 rounded-lg pl-8 pr-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#0F5132]"
                       />
-                      <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2.5" />
+                      <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" strokeWidth={1.75} />
                     </div>
                   </div>
 
-                  {/* Category Pills */}
+                  {/* Category Filter Tabs */}
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
                     {catalogCategories.map((cat) => (
                       <button
                         key={cat.id}
                         type="button"
                         onClick={() => setCatalogCategoryFilter(cat.id)}
-                        className={`px-3 py-1.5 rounded-full font-bold whitespace-nowrap transition cursor-pointer text-xs ${
+                        className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-colors cursor-pointer text-xs border ${
                           catalogCategoryFilter === cat.id
-                            ? 'bg-[#2E6F40] text-white shadow-2xs'
-                            : 'bg-white text-gray-600 hover:bg-emerald-50 border border-gray-200'
+                            ? 'bg-[#0F5132] text-white border-[#0F5132]'
+                            : 'bg-white text-stone-600 hover:bg-[#FAFBF9] border-stone-200'
                         }`}
                       >
                         {cat.label}
@@ -1114,8 +1112,8 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                   {/* Product Cards Grid */}
                   {filteredCatalogProducts.length === 0 ? (
-                    <div className="text-center py-6 bg-white rounded-xl border border-gray-200 p-4">
-                      <p className="text-xs text-gray-500 font-semibold">
+                    <div className="text-center py-6 bg-[#FAFBF9] rounded-xl border border-stone-200 p-4">
+                      <p className="text-xs text-stone-500 font-semibold">
                         {lang === 'en' ? 'No menu items match your search.' : 'Tidak ada menu yang sesuai pencarian.'}
                       </p>
                     </div>
@@ -1126,14 +1124,14 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         return (
                           <div
                             key={prod.id}
-                            className="bg-white rounded-xl p-3 border border-gray-200 hover:border-emerald-400 hover:shadow-xs transition flex flex-col justify-between group"
+                            className="bg-white rounded-xl p-3 border border-stone-200 hover:border-[#0F5132]/50 transition-colors flex flex-col justify-between group"
                           >
                             <div className="flex gap-3">
-                              <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-100">
+                              <div className="w-16 h-16 rounded-lg bg-stone-100 overflow-hidden shrink-0 border border-stone-200">
                                 <img
                                   src={prod.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400'}
                                   alt={prod.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                  className="w-full h-full object-cover"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400';
@@ -1141,33 +1139,31 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1 mb-0.5">
-                                  <span className="bg-emerald-50 text-[#2E6F40] text-[9px] font-bold px-1.5 py-0.5 rounded border border-emerald-100 line-clamp-1">
-                                    {prod.category || 'Menu Katering'}
-                                  </span>
+                                <div className="text-[10px] font-bold text-[#0F5132] uppercase tracking-wider line-clamp-1 mb-0.5">
+                                  {prod.category || 'Menu Katering'}
                                 </div>
-                                <h6 className="font-extrabold text-xs text-gray-900 line-clamp-1 leading-tight">
+                                <h6 className="font-extrabold text-xs text-stone-900 line-clamp-1 leading-tight">
                                   {prod.name}
                                 </h6>
-                                <p className="text-[11px] font-bold text-[#2E6F40] mt-0.5">
-                                  {formatRupiah(prod.price)} <span className="text-[10px] text-gray-500 font-normal">/ {prod.unit || 'porsi'}</span>
+                                <p className="text-[11px] font-bold text-[#0F5132] mt-0.5 tabular-nums">
+                                  {formatRupiah(prod.price)} <span className="text-[10px] text-stone-500 font-normal">/ {prod.unit || 'porsi'}</span>
                                 </p>
-                                <p className="text-[10px] text-gray-400 mt-0.5">
+                                <p className="text-[10px] text-stone-400 mt-0.5 tabular-nums">
                                   {lang === 'en' ? `Stock: ${prod.stock ?? 100}` : `Sisa Stok: ${prod.stock ?? 100} ${prod.unit || 'porsi'}`}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="mt-2.5 pt-2 border-t border-gray-100 flex items-center justify-between">
+                            <div className="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
                               {inCart ? (
-                                <div className="flex items-center justify-between w-full">
-                                  <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                                    ✓ {inCart.quantity} {prod.unit || 'porsi'} di keranjang
+                                <div className="flex items-center justify-between w-full gap-2">
+                                  <span className="text-[11px] font-bold text-[#0F5132] bg-[#F7F8F6] px-2 py-0.5 rounded border border-stone-200 tabular-nums">
+                                    {inCart.quantity} {prod.unit || 'porsi'} di keranjang
                                   </span>
                                   <button
                                     type="button"
                                     onClick={() => handleQuickAddProduct(prod)}
-                                    className="bg-[#2E6F40] hover:bg-green-800 text-white text-[11px] font-black px-2.5 py-1 rounded-lg transition shadow-2xs cursor-pointer active:scale-95"
+                                    className="bg-[#0F5132] hover:bg-[#0b3d26] text-white text-[11px] font-bold px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                                   >
                                     + Tambah Lagi
                                   </button>
@@ -1176,10 +1172,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                 <button
                                   type="button"
                                   onClick={() => handleQuickAddProduct(prod)}
-                                  className="w-full bg-emerald-600 hover:bg-[#2E6F40] text-white text-xs font-bold py-1.5 rounded-lg transition shadow-2xs flex items-center justify-center gap-1 cursor-pointer active:scale-95"
+                                  className="w-full bg-[#0F5132] hover:bg-[#0b3d26] text-white text-xs font-bold py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1 cursor-pointer"
                                 >
-                                  <Plus className="w-3.5 h-3.5" />
-                                  <span>{lang === 'en' ? 'Add to Order' : '+ Tambah ke Pesanan'}</span>
+                                  <Plus className="w-3.5 h-3.5" strokeWidth={1.75} />
+                                  <span>{lang === 'en' ? 'Add to Order' : 'Tambah ke Pesanan'}</span>
                                 </button>
                               )}
                             </div>
@@ -1193,11 +1189,11 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
               {/* Real-time Stock Alert Banner */}
               {hasStockIssues && (
-                <div className="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                <div className="bg-amber-50 border border-amber-300 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-2.5">
-                    <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                    <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" strokeWidth={1.75} />
                     <div>
-                      <h5 className="font-black text-amber-900 text-xs sm:text-sm">
+                      <h5 className="font-bold text-amber-900 text-xs sm:text-sm">
                         {lang === 'en'
                           ? 'Real-Time Stock Limit Alert'
                           : 'Peringatan Validasi Stok Menu Real-Time (Nasemangkuk & Katering)'}
@@ -1212,9 +1208,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                   <button
                     type="button"
                     onClick={handleAutoAdjustStock}
-                    className="shrink-0 bg-amber-600 hover:bg-amber-700 text-white text-xs font-black px-3.5 py-2 rounded-xl flex items-center justify-center gap-1.5 shadow-xs cursor-pointer active:scale-95 transition"
+                    className="shrink-0 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
                   >
-                    <RefreshCw className="w-3.5 h-3.5" />
+                    <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.75} />
                     <span>{lang === 'en' ? 'Auto-Adjust to Available Stock' : 'Sesuaikan Otomatis'}</span>
                   </button>
                 </div>
@@ -1223,12 +1219,12 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
               {/* Cart Item Rows */}
               <div className="space-y-3" id="cart-items-container">
                 {cartStockAnalysis.length === 0 ? (
-                  <div className="text-center py-8 bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-6">
-                    <ShoppingCart className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                    <p className="text-sm font-semibold text-gray-600">
+                  <div className="text-center py-8 bg-white border border-dashed border-stone-300 rounded-xl p-6">
+                    <ShoppingCart className="w-8 h-8 text-stone-300 mx-auto mb-2" strokeWidth={1.5} />
+                    <p className="text-sm font-semibold text-stone-700">
                       {t('order.cart_empty', 'Keranjang Anda masih kosong.')}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-stone-500 mt-1">
                       {lang === 'en'
                         ? 'Select products from the catalog above to start your order.'
                         : 'Pilih hidangan dari menu katalog di atas atau klik "Tambah Baris".'}
@@ -1237,9 +1233,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                       <button
                         type="button"
                         onClick={() => setShowCatalogMenuPicker(true)}
-                        className="mt-3 inline-flex items-center gap-1.5 bg-[#2E6F40] hover:bg-green-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs cursor-pointer"
+                        className="mt-3 inline-flex items-center gap-1.5 bg-[#0F5132] hover:bg-[#0b3d26] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer"
                       >
-                        <Utensils className="w-4 h-4" />
+                        <Utensils className="w-4 h-4" strokeWidth={1.75} />
                         <span>{lang === 'en' ? 'Open Menu Catalog' : 'Buka Katalog Menu'}</span>
                       </button>
                     )}
@@ -1251,19 +1247,19 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                     return (
                       <div
                         key={item.id}
-                        className={`bg-white border rounded-2xl p-4 sm:p-5 shadow-2xs transition space-y-3 ${
+                        className={`bg-white border rounded-xl p-4 sm:p-5 transition-colors space-y-3 ${
                           item.isOutOfStock
                             ? 'border-red-400 bg-red-50/20'
                             : item.isExceeded
                             ? 'border-amber-400 bg-amber-50/20'
-                            : 'border-gray-200 hover:border-green-300'
+                            : 'border-stone-200 hover:border-[#0F5132]/40'
                         }`}
                       >
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                           {/* Product Selection with Photo & Details */}
                           <div className="flex items-start gap-3 flex-1">
                             {/* Product Thumbnail */}
-                            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gray-100 overflow-hidden shrink-0 border border-gray-200 shadow-2xs">
+                            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-stone-100 overflow-hidden shrink-0 border border-stone-200">
                               <img
                                 src={item.image || matched?.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400'}
                                 alt={item.name}
@@ -1277,31 +1273,34 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2 mb-1">
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="text-[11px] font-bold text-gray-500">
+                                <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
+                                  <span className="font-bold text-stone-500">
                                     {lang === 'en' ? `Item #${index + 1}` : `Menu #${index + 1}`}
                                   </span>
                                   {matched?.category && (
-                                    <span className="bg-emerald-50 text-[#2E6F40] text-[10px] font-bold px-2 py-0.5 rounded-md border border-emerald-200">
-                                      {matched.category}
-                                    </span>
+                                    <>
+                                      <span className="text-stone-300" aria-hidden="true">·</span>
+                                      <span className="font-semibold text-[#0F5132]">
+                                        {matched.category}
+                                      </span>
+                                    </>
                                   )}
                                 </div>
 
-                                {/* Stock status badge */}
+                                {/* Stock status label */}
                                 {item.isOutOfStock ? (
-                                  <span className="bg-red-100 text-red-800 text-[10px] font-black px-2 py-0.5 rounded-md border border-red-300">
+                                  <span className="bg-red-50 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded border border-red-200">
                                     {lang === 'en' ? 'Out of Stock' : 'Stok Habis'}
                                   </span>
                                 ) : (
                                   <span
-                                    className={`text-[10px] font-black px-2 py-0.5 rounded-md border ${
+                                    className={`text-[10px] font-bold px-2 py-0.5 rounded border tabular-nums ${
                                       item.isNasemangkuk
-                                        ? 'bg-emerald-50 text-[#2E6F40] border-emerald-300'
-                                        : 'bg-gray-100 text-gray-700 border-gray-200'
+                                        ? 'bg-emerald-50 text-[#0F5132] border-emerald-200'
+                                        : 'bg-[#FAFBF9] text-stone-700 border-stone-200'
                                     }`}
                                   >
-                                    {item.isNasemangkuk && '🍚 Nasemangkuk • '}
+                                    {item.isNasemangkuk && 'Nasemangkuk · '}
                                     {lang === 'en' ? `Stock: ${item.availableStock}` : `Sisa Stok: ${item.availableStock} ${item.unit || 'porsi'}`}
                                   </span>
                                 )}
@@ -1311,7 +1310,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                               <select
                                 value={item.productId}
                                 onChange={(e) => onChangeCartItemProduct(item.id, e.target.value)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2E6F40]"
+                                className="w-full bg-[#FAFBF9] border border-stone-300 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#0F5132]"
                               >
                                 {products.map((p) => (
                                   <option key={p.id} value={p.id}>
@@ -1323,25 +1322,25 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                           </div>
 
                           {/* Quantity & Subtotal Controls */}
-                          <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-gray-100">
+                          <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-stone-100">
                             {/* Quantity Controls */}
                             <div>
-                              <div className="text-[11px] font-bold text-gray-500 mb-1">
+                              <div className="text-[11px] font-bold text-stone-500 mb-1">
                                 {t('order.quantity', 'Jumlah')}
                               </div>
-                              <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+                              <div className="flex items-center border border-stone-300 rounded-lg overflow-hidden bg-[#FAFBF9]">
                                 <button
                                   type="button"
                                   onClick={() => onUpdateCartItemQuantity(item.id, item.quantity - 1)}
-                                  className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs cursor-pointer"
+                                  className="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs cursor-pointer"
                                 >
                                   -
                                 </button>
                                 <span
-                                  className={`px-3 py-1 text-xs font-bold min-w-8 text-center ${
+                                  className={`px-3 py-1 text-xs font-bold min-w-8 text-center tabular-nums ${
                                     item.isExceeded || item.isOutOfStock
                                       ? 'text-red-600 bg-red-50'
-                                      : 'text-gray-900'
+                                      : 'text-stone-900'
                                   }`}
                                 >
                                   {item.quantity}
@@ -1356,8 +1355,8 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                   disabled={item.quantity >= item.availableStock}
                                   className={`px-3 py-1.5 font-bold text-xs ${
                                     item.quantity >= item.availableStock
-                                      ? 'bg-gray-100 text-gray-300 cursor-not-allowed'
-                                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer'
+                                      ? 'bg-stone-100 text-stone-300 cursor-not-allowed'
+                                      : 'bg-stone-100 hover:bg-stone-200 text-stone-800 cursor-pointer'
                                   }`}
                                 >
                                   +
@@ -1367,10 +1366,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                             {/* Subtotal */}
                             <div className="text-right min-w-28">
-                              <div className="text-[11px] font-bold text-gray-500 mb-1">
+                              <div className="text-[11px] font-bold text-stone-500 mb-1">
                                 {t('order.subtotal', 'Subtotal')}
                               </div>
-                              <div className="text-sm sm:text-base font-extrabold text-[#2E6F40]">
+                              <div className="text-sm sm:text-base font-extrabold text-[#0F5132] tabular-nums">
                                 {formatRupiah(itemSubtotal)}
                               </div>
                             </div>
@@ -1379,10 +1378,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                             <button
                               type="button"
                               onClick={() => onRemoveCartItem(item.id)}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition mt-4 cursor-pointer"
+                              className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors mt-4 cursor-pointer"
                               title="Hapus item ini"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-4 h-4" strokeWidth={1.75} />
                             </button>
                           </div>
                         </div>
@@ -1390,7 +1389,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         {/* Exceeded / Out of stock warning note */}
                         {item.isOutOfStock && (
                           <div className="text-[11px] font-bold text-red-600 flex items-center justify-between pt-1 border-t border-red-200">
-                            <span>⚠️ Menu ini sedang habis dipesan untuk hari ini.</span>
+                            <span className="inline-flex items-center gap-1">
+                              <AlertTriangle className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+                              <span>Menu ini sedang habis dipesan untuk hari ini.</span>
+                            </span>
                             <button
                               type="button"
                               onClick={() => onRemoveCartItem(item.id)}
@@ -1402,11 +1404,14 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         )}
                         {item.isExceeded && !item.isOutOfStock && (
                           <div className="text-[11px] font-bold text-amber-700 flex items-center justify-between pt-1 border-t border-amber-200">
-                            <span>⚠️ Pesanan ({item.quantity}) melebihi sisa stok ({item.availableStock}).</span>
+                            <span className="inline-flex items-center gap-1">
+                              <AlertTriangle className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+                              <span>Pesanan ({item.quantity}) melebihi sisa stok ({item.availableStock}).</span>
+                            </span>
                             <button
                               type="button"
                               onClick={() => onUpdateCartItemQuantity(item.id, item.availableStock)}
-                              className="text-amber-800 underline hover:text-amber-950 font-black cursor-pointer"
+                              className="text-amber-800 underline hover:text-amber-950 font-bold cursor-pointer"
                             >
                               Ubah ke {item.availableStock} {item.unit || 'porsi'}
                             </button>
@@ -1420,50 +1425,50 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
             </div>
 
             {/* 3. SISTEM OTOMATISASI KURIR & GEOKODING BERBASIS KOORDINAT */}
-            <div className="space-y-4 border-b border-gray-100 pb-8">
+            <div className="space-y-4 border-b border-stone-200 pb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <h4 className="font-extrabold text-[#2E6F40] text-lg sm:text-xl flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-[#4A9E60]" />
+                <h4 className="font-extrabold text-[#0F5132] text-lg sm:text-xl flex items-center">
+                  <MapPin className="w-5 h-5 mr-2 text-[#0F5132]" strokeWidth={1.75} />
                   <span>{t('order.step3', '3. Sistem Otomatisasi Kurir & Cek Ongkir Geokoding')}</span>
                 </h4>
-                <span className="text-[11px] bg-emerald-100 text-emerald-900 font-bold px-2.5 py-1 rounded-full border border-emerald-300">
+                <span className="text-[11px] text-[#0F5132] font-bold">
                   {lang === 'en' ? 'Haversine Real-Time Engine' : 'Formula Geokoding Real-Time'}
                 </span>
               </div>
 
               {/* Static Warehouse Origin Card (Gudang Asasora di Tangerang) */}
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 sm:p-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <Building2 className="w-3.5 h-3.5 text-emerald-700" />
+              <div className="rounded-xl border border-stone-200 bg-white p-4 sm:p-5">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-xs font-bold text-[#0F5132] uppercase tracking-wider flex items-center gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
                     {t('order.warehouse_origin', 'Gudang Dapur Asal (Statis)')}
                   </span>
-                  <span className="text-[10px] bg-white text-[#2E6F40] font-extrabold px-2.5 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-[10px] bg-[#FAFBF9] text-[#0F5132] font-bold px-2.5 py-0.5 rounded border border-stone-200">
                     {t('order.warehouse_tag', 'Dapur Pusat Asasora Tangerang')}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-1.5 gap-2">
                   <div>
-                    <p className="font-black text-[#2E6F40] text-base">
+                    <p className="font-extrabold text-stone-900 text-base">
                       {originWarehouse.name}
                     </p>
-                    <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                    <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">
                       {originWarehouse.address}
                     </p>
                   </div>
-                  <div className="text-[11px] font-mono text-emerald-800 bg-white/80 px-2.5 py-1 rounded-lg border border-emerald-200 self-start sm:self-auto shrink-0">
+                  <div className="text-[11px] font-mono text-[#0F5132] bg-[#FAFBF9] px-2.5 py-1 rounded-lg border border-stone-200 self-start sm:self-auto shrink-0 tabular-nums">
                     Lat: {originWarehouse.lat}, Lng: {originWarehouse.lng}
                   </div>
                 </div>
               </div>
 
               {/* Geocoding Search & Coordinate Input Section */}
-              <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 space-y-4 shadow-2xs">
+              <div className="rounded-xl border border-stone-200 bg-white p-4 sm:p-5 space-y-4">
                 {/* Integrated Geocoding Search Bar */}
                 <div className="relative" ref={searchContainerRef}>
-                  <label className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5 flex items-center justify-between">
+                  <label className="block text-xs sm:text-sm font-bold text-stone-800 mb-1.5 flex items-center justify-between">
                     <span>{t('order.search_address', 'Cari Alamat / Titik Lokasi Rumah (Geokoding Terintegrasi)')}</span>
-                    <span className="text-[11px] text-gray-400 font-normal">
+                    <span className="text-[11px] text-stone-400 font-normal">
                       {lang === 'en' ? 'OpenStreetMap Nominatim' : 'Peta OpenStreetMap'}
                     </span>
                   </label>
@@ -1480,23 +1485,23 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                           'order.search_placeholder',
                           'Ketik nama jalan / kelurahan / area (contoh: Cipondoh, BSD, Karawaci, Sudirman)...'
                         )}
-                        className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#2E6F40] focus:outline-none text-xs sm:text-sm bg-gray-50/50"
+                        className="w-full pl-10 pr-10 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-[#0F5132] focus:outline-none text-xs sm:text-sm bg-[#FAFBF9] text-stone-900"
                       />
-                      <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+                      <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" strokeWidth={1.75} />
                       {isSearchingGeocode && (
-                        <Loader2 className="w-4 h-4 text-[#2E6F40] animate-spin absolute right-3.5 top-3.5" />
+                        <Loader2 className="w-4 h-4 text-[#0F5132] animate-spin absolute right-3.5 top-3.5" />
                       )}
                     </div>
                     <button
                       type="button"
                       onClick={handleCalculateOngkir}
                       disabled={isCalculatingOngkir}
-                      className="shrink-0 bg-[#2E6F40] hover:bg-green-800 disabled:opacity-75 text-white font-extrabold text-xs px-4 py-3 rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
+                      className="btn-micro shrink-0 bg-[#0F5132] hover:bg-[#0b3d26] disabled:opacity-75 text-white font-bold text-xs px-4 py-3 rounded-xl flex items-center gap-1.5 cursor-pointer"
                     >
                       {isCalculatingOngkir ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        <Calculator className="w-4 h-4" />
+                        <Calculator className="w-4 h-4" strokeWidth={1.75} />
                       )}
                       <span>{isCalculatingOngkir ? 'Menghitung...' : 'Hitung Ongkir'}</span>
                     </button>
@@ -1504,15 +1509,15 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                   {/* Search Results Dropdown */}
                   {showSearchResults && searchResults.length > 0 && (
-                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
+                    <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-stone-300 rounded-xl overflow-hidden max-h-60 overflow-y-auto">
                       {searchResults.map((res, i) => (
                         <div
                           key={i}
                           onClick={() => handleSelectSearchResult(res)}
-                          className="px-4 py-2.5 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-0 transition flex items-start gap-2.5"
+                          className="px-4 py-2.5 hover:bg-[#FAFBF9] cursor-pointer border-b border-stone-100 last:border-0 transition-colors flex items-start gap-2.5"
                         >
-                          <MapPin className="w-4 h-4 text-[#2E6F40] shrink-0 mt-0.5" />
-                          <div className="text-xs text-gray-800 line-clamp-2 leading-snug">
+                          <MapPin className="w-4 h-4 text-[#0F5132] shrink-0 mt-0.5" strokeWidth={1.75} />
+                          <div className="text-xs text-stone-800 line-clamp-2 leading-snug">
                             {res.display_name}
                           </div>
                         </div>
@@ -1522,12 +1527,12 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                   {/* Address from Step 1 synchronization card */}
                   {address && address.trim().length > 0 && (
-                    <div className="mt-2.5 p-3 bg-emerald-50/90 border border-emerald-300 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+                    <div className="mt-2.5 p-3 bg-[#FAFBF9] border border-stone-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
                       <div className="flex items-start sm:items-center gap-2 overflow-hidden">
-                        <MapPin className="w-4 h-4 text-[#2E6F40] shrink-0 mt-0.5 sm:mt-0" />
-                        <div className="text-gray-800">
-                          <span className="font-extrabold text-[#2E6F40]">Alamat Tujuan (Langkah 1):</span>{' '}
-                          <span className="text-gray-700 font-medium line-clamp-1">{address}</span>
+                        <MapPin className="w-4 h-4 text-[#0F5132] shrink-0 mt-0.5 sm:mt-0" strokeWidth={1.75} />
+                        <div className="text-stone-800">
+                          <span className="font-bold text-[#0F5132]">Alamat Tujuan (Langkah 1):</span>{' '}
+                          <span className="text-stone-700 font-medium line-clamp-1">{address}</span>
                         </div>
                       </div>
                       <button
@@ -1537,9 +1542,9 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                           handleCalculateOngkir();
                         }}
                         disabled={isCalculatingOngkir}
-                        className="shrink-0 bg-[#2E6F40] hover:bg-green-800 disabled:opacity-75 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg border border-emerald-600 transition cursor-pointer shadow-2xs self-end sm:self-auto flex items-center gap-1"
+                        className="shrink-0 bg-[#0F5132] hover:bg-[#0b3d26] disabled:opacity-75 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg border border-[#0b3d26] transition-colors cursor-pointer self-end sm:self-auto flex items-center gap-1"
                       >
-                        <Calculator className="w-3 h-3" />
+                        <Calculator className="w-3 h-3" strokeWidth={1.75} />
                         <span>{isCalculatingOngkir ? 'Menghitung...' : 'Hitung Ongkir Alamat Ini'}</span>
                       </button>
                     </div>
@@ -1547,8 +1552,8 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                   {/* Quick Preset Locations */}
                   <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                    <span className="text-[11px] font-bold text-gray-500 mr-1 flex items-center gap-1">
-                      <Compass className="w-3.5 h-3.5 text-[#2E6F40]" />
+                    <span className="text-[11px] font-bold text-stone-500 mr-1 flex items-center gap-1">
+                      <Compass className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
                       {lang === 'en' ? 'Quick Preset:' : 'Preset Cepat Area:'}
                     </span>
                     {QUICK_LOCATION_PRESETS.map((loc, idx) => (
@@ -1560,10 +1565,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                           if (!address) setAddress(loc.name);
                           updateCoordinatesAndDistance(loc.lat, loc.lng, loc.name);
                         }}
-                        className={`text-[11px] px-2.5 py-1 rounded-lg border transition font-medium cursor-pointer ${
+                        className={`text-[11px] px-2.5 py-1 rounded-lg border transition-colors font-medium cursor-pointer ${
                           Math.abs(destLat - loc.lat) < 0.005 && Math.abs(destLng - loc.lng) < 0.005
-                            ? 'bg-emerald-100 text-[#2E6F40] border-emerald-400 font-bold shadow-2xs'
-                            : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-200'
+                            ? 'bg-[#0F5132]/10 text-[#0F5132] border-[#0F5132]/40 font-bold'
+                            : 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
                         }`}
                       >
                         {loc.name}
@@ -1575,7 +1580,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                 {/* Manual Lat & Lng Input */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    <label className="block text-xs font-semibold text-stone-600 mb-1">
                       {t('order.lat_label', 'Latitude Rumah')}
                     </label>
                     <input
@@ -1586,11 +1591,11 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         const val = parseFloat(e.target.value) || 0;
                         updateCoordinatesAndDistance(val, destLng);
                       }}
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-xs sm:text-sm font-mono bg-white"
+                      className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono tabular-nums bg-white text-stone-900"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    <label className="block text-xs font-semibold text-stone-600 mb-1">
                       {t('order.lng_label', 'Longitude Rumah')}
                     </label>
                     <input
@@ -1601,7 +1606,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         const val = parseFloat(e.target.value) || 0;
                         updateCoordinatesAndDistance(destLat, val);
                       }}
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-xs sm:text-sm font-mono bg-white"
+                      className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono tabular-nums bg-white text-stone-900"
                     />
                   </div>
                 </div>
@@ -1611,21 +1616,21 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                   <button
                     type="button"
                     onClick={handleUseMyLocation}
-                    className="flex-1 bg-[#2E6F40] hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+                    className="btn-micro flex-1 bg-white hover:bg-stone-100 text-[#0F5132] border border-[#0F5132] font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <Navigation className="w-3.5 h-3.5" />
+                    <Navigation className="w-3.5 h-3.5" strokeWidth={1.75} />
                     <span>{t('order.btn_gps', 'Gunakan GPS Lokasi Saya')}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleCalculateOngkir}
                     disabled={isCalculatingOngkir}
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-75 text-white font-black py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+                    className="btn-micro flex-1 bg-[#0F5132] hover:bg-[#0b3d26] disabled:opacity-75 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {isCalculatingOngkir ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
-                      <Calculator className="w-3.5 h-3.5" />
+                      <Calculator className="w-3.5 h-3.5" strokeWidth={1.75} />
                     )}
                     <span>
                       {isCalculatingOngkir
@@ -1641,14 +1646,14 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                 {/* Real-Time Ongkir Feedback Banner */}
                 {ongkirFeedback && (
-                  <div className="bg-emerald-100/90 border-2 border-emerald-400 p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-950 shadow-xs animate-in fade-in duration-200">
+                  <div className="bg-emerald-50 border border-[#0F5132]/40 p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-stone-900 animate-in fade-in duration-200">
                     <div className="flex items-center gap-2.5">
-                      <CheckCircle2 className="w-5 h-5 text-[#2E6F40] shrink-0" />
+                      <CheckCircle2 className="w-5 h-5 text-[#0F5132] shrink-0" strokeWidth={1.75} />
                       <div>
-                        <div className="font-black text-xs text-[#2E6F40]">
+                        <div className="font-bold text-xs text-[#0F5132]">
                           {lang === 'en' ? 'Shipping Rate Calculated!' : 'Tarif Ongkir Berhasil Dihitung!'}
                         </div>
-                        <div className="text-[11px] text-emerald-800 mt-0.5">
+                        <div className="text-[11px] text-stone-700 mt-0.5 tabular-nums">
                           {lang === 'en'
                             ? `Distance: ${ongkirFeedback.distance} km • Best Rate: ${formatRupiah(
                                 ongkirFeedback.fare
@@ -1660,7 +1665,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                       </div>
                     </div>
                     <div className="flex items-center gap-2 self-end sm:self-auto">
-                      <span className="text-xs bg-white text-[#2E6F40] font-black px-3 py-1 rounded-xl border border-emerald-300 shadow-2xs">
+                      <span className="text-xs bg-white text-[#0F5132] font-extrabold px-3 py-1 rounded-lg border border-stone-200 tabular-nums">
                         {formatRupiah(ongkirFeedback.fare)}
                       </span>
                     </div>
@@ -1668,48 +1673,48 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                 )}
 
                 {/* Distance Badge & Status */}
-                <div className="bg-emerald-50/90 border border-emerald-200 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="bg-[#FAFBF9] border border-stone-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#2E6F40] shrink-0" />
-                    <div className="text-xs text-emerald-950 font-medium">
+                    <MapPin className="w-4 h-4 text-[#0F5132] shrink-0" strokeWidth={1.75} />
+                    <div className="text-xs text-stone-800 font-medium">
                       <span className="font-bold">{t('order.dist_result', 'Jarak Terhitung')}:</span>{' '}
-                      <span className="text-base font-black text-[#2E6F40] font-mono">{distanceKm} Km</span>{' '}
-                      <span className="text-gray-500">({t('order.from_store', 'dari Gudang Asasora Tangerang')})</span>
+                      <span className="text-base font-extrabold text-[#0F5132] font-mono tabular-nums">{distanceKm} Km</span>{' '}
+                      <span className="text-stone-500">({t('order.from_store', 'dari Gudang Asasora Tangerang')})</span>
                     </div>
                   </div>
-                  <div className="text-[11px] text-emerald-800 font-semibold bg-white/90 px-2.5 py-1 rounded-lg border border-emerald-200 self-start sm:self-auto">
+                  <div className="text-[11px] text-[#0F5132] font-semibold bg-white px-2.5 py-1 rounded-lg border border-stone-200 self-start sm:self-auto">
                     {locationStatus}
                   </div>
                 </div>
               </div>
 
-              {/* COURIER SELECTION & REAL-TIME TARIFFS (Shopee / Gojek E-Commerce Style) */}
+              {/* COURIER SELECTION & REAL-TIME TARIFFS */}
               <div className="space-y-4">
                 {/* Category / Vehicle Filter Tabs */}
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs sm:text-sm font-extrabold text-gray-800">
+                    <span className="text-xs sm:text-sm font-extrabold text-stone-800">
                       {lang === 'en' ? 'Choose Shipping Method:' : 'Pilih Metode & Tarif Kurir:'}
                     </span>
                     <button
                       type="button"
                       onClick={handleCalculateOngkir}
                       disabled={isCalculatingOngkir}
-                      className="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-[#2E6F40] font-bold px-2 py-0.5 rounded-lg border border-emerald-200 flex items-center gap-1 transition cursor-pointer"
+                      className="text-[11px] bg-white hover:bg-stone-100 text-[#0F5132] font-bold px-2 py-0.5 rounded-md border border-stone-300 flex items-center gap-1 transition-colors cursor-pointer"
                     >
-                      <RefreshCw className={`w-3 h-3 ${isCalculatingOngkir ? 'animate-spin' : ''}`} />
+                      <RefreshCw className={`w-3 h-3 ${isCalculatingOngkir ? 'animate-spin' : ''}`} strokeWidth={1.75} />
                       <span>{lang === 'en' ? 'Recalculate' : 'Hitung Ulang'}</span>
                     </button>
                   </div>
 
-                  <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl border border-gray-200 text-xs">
+                  <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200 text-xs">
                     <button
                       type="button"
                       onClick={() => setActiveCourierTab('all')}
-                      className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
                         activeCourierTab === 'all'
-                          ? 'bg-[#2E6F40] text-white shadow-2xs'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-[#0F5132] text-white'
+                          : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
                       {t('order.filter_all', 'Semua Kurir (7 Opsi)')}
@@ -1717,47 +1722,67 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                     <button
                       type="button"
                       onClick={() => setActiveCourierTab('motor')}
-                      className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center gap-1 cursor-pointer ${
                         activeCourierTab === 'motor'
-                          ? 'bg-[#2E6F40] text-white shadow-2xs'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-[#0F5132] text-white'
+                          : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
-                      <Bike className="w-3.5 h-3.5" />
+                      <Bike className="w-3.5 h-3.5" strokeWidth={1.75} />
                       <span>{t('order.filter_motor', 'Motor (3)')}</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveCourierTab('mobil')}
-                      className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center gap-1 cursor-pointer ${
                         activeCourierTab === 'mobil'
-                          ? 'bg-[#2E6F40] text-white shadow-2xs'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-[#0F5132] text-white'
+                          : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
-                      <Car className="w-3.5 h-3.5" />
+                      <Car className="w-3.5 h-3.5" strokeWidth={1.75} />
                       <span>{t('order.filter_mobil', 'Mobil (3)')}</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveCourierTab('toko')}
-                      className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center gap-1 cursor-pointer ${
                         activeCourierTab === 'toko'
-                          ? 'bg-[#2E6F40] text-white shadow-2xs'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-[#0F5132] text-white'
+                          : 'text-stone-600 hover:text-stone-900'
                       }`}
                     >
-                      <Building2 className="w-3.5 h-3.5" />
+                      <Building2 className="w-3.5 h-3.5" strokeWidth={1.75} />
                       <span>{t('order.filter_toko', 'Toko')}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Over 40 Km Banner & WhatsApp Button */}
-                {isOver40Km ? (
-                  <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 text-center space-y-3 shadow-sm">
-                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-amber-700">
-                      <Truck className="w-6 h-6" />
+                {isCalculatingOngkir ? (
+                  <div className="space-y-3" aria-busy="true" aria-label="Menghitung tarif kurir">
+                    {[0, 1, 2].map((row) => (
+                      <div
+                        key={row}
+                        className="p-4 rounded-xl border border-stone-200 bg-white flex items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className="w-5 h-5 rounded-full skeleton-shimmer shrink-0" />
+                          <div className="space-y-2 flex-1 max-w-xs">
+                            <div className="h-4 w-3/4 rounded skeleton-shimmer" />
+                            <div className="h-3 w-1/2 rounded skeleton-shimmer" />
+                          </div>
+                        </div>
+                        <div className="space-y-1.5 text-right">
+                          <div className="h-4 w-20 rounded skeleton-shimmer ml-auto" />
+                          <div className="h-3 w-12 rounded skeleton-shimmer ml-auto" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : isOver40Km ? (
+                  <div className="bg-amber-50 border border-amber-300 rounded-xl p-5 text-center space-y-3">
+                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-amber-800 border border-amber-200">
+                      <Truck className="w-6 h-6" strokeWidth={1.75} />
                     </div>
                     <div>
                       <h5 className="font-extrabold text-amber-900 text-base">
@@ -1778,14 +1803,14 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                       href={generateOutOfTownWhatsAppUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-[#2E6F40] hover:bg-green-800 text-white font-extrabold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition"
+                      className="inline-flex items-center gap-2 bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl transition-colors"
                     >
-                      <MessageSquare className="w-4 h-4" />
+                      <MessageSquare className="w-4 h-4" strokeWidth={1.75} />
                       <span>{t('order.btn_wa_out_of_town', 'Hubungi Admin via WhatsApp untuk Pengiriman Luar Kota')}</span>
                     </a>
                   </div>
                 ) : (
-                  /* Courier Cards Grid - Shopee / Gojek E-Commerce UI */
+                  /* Courier Cards Grid */
                   <div className="space-y-4">
                     {/* Render Groups if in 'all' tab or single group if filtered */}
                     {(['motor', 'mobil', 'toko'] as const).map((groupKey) => {
@@ -1803,7 +1828,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                       return (
                         <div key={groupKey} className="space-y-2">
-                          <div className="text-[11px] font-extrabold text-gray-500 uppercase tracking-wider pl-1">
+                          <div className="text-[11px] font-bold text-stone-500 uppercase tracking-wider pl-1">
                             {groupTitle}
                           </div>
 
@@ -1815,25 +1840,25 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                               let brandBadge = null;
                               if (courier.courierProvider === 'gojek') {
                                 brandBadge = (
-                                  <span className="bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] font-black px-2 py-0.5 rounded-md">
+                                  <span className="bg-emerald-50 text-[#0F5132] border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded">
                                     GOJEK
                                   </span>
                                 );
                               } else if (courier.courierProvider === 'grab') {
                                 brandBadge = (
-                                  <span className="bg-green-100 text-green-900 border border-green-300 text-[10px] font-black px-2 py-0.5 rounded-md">
+                                  <span className="bg-green-50 text-green-900 border border-green-200 text-[10px] font-bold px-2 py-0.5 rounded">
                                     GRAB
                                   </span>
                                 );
                               } else if (courier.courierProvider === 'lalamove') {
                                 brandBadge = (
-                                  <span className="bg-orange-100 text-orange-900 border border-orange-300 text-[10px] font-black px-2 py-0.5 rounded-md">
+                                  <span className="bg-orange-50 text-orange-900 border border-orange-200 text-[10px] font-bold px-2 py-0.5 rounded">
                                     LALAMOVE
                                   </span>
                                 );
                               } else {
                                 brandBadge = (
-                                  <span className="bg-teal-100 text-teal-950 border border-teal-300 text-[10px] font-black px-2 py-0.5 rounded-md">
+                                  <span className="bg-stone-100 text-stone-800 border border-stone-300 text-[10px] font-bold px-2 py-0.5 rounded">
                                     ASASORA TOKO
                                   </span>
                                 );
@@ -1847,12 +1872,12 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                       setSelectedCourierId(courier.id);
                                     }
                                   }}
-                                  className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                                  className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                                     !isAvailable
-                                      ? 'bg-gray-50 border-gray-200 opacity-60 cursor-not-allowed'
+                                      ? 'bg-stone-50 border-stone-200 opacity-60 cursor-not-allowed'
                                       : isSelected
-                                      ? 'bg-emerald-50/90 border-[#2E6F40] ring-2 ring-[#2E6F40]/30 shadow-xs cursor-pointer'
-                                      : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/30 cursor-pointer'
+                                      ? 'card-hover bg-[#FAFBF9] border-[#0F5132] ring-1 ring-[#0F5132] cursor-pointer'
+                                      : 'card-hover bg-white border-stone-200 cursor-pointer'
                                   }`}
                                 >
                                   {/* Left details */}
@@ -1860,10 +1885,10 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                     <div
                                       className={`w-5 h-5 rounded-full border flex items-center justify-center mt-1 shrink-0 ${
                                         !isAvailable
-                                          ? 'border-gray-300 bg-gray-200'
+                                          ? 'border-stone-300 bg-stone-200'
                                           : isSelected
-                                          ? 'border-[#2E6F40] bg-[#2E6F40]'
-                                          : 'border-gray-300 bg-white'
+                                          ? 'border-[#0F5132] bg-[#0F5132]'
+                                          : 'border-stone-300 bg-white'
                                       }`}
                                     >
                                       {isSelected && isAvailable && (
@@ -1873,22 +1898,22 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
 
                                     <div>
                                       <div className="flex flex-wrap items-center gap-1.5">
-                                        <span className="font-extrabold text-xs sm:text-sm text-gray-900">
+                                        <span className="font-extrabold text-xs sm:text-sm text-stone-900">
                                           {courier.name}
                                         </span>
                                         {brandBadge}
-                                        <span className="bg-gray-100 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 border border-gray-200">
+                                        <span className="bg-[#FAFBF9] text-stone-700 text-[10px] font-semibold px-2 py-0.5 rounded flex items-center gap-1 border border-stone-200">
                                           {courier.vehicleType === 'mobil' ? (
-                                            <Car className="w-3 h-3 text-blue-600" />
+                                            <Car className="w-3 h-3 text-stone-600" strokeWidth={1.75} />
                                           ) : (
-                                            <Bike className="w-3 h-3 text-emerald-600" />
+                                            <Bike className="w-3 h-3 text-[#0F5132]" strokeWidth={1.75} />
                                           )}
                                           <span>{courier.vehicleType === 'mobil' ? (lang === 'en' ? 'Car' : 'Mobil') : (lang === 'en' ? 'Motorcycle' : 'Motor')}</span>
                                         </span>
                                       </div>
 
                                       {!isAvailable && (
-                                        <div className="mt-1 inline-block text-[10px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-md border border-red-200">
+                                        <div className="mt-1 inline-block text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">
                                           {courier.statusText || t('order.out_of_store_coverage', 'Di luar area Kurir Toko')}
                                         </div>
                                       )}
@@ -1899,15 +1924,15 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                                   <div className="text-right sm:pl-4 self-end sm:self-auto shrink-0">
                                     {isAvailable ? (
                                       <>
-                                        <div className="font-black text-[#2E6F40] text-sm sm:text-base font-mono">
+                                        <div className="font-black text-[#0F5132] text-sm sm:text-base font-mono tabular-nums">
                                           {formatRupiah(courier.calculatedFare)}
                                         </div>
-                                        <div className="text-[10px] text-gray-400">
+                                        <div className="text-[10px] text-stone-400 tabular-nums">
                                           ({distanceKm} Km)
                                         </div>
                                       </>
                                     ) : (
-                                      <div className="text-xs font-bold text-gray-400 italic">
+                                      <div className="text-xs font-bold text-stone-400 italic">
                                         {lang === 'en' ? 'Not Available' : 'Tidak Tersedia'}
                                       </div>
                                     )}
@@ -1925,41 +1950,41 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
             </div>
 
             {/* 4. RINCIAN TOTAL PEMBAYARAN */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-200 space-y-3 shadow-inner">
-              <h4 className="font-black text-[#2E6F40] text-base sm:text-lg mb-2 flex items-center justify-between">
+            <div className="bg-white p-6 rounded-xl border border-stone-200 space-y-3">
+              <h4 className="font-extrabold text-[#0F5132] text-base sm:text-lg mb-2 flex items-center justify-between">
                 <span>{t('order.step4', '4. Rincian Total Pembayaran')}</span>
-                <span className="text-xs text-emerald-800 font-bold bg-white px-2.5 py-1 rounded-full border border-emerald-200">
+                <span className="text-xs text-[#0F5132] font-bold bg-[#F7F8F6] px-2.5 py-1 rounded-md border border-stone-200 tabular-nums">
                   {cartItems.length} {lang === 'en' ? 'Menu Items' : 'Macam Menu'}
                 </span>
               </h4>
 
-              <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+              <div className="flex justify-between text-xs sm:text-sm text-stone-600">
                 <span>
                   {t('order.total_products', 'Subtotal Produk')} ({cartItems.reduce((acc, it) => acc + it.quantity, 0)} {lang === 'en' ? 'portions' : 'porsi'}):
                 </span>
-                <span className="font-bold text-gray-800" id="totalProdukText">
+                <span className="font-bold text-stone-900 tabular-nums" id="totalProdukText">
                   {formatRupiah(subtotal)}
                 </span>
               </div>
 
-              <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+              <div className="flex justify-between text-xs sm:text-sm text-stone-600">
                 <span>
                   {t('order.shipping_fee', 'Ongkos Kirim')} ({activeCourier?.name || 'Pilih Kurir Di Atas'}):
                 </span>
-                <span className="font-bold text-gray-800" id="totalOngkirText">
+                <span className="font-bold text-stone-900 tabular-nums" id="totalOngkirText">
                   {formatRupiah(shippingCost)}
                 </span>
               </div>
 
-              <hr className="border-green-200 my-2" />
+              <hr className="border-stone-200 my-2" />
 
-              <div className="flex justify-between text-base sm:text-xl font-black text-[#2E6F40]">
+              <div className="flex justify-between text-base sm:text-xl font-black text-[#0F5132]">
                 <span>{t('order.subtotal_accumulated', 'TOTAL SEMENTARA')}:</span>
-                <span id="totalKeseluruhanText">
+                <span id="totalKeseluruhanText" className="tabular-nums">
                   {formatRupiah(subtotal + shippingCost)}
                 </span>
               </div>
-              <p className="text-[11px] text-gray-500 italic">
+              <p className="text-[11px] text-stone-500 italic">
                 {t(
                   'order.unique_code_note',
                   '* Kode unik verifikasi otomatis (3 digit) akan ditambahkan saat invoice resmi diterbitkan.'
@@ -1990,11 +2015,11 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
               )}
 
               {formError && (
-                <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-red-800 text-xs sm:text-sm animate-in fade-in shadow-xs">
+                <div className="p-4 bg-red-50 border border-red-300 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-red-800 text-xs sm:text-sm animate-in fade-in">
                   <div className="flex items-start gap-2.5">
-                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" strokeWidth={1.75} />
                     <div>
-                      <strong className="block font-black text-red-950 text-xs sm:text-sm">
+                      <strong className="block font-bold text-red-950 text-xs sm:text-sm">
                         Periksa Kembali Data Pemesanan:
                       </strong>
                       <span className="leading-relaxed font-medium">{formError}</span>
@@ -2011,7 +2036,7 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                         scrollToElement('section-keranjang');
                       } else scrollToElement('section-kurir');
                     }}
-                    className="shrink-0 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer active:scale-95 shadow-2xs flex items-center justify-center gap-1"
+                    className="shrink-0 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1"
                   >
                     <span>Perbaiki Field Sekarang</span>
                     <span>&rarr;</span>
@@ -2024,20 +2049,20 @@ Mohon informasi tarif kargo pendingin / armada khusus antar kota. Terima kasih! 
                 id="btn-buat-order"
                 onClick={() => handleCreateOrder()}
                 disabled={hasStockIssues || isSubmittingOrder}
-                className={`w-full font-extrabold py-4 px-6 rounded-2xl shadow-xl transition duration-200 flex items-center justify-center space-x-2 text-base ${
+                className={`btn-micro w-full font-bold py-4 px-6 rounded-xl border flex items-center justify-center space-x-2 text-base ${
                   hasStockIssues || isSubmittingOrder
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 cursor-pointer transform hover:-translate-y-0.5 active:scale-98'
+                    ? 'bg-stone-300 text-stone-500 border-stone-300 cursor-not-allowed'
+                    : 'bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 border-[#D9AE14] cursor-pointer'
                 }`}
               >
                 {isSubmittingOrder ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin text-green-950" />
+                    <Loader2 className="w-5 h-5 animate-spin text-stone-900" />
                     <span>Memproses Order &amp; Menerbitkan Invoice...</span>
                   </>
                 ) : (
                   <>
-                    <ReceiptText className="w-5 h-5 text-green-950" />
+                    <ReceiptText className="w-5 h-5 text-stone-900" strokeWidth={1.75} />
                     <span>{t('order.btn_create_invoice', 'Buat Order & Terbitkan Invoice Resmi')}</span>
                   </>
                 )}

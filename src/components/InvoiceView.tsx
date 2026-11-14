@@ -16,7 +16,6 @@ import {
   Truck,
   MapPin,
   Calendar,
-  Sparkles,
   QrCode,
   X,
   RefreshCw,
@@ -81,7 +80,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
             onUpdateOrderStatus?.(order.id, 'Diproses');
             setPaymentAlert({
               type: 'success',
-              message: '⚡ Pembayaran berhasil terdeteksi otomatis oleh sistem perbankan! Status pesanan kini: DIPROSES.',
+              message: 'Pembayaran berhasil terdeteksi otomatis oleh sistem perbankan. Status pesanan kini: DIPROSES.',
             });
           }
         }
@@ -109,7 +108,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           onUpdateOrderStatus?.(order.id, 'Diproses');
           setPaymentAlert({
             type: 'success',
-            message: '✅ Pembayaran telah terverifikasi lunas secara otomatis! Pesanan kini sedang diproses.',
+            message: 'Pembayaran telah terverifikasi lunas secara otomatis. Pesanan kini sedang diproses.',
           });
         } else {
           setPaymentAlert({
@@ -153,7 +152,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
         onUpdateOrderStatus?.(order.id, 'Diproses');
         setPaymentAlert({
           type: 'success',
-          message: `🎉 Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS! Pembeli tidak perlu kirim bukti transfer. Pesanan langsung diproses dapur.`,
+          message: `Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS. Pembeli tidak perlu kirim bukti transfer. Pesanan langsung diproses dapur.`,
         });
       }
     } catch {
@@ -161,7 +160,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
       onUpdateOrderStatus?.(order.id, 'Diproses');
       setPaymentAlert({
         type: 'success',
-        message: `🎉 Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS! Pesanan langsung diproses dapur.`,
+        message: `Pembayaran via ${channelName} BERHASIL DIVERIFIKASI OTOMATIS. Pesanan langsung diproses dapur.`,
       });
     } finally {
       setIsSimulatingPayment(false);
@@ -528,37 +527,37 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
   };
 
   return (
-    <div className="bg-white border-2 border-emerald-600 rounded-3xl p-4 sm:p-7 shadow-2xl space-y-6 text-gray-800 animate-in fade-in duration-200">
+    <div className="bg-white border border-stone-300 rounded-2xl p-4 sm:p-7 space-y-6 text-stone-800 animate-in fade-in duration-200">
       {/* Top Invoice Action Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-gray-100 pb-5">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-stone-200 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-700/20 shrink-0">
-            <FileText className="w-6 h-6 text-[#F3C623]" />
+          <div className="w-11 h-11 rounded-xl bg-[#0F5132] text-white flex items-center justify-center font-bold shrink-0">
+            <FileText className="w-5 h-5 text-[#F3C623]" strokeWidth={1.75} />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] bg-emerald-800 text-white font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              <span className="text-[10px] bg-[#0F5132] text-white font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
                 Invoice Resmi Asasora
               </span>
-              <span className="text-[10px] bg-amber-100 text-amber-950 font-black px-2.5 py-0.5 rounded-full border border-amber-300 flex items-center gap-1">
-                <Clock className="w-3 h-3 text-amber-700" />
+              <span className="text-[10px] bg-amber-50 text-amber-900 font-bold px-2.5 py-0.5 rounded border border-amber-300 flex items-center gap-1">
+                <Clock className="w-3 h-3 text-amber-700" strokeWidth={1.75} />
                 MENUNGGU PEMBAYARAN
               </span>
             </div>
             <div className="flex items-center gap-2 mt-1">
-              <h4 className="text-xl sm:text-2xl font-black text-gray-900 font-mono tracking-tight">
+              <h4 className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight tabular-nums">
                 {invoiceNumber}
               </h4>
               <button
                 type="button"
                 onClick={handleCopyInvNum}
-                className="text-gray-400 hover:text-emerald-700 p-1 rounded-md hover:bg-gray-100 transition cursor-pointer"
+                className="text-stone-400 hover:text-[#0F5132] p-1 rounded hover:bg-stone-100 transition-colors cursor-pointer"
                 title="Salin Nomor Invoice"
               >
                 {copiedInvNum ? (
-                  <Check className="w-4 h-4 text-emerald-600" />
+                  <Check className="w-4 h-4 text-[#0F5132]" strokeWidth={2} />
                 ) : (
-                  <Copy className="w-4 h-4" />
+                  <Copy className="w-4 h-4" strokeWidth={1.75} />
                 )}
               </button>
             </div>
@@ -568,17 +567,17 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
         {/* Toolbar: Logo Size and View Switch */}
         <div className="flex flex-wrap items-center gap-2.5 self-end lg:self-auto">
           {/* Logo Size Control */}
-          <div className="flex items-center gap-1 bg-emerald-50/90 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-bold text-emerald-950">
-            <span className="text-emerald-800/80 font-medium mr-1 hidden sm:inline">Ukuran Logo:</span>
+          <div className="flex items-center gap-1 bg-[#FAFBF9] border border-stone-200 px-2.5 py-1 rounded-lg text-xs font-bold text-stone-800">
+            <span className="text-stone-500 font-medium mr-1 hidden sm:inline">Ukuran Logo:</span>
             {(['sm', 'md', 'lg'] as const).map((sz) => (
               <button
                 key={sz}
                 type="button"
                 onClick={() => setLogoSize(sz)}
-                className={`px-2 py-0.5 rounded-lg transition cursor-pointer text-[11px] ${
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer text-[11px] ${
                   logoSize === sz
-                    ? 'bg-[#2E6F40] text-white shadow-2xs font-extrabold'
-                    : 'hover:bg-emerald-100 text-emerald-900 font-semibold'
+                    ? 'bg-[#0F5132] text-white font-bold'
+                    : 'hover:bg-stone-200 text-stone-700 font-semibold'
                 }`}
               >
                 {sz === 'sm' ? 'Kecil' : sz === 'md' ? 'Standar' : 'Besar'}
@@ -587,14 +586,14 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           </div>
 
           {/* Mode Switcher */}
-          <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl text-xs font-bold">
+          <div className="flex items-center gap-1 bg-stone-100 border border-stone-200 p-1 rounded-lg text-xs font-bold">
             <button
               type="button"
               onClick={() => setActiveTab('visual')}
-              className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
                 activeTab === 'visual'
-                  ? 'bg-white text-emerald-900 shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-[#0F5132] border border-stone-200'
+                  : 'text-stone-600 hover:text-stone-900'
               }`}
             >
               Tampilan Resmi
@@ -602,10 +601,10 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
             <button
               type="button"
               onClick={() => setActiveTab('text')}
-              className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
                 activeTab === 'text'
-                  ? 'bg-white text-emerald-900 shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-[#0F5132] border border-stone-200'
+                  : 'text-stone-600 hover:text-stone-900'
               }`}
             >
               Format Teks (ASCII)
@@ -615,38 +614,38 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
       </div>
 
       {/* Main Action Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-gradient-to-r from-emerald-50 via-green-50 to-emerald-50 border border-emerald-200 p-3 rounded-2xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-[#FAFBF9] border border-stone-200 p-3 rounded-xl">
         <button
           type="button"
           onClick={handleDownloadPdf}
-          className="bg-[#2E6F40] hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm py-2.5 px-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          className="bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold text-xs sm:text-sm py-2.5 px-3 rounded-lg border border-[#0b3d26] transition-colors flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Download className="w-4 h-4 text-[#F3C623]" />
+          <Download className="w-4 h-4 text-[#F3C623]" strokeWidth={1.75} />
           <span>Download PDF</span>
         </button>
 
         <button
           type="button"
           onClick={handlePrint}
-          className="bg-white hover:bg-emerald-100 text-gray-800 border border-gray-300 font-bold text-xs sm:text-sm py-2.5 px-3 rounded-xl shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+          className="bg-white hover:bg-stone-100 text-stone-800 border border-stone-300 font-bold text-xs sm:text-sm py-2.5 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <Printer className="w-4 h-4 text-emerald-700" />
+          <Printer className="w-4 h-4 text-[#0F5132]" strokeWidth={1.75} />
           <span>Cetak Invoice</span>
         </button>
 
         <button
           type="button"
           onClick={handleCopyInvoiceText}
-          className="bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-xs sm:text-sm py-2.5 px-3 rounded-xl shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+          className="bg-white hover:bg-stone-100 text-[#0F5132] border border-stone-300 font-bold text-xs sm:text-sm py-2.5 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
         >
           {copiedText ? (
             <>
-              <Check className="w-4 h-4 text-emerald-600" />
+              <Check className="w-4 h-4 text-[#0F5132]" strokeWidth={2} />
               <span>Tersalin!</span>
             </>
           ) : (
             <>
-              <Copy className="w-4 h-4" />
+              <Copy className="w-4 h-4" strokeWidth={1.75} />
               <span>Salin Teks</span>
             </>
           )}
@@ -657,9 +656,9 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           <button
             type="button"
             onClick={() => onTriggerCourier(order)}
-            className="sm:col-span-3 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            className="sm:col-span-3 bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Truck className="w-4 h-4 text-[#F3C623]" />
+            <Truck className="w-4 h-4 text-[#F3C623]" strokeWidth={1.75} />
             <span>Pesan / Dispatch Kurir Pengantaran (Otoritas Admin)</span>
           </button>
         )}
@@ -668,28 +667,28 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
       {/* Main Content View */}
       {activeTab === 'text' ? (
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-gray-500 font-semibold px-1">
+          <div className="flex items-center justify-between text-xs text-stone-500 font-semibold px-1">
             <span>Struktur Text-Block Standar Asasora (80 Kolom):</span>
-            <span className="font-mono text-[11px] text-emerald-700">Format Siap Cetak</span>
+            <span className="font-mono text-[11px] text-[#0F5132]">Format Siap Cetak</span>
           </div>
           <div className="relative">
-            <pre className="font-mono text-[11px] sm:text-xs leading-relaxed bg-gray-950 text-emerald-300 p-4 sm:p-6 rounded-2xl overflow-x-auto border border-gray-800 shadow-inner max-h-96 select-all scrollbar-thin">
+            <pre className="font-mono text-[11px] sm:text-xs leading-relaxed bg-stone-950 text-emerald-300 p-4 sm:p-6 rounded-xl overflow-x-auto border border-stone-800 max-h-96 select-all scrollbar-thin">
               {rawText}
             </pre>
           </div>
-          <p className="text-[11px] text-gray-400 italic text-center">
+          <p className="text-[11px] text-stone-500 italic text-center">
             * Format teks di atas dapat disalin untuk dikirim langsung via WhatsApp, SMS, ataupun dicetak menggunakan printer struk thermal/dot-matrix.
           </p>
         </div>
       ) : (
         /* Visual Professional Invoice Card */
-        <div className="border border-emerald-100 rounded-3xl p-5 sm:p-8 bg-linear-to-b from-white via-white to-gray-50/70 space-y-7 shadow-xs">
+        <div className="border border-stone-200 rounded-2xl p-5 sm:p-8 bg-white space-y-7">
           {/* Header Brand Section with Asasora Logo */}
-          <div className="border-b-2 border-dashed border-emerald-200 pb-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="border-b border-stone-200 pb-6 flex flex-col md:flex-row items-center justify-between gap-6">
             {/* Logo and Brand Identity */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
               <div
-                className="bg-white rounded-2xl p-2 border border-emerald-100 shadow-sm flex items-center justify-center transition-all duration-300 shrink-0"
+                className="bg-[#FAFBF9] rounded-xl p-2 border border-stone-200 flex items-center justify-center transition-all duration-300 shrink-0"
                 style={{
                   height: `${currentLogoHeight + 12}px`,
                   minWidth: `${currentLogoHeight + 12}px`,
@@ -702,7 +701,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
                     height: `${currentLogoHeight}px`,
                     maxHeight: `${currentLogoHeight}px`,
                   }}
-                  className="w-auto object-contain transition-all duration-300 drop-shadow-2xs"
+                  className="w-auto object-contain transition-all duration-300"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/logo-asasora.svg';
@@ -711,38 +710,38 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
               </div>
 
               <div>
-                <h3 className="font-black text-lg sm:text-xl text-[#2E6F40] tracking-wide uppercase">
+                <h3 className="font-black text-lg sm:text-xl text-[#0F5132] tracking-wide uppercase">
                   {company.name || 'PT. ASASORA BIO HEALTHORA'}
                 </h3>
-                <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full border border-emerald-200 mt-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>TERSERTIFIKASI HALAL BPJPH & DINKES P-IRT</span>
+                <div className="inline-flex items-center gap-1.5 text-[#0F5132] font-bold text-[11px] mt-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
+                  <span>TERSERTIFIKASI HALAL BPJPH &amp; DINKES P-IRT</span>
                 </div>
-                <div className="text-xs text-gray-600 mt-1.5 space-y-0.5">
+                <div className="text-xs text-stone-600 mt-1.5 space-y-0.5">
                   <p className="flex items-center justify-center sm:justify-start gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0" strokeWidth={1.75} />
                     <span>{company.address || 'Buaran Indah, Kec. Tangerang, Kota Tangerang, Banten'}</span>
                   </p>
-                  <p className="text-[11px] text-gray-500">
-                    Website: <span className="font-semibold text-emerald-800">{company.website || 'www.asasorfood.com'}</span> &bull; WhatsApp:{' '}
-                    <span className="font-semibold text-emerald-800">{company.whatsapp || '+62 852-7100-0900'}</span>
+                  <p className="text-[11px] text-stone-500">
+                    Website: <span className="font-semibold text-[#0F5132]">{company.website || 'www.asasorfood.com'}</span> &bull; WhatsApp:{' '}
+                    <span className="font-semibold text-[#0F5132] tabular-nums">{company.whatsapp || '+62 852-7100-0900'}</span>
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Document Stamp / Status */}
-            <div className="text-center md:text-right shrink-0 bg-emerald-50/80 md:bg-transparent p-4 md:p-0 rounded-2xl border border-emerald-200 md:border-none w-full md:w-auto">
-              <div className="text-xs font-black text-gray-400 tracking-wider uppercase">
+            <div className="text-center md:text-right shrink-0 bg-[#FAFBF9] md:bg-transparent p-4 md:p-0 rounded-xl border border-stone-200 md:border-none w-full md:w-auto">
+              <div className="text-xs font-bold text-stone-400 tracking-wider uppercase">
                 DOKUMEN TRANSAKSI
               </div>
-              <div className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+              <div className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">
                 INVOICE RESMI
               </div>
-              <div className="font-mono text-xs sm:text-sm font-black text-[#2E6F40] mt-0.5">
+              <div className="font-mono text-xs sm:text-sm font-black text-[#0F5132] mt-0.5 tabular-nums">
                 {invoiceNumber}
               </div>
-              <div className="inline-block bg-amber-100 text-amber-950 border border-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider mt-2">
+              <div className="inline-block bg-amber-50 text-amber-900 border border-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wider mt-2">
                 Menunggu Pembayaran
               </div>
             </div>
@@ -751,43 +750,43 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           {/* 2-Column Bento Meta Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {/* Left: Customer Profile */}
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-2xs space-y-2.5">
-              <div className="font-black text-gray-900 text-xs uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-gray-100">
-                <FileText className="w-3.5 h-3.5 text-[#2E6F40]" />
+            <div className="bg-[#FAFBF9] p-4 sm:p-5 rounded-xl border border-stone-200 space-y-2.5">
+              <div className="font-bold text-stone-900 text-xs uppercase tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-stone-200">
+                <FileText className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
                 <span>Ditujukan Kepada (Pelanggan):</span>
               </div>
               <div className="space-y-1.5">
                 <div className="flex">
-                  <span className="w-24 text-gray-400 font-medium">Nama:</span>
-                  <strong className="text-gray-900 font-bold">{order.customerName}</strong>
+                  <span className="w-24 text-stone-500 font-medium">Nama:</span>
+                  <strong className="text-stone-900 font-bold">{order.customerName}</strong>
                 </div>
                 <div className="flex">
-                  <span className="w-24 text-gray-400 font-medium">WhatsApp:</span>
-                  <span className="text-gray-800 font-mono font-bold">{order.whatsapp}</span>
+                  <span className="w-24 text-stone-500 font-medium">WhatsApp:</span>
+                  <span className="text-stone-800 font-mono font-bold tabular-nums">{order.whatsapp}</span>
                 </div>
                 {order.email && (
                   <div className="flex">
-                    <span className="w-24 text-gray-400 font-medium">Email:</span>
-                    <span className="text-gray-700">{order.email}</span>
+                    <span className="w-24 text-stone-500 font-medium">Email:</span>
+                    <span className="text-stone-700">{order.email}</span>
                   </div>
                 )}
                 <div className="flex items-start">
-                  <span className="w-24 text-gray-400 font-medium shrink-0">Alamat Kirim:</span>
-                  <span className="text-gray-700 leading-relaxed font-medium">{order.address}</span>
+                  <span className="w-24 text-stone-500 font-medium shrink-0">Alamat Kirim:</span>
+                  <span className="text-stone-700 leading-relaxed font-medium">{order.address}</span>
                 </div>
               </div>
             </div>
 
             {/* Right: Order Logistics & Schedule */}
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-2xs space-y-2.5">
-              <div className="font-black text-gray-900 text-xs uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-gray-100">
-                <Truck className="w-3.5 h-3.5 text-[#2E6F40]" />
-                <span>Informasi Pengiriman & Jadwal:</span>
+            <div className="bg-[#FAFBF9] p-4 sm:p-5 rounded-xl border border-stone-200 space-y-2.5">
+              <div className="font-bold text-stone-900 text-xs uppercase tracking-wider flex items-center gap-1.5 pb-1.5 border-b border-stone-200">
+                <Truck className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
+                <span>Informasi Pengiriman &amp; Jadwal:</span>
               </div>
               <div className="space-y-1.5">
                 <div className="flex">
-                  <span className="w-28 text-gray-400 font-medium">Tanggal Order:</span>
-                  <strong className="text-gray-800">
+                  <span className="w-28 text-stone-500 font-medium">Tanggal Order:</span>
+                  <strong className="text-stone-800">
                     {new Date(order.date).toLocaleString('id-ID', {
                       dateStyle: 'medium',
                       timeStyle: 'short',
@@ -795,21 +794,21 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
                   </strong>
                 </div>
                 <div className="flex">
-                  <span className="w-28 text-gray-400 font-medium">Jatuh Tempo:</span>
+                  <span className="w-28 text-stone-500 font-medium">Jatuh Tempo:</span>
                   <span className="text-red-700 font-bold">
                     {order.dueDate || '24 Jam dari waktu transaksi'}
                   </span>
                 </div>
                 <div className="flex">
-                  <span className="w-28 text-gray-400 font-medium">Armada Kurir:</span>
-                  <strong className="text-emerald-900">
+                  <span className="w-28 text-stone-500 font-medium">Armada Kurir:</span>
+                  <strong className="text-[#0F5132]">
                     {order.shippingMethodName || 'Kurir Reguler'}
                     {order.distanceKm ? ` (${order.distanceKm} Km)` : ''}
                   </strong>
                 </div>
                 <div className="flex">
-                  <span className="w-28 text-gray-400 font-medium">Dapur Asal:</span>
-                  <span className="text-gray-600">Dapur Pusat Asasora Tangerang</span>
+                  <span className="w-28 text-stone-500 font-medium">Dapur Asal:</span>
+                  <span className="text-stone-600">Dapur Pusat Asasora Tangerang</span>
                 </div>
               </div>
             </div>
@@ -817,16 +816,16 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
 
           {/* Structured Items Table */}
           <div className="space-y-2.5">
-            <div className="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center justify-between">
+            <div className="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center justify-between">
               <span>RINCIAN PESANAN KATERING:</span>
-              <span className="text-[11px] text-gray-500 font-bold">
+              <span className="text-[11px] text-stone-500 font-bold tabular-nums">
                 {order.items.reduce((acc, it) => acc + it.quantity, 0)} Porsi Total
               </span>
             </div>
 
-            <div className="overflow-x-auto border border-gray-200 rounded-2xl bg-white shadow-2xs">
+            <div className="overflow-x-auto border border-stone-200 rounded-xl bg-white">
               <table className="w-full text-xs text-left">
-                <thead className="bg-gradient-to-r from-[#2E6F40] to-emerald-800 text-white font-bold">
+                <thead className="bg-[#0F5132] text-white font-bold">
                   <tr>
                     <th className="py-3 px-3.5 text-center w-10">NO</th>
                     <th className="py-3 px-3.5">DESKRIPSI MENU / PRODUK</th>
@@ -835,25 +834,25 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
                     <th className="py-3 px-3.5 text-right w-36">SUBTOTAL</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-stone-100">
                   {order.items.map((item, idx) => (
-                    <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
-                      <td className="py-3 px-3.5 text-center text-gray-400 font-semibold">{idx + 1}</td>
+                    <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFBF9]'}>
+                      <td className="py-3 px-3.5 text-center text-stone-400 font-semibold tabular-nums">{idx + 1}</td>
                       <td className="py-3 px-3.5">
-                        <div className="font-bold text-gray-900 text-xs sm:text-sm">{item.name}</div>
+                        <div className="font-bold text-stone-900 text-xs sm:text-sm">{item.name}</div>
                         {item.unit && (
-                          <span className="inline-block text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-200 mt-0.5">
+                          <span className="inline-block text-[10px] text-[#0F5132] bg-[#F7F8F6] px-2 py-0.5 rounded font-semibold border border-stone-200 mt-0.5">
                             Porsi {item.unit}
                           </span>
                         )}
                       </td>
-                      <td className="py-3 px-3.5 text-center font-bold text-gray-800">
+                      <td className="py-3 px-3.5 text-center font-bold text-stone-800 tabular-nums">
                         {item.quantity} {item.unit || 'porsi'}
                       </td>
-                      <td className="py-3 px-3.5 text-right text-gray-600 font-medium">
+                      <td className="py-3 px-3.5 text-right text-stone-600 font-medium tabular-nums">
                         {formatRupiah(item.price)}
                       </td>
-                      <td className="py-3 px-3.5 text-right font-black text-gray-900">
+                      <td className="py-3 px-3.5 text-right font-extrabold text-stone-900 tabular-nums">
                         {formatRupiah(item.price * item.quantity)}
                       </td>
                     </tr>
@@ -866,47 +865,47 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           {/* Calculation Summary & BCA Payment Bento */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
             {/* Left: BCA Official Payment Card */}
-            <div className="border border-blue-200 bg-gradient-to-br from-blue-50/80 to-indigo-50/50 rounded-2xl p-5 space-y-3.5 shadow-2xs">
+            <div className="border border-blue-200 bg-blue-50/50 rounded-xl p-5 space-y-3.5">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-blue-950 font-black text-xs sm:text-sm uppercase tracking-wide">
-                  <CreditCard className="w-4 h-4 text-blue-700" />
+                <div className="flex items-center gap-2 text-blue-950 font-bold text-xs sm:text-sm uppercase tracking-wide">
+                  <CreditCard className="w-4 h-4 text-blue-700" strokeWidth={1.75} />
                   <span>PEMBAYARAN: BANK CENTRAL ASIA (BCA)</span>
                 </div>
-                <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded">
+                <span className="bg-blue-700 text-white text-[10px] font-bold px-2 py-0.5 rounded">
                   BCA
                 </span>
               </div>
 
-              <div className="bg-white p-4 rounded-xl border border-blue-100 flex items-center justify-between gap-3 shadow-2xs">
+              <div className="bg-white p-4 rounded-xl border border-blue-200 flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-[11px] text-gray-500 font-medium">Nomor Rekening BCA Resmi:</div>
-                  <div className="font-mono font-black text-xl text-blue-900 tracking-wider mt-0.5">
+                  <div className="text-[11px] text-stone-500 font-medium">Nomor Rekening BCA Resmi:</div>
+                  <div className="font-mono font-black text-xl text-blue-900 tracking-wider mt-0.5 tabular-nums">
                     {bcaAccountNum}
                   </div>
-                  <div className="text-xs font-bold text-gray-700 mt-0.5">
+                  <div className="text-xs font-bold text-stone-700 mt-0.5">
                     Atas Nama: {bcaAccountHolder}
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={handleCopyBca}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 shrink-0"
+                  className="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs px-3.5 py-2.5 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
                 >
                   {copiedBca ? (
                     <>
-                      <Check className="w-3.5 h-3.5" />
+                      <Check className="w-3.5 h-3.5" strokeWidth={2} />
                       <span>Tersalin!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" />
+                      <Copy className="w-3.5 h-3.5" strokeWidth={1.75} />
                       <span>Salin Rekening</span>
                     </>
                   )}
                 </button>
               </div>
 
-              <div className="text-xs text-blue-900 space-y-1.5 leading-relaxed bg-white/70 p-3 rounded-xl border border-blue-100/80">
+              <div className="text-xs text-blue-900 space-y-1.5 leading-relaxed bg-white p-3.5 rounded-xl border border-blue-100">
                 <div className="font-bold text-[11px] text-blue-950">PETUNJUK TRANSFER:</div>
                 <ol className="list-decimal list-inside space-y-1 text-[11px] text-blue-900">
                   <li>
@@ -920,57 +919,57 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
             </div>
 
             {/* Right: Financial Breakdown Card */}
-            <div className="bg-gradient-to-br from-emerald-50/90 via-green-50/70 to-emerald-50/90 border border-emerald-200 rounded-2xl p-5 space-y-3 shadow-2xs">
-              <div className="font-black text-xs uppercase tracking-wider text-emerald-950 pb-1 border-b border-emerald-200">
+            <div className="bg-[#FAFBF9] border border-stone-200 rounded-xl p-5 space-y-3">
+              <div className="font-bold text-xs uppercase tracking-wider text-stone-900 pb-2 border-b border-stone-200">
                 RINCIAN TOTAL PEMBAYARAN:
               </div>
 
               <div className="space-y-2 text-xs">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-stone-600">
                   <span>Subtotal Produk:</span>
-                  <span className="font-bold text-gray-900">{formatRupiah(order.subtotal)}</span>
+                  <span className="font-bold text-stone-900 tabular-nums">{formatRupiah(order.subtotal)}</span>
                 </div>
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-stone-600">
                   <div>
                     <span>Ongkos Kirim ({order.shippingMethodName || 'Kurir Toko'}):</span>
                     {order.distanceKm && (
-                      <div className="text-[10px] text-gray-400">Jarak tempuh: {order.distanceKm} Km</div>
+                      <div className="text-[10px] text-stone-400">Jarak tempuh: {order.distanceKm} Km</div>
                     )}
                   </div>
-                  <span className="font-bold text-gray-900">
+                  <span className="font-bold text-stone-900 tabular-nums">
                     {formatRupiah(order.shippingCost || order.shippingFee || 0)}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center text-emerald-900 font-semibold bg-emerald-100/80 p-2.5 rounded-xl border border-emerald-200">
+                <div className="flex justify-between items-center text-[#0F5132] font-semibold bg-white p-2.5 rounded-lg border border-stone-200">
                   <div>
                     <div className="font-bold text-xs">Kode Unik Verifikasi:</div>
-                    <div className="text-[10px] text-emerald-700 font-normal">
+                    <div className="text-[10px] text-stone-500 font-normal">
                       * Otomatis memvalidasi mutasi rekening
                     </div>
                   </div>
-                  <span className="font-mono font-black text-sm text-[#2E6F40]">
+                  <span className="font-mono font-bold text-sm text-[#0F5132] tabular-nums">
                     +{formatRupiah(uniqueCode)}
                   </span>
                 </div>
 
-                <div className="border-t-2 border-emerald-300 pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="border-t border-stone-300 pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <div className="text-xs font-black text-gray-800 uppercase">TOTAL HARUS DITRANSFER:</div>
-                    <div className="text-[10px] text-gray-500">Termasuk subtotal, ongkir &amp; kode unik</div>
+                    <div className="text-xs font-extrabold text-stone-900 uppercase">TOTAL HARUS DITRANSFER:</div>
+                    <div className="text-[10px] text-stone-500">Termasuk subtotal, ongkir &amp; kode unik</div>
                   </div>
                   <div className="flex items-center gap-2 self-end sm:self-auto">
-                    <span className="font-mono text-xl sm:text-2xl font-black text-[#2E6F40]">
+                    <span className="font-mono text-xl sm:text-2xl font-black text-[#0F5132] tabular-nums">
                       {formatRupiah(order.totalAmount)}
                     </span>
                     <button
                       type="button"
                       onClick={handleCopyAmount}
-                      className="text-emerald-700 hover:text-emerald-900 bg-emerald-100/80 p-1.5 rounded-lg transition cursor-pointer"
+                      className="text-[#0F5132] hover:bg-stone-200 bg-stone-100 border border-stone-200 p-1.5 rounded-lg transition-colors cursor-pointer"
                       title="Salin Nominal Total"
                     >
-                      {copiedAmount ? <Check className="w-4 h-4 text-emerald-700" /> : <Copy className="w-4 h-4" />}
+                      {copiedAmount ? <Check className="w-4 h-4 text-[#0F5132]" strokeWidth={2} /> : <Copy className="w-4 h-4" strokeWidth={1.75} />}
                     </button>
                   </div>
                 </div>
@@ -980,12 +979,12 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
                   <button
                     type="button"
                     onClick={handleSendWhatsApp}
-                    className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-95 border border-emerald-500"
+                    className="w-full bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2.5 cursor-pointer border border-[#0b3d26]"
                   >
                     <MinsoraAvatar size="xs" showWaBadge={false} />
                     <span>Konfirmasi Pembayaran</span>
                   </button>
-                  <p className="text-[10px] text-center text-gray-500 mt-1.5">
+                  <p className="text-[10px] text-center text-stone-500 mt-1.5">
                     Kirim bukti transfer &amp; invoice resmi ke WhatsApp Customer Service Minsora
                   </p>
                 </div>
@@ -994,15 +993,15 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({
           </div>
 
           {/* Official Verification Watermark Footer */}
-          <div className="text-center pt-2 border-t border-gray-100 text-[11px] text-gray-400 flex flex-wrap items-center justify-center gap-3">
+          <div className="text-center pt-3 border-t border-stone-200 text-[11px] text-stone-400 flex flex-wrap items-center justify-center gap-3">
             <span className="flex items-center gap-1 font-medium">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
               Invoice Resmi PT. Asasora Bio Healthora
             </span>
             <span>&bull;</span>
             <span>Diterbitkan Secara Elektronik</span>
             <span>&bull;</span>
-            <span className="font-mono font-semibold">{invoiceNumber}</span>
+            <span className="font-mono font-semibold tabular-nums">{invoiceNumber}</span>
           </div>
         </div>
       )}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { MessageSquareQuote, Phone } from 'lucide-react';
 
 export const MINSORA_AVATAR_SRC = '/images/minsora-avatar.jpg';
 
@@ -97,22 +96,21 @@ export const MinsoraAvatar: React.FC<MinsoraAvatarProps> = ({
         loading="lazy"
         decoding="async"
         referrerPolicy="no-referrer"
-        className={`${s.img} rounded-full object-cover border-2 border-white shadow-sm ring-2 ring-emerald-500/80 bg-emerald-50`}
+        className={`${s.img} rounded-full object-cover border border-white ring-1 ring-[#0F5132]/40 bg-stone-100`}
         onError={(e) => {
-          // Fallback if image path fails
           (e.target as HTMLElement).style.display = 'none';
         }}
       />
 
       {/* Online Status Dot Indicator */}
       {showOnlineBadge && (
-        <span className={`absolute top-0 right-0 ${s.onlineDot} bg-emerald-500 border-2 border-white rounded-full animate-pulse shadow-xs`} />
+        <span className={`absolute top-0 right-0 ${s.onlineDot} bg-emerald-500 border border-white rounded-full`} />
       )}
 
       {/* WhatsApp Green Badge Icon */}
       {showWaBadge && (
         <span
-          className={`absolute -bottom-0.5 -right-0.5 ${s.waBadge} bg-[#25D366] text-white rounded-full flex items-center justify-center border-2 border-white shadow-md`}
+          className={`absolute -bottom-0.5 -right-0.5 ${s.waBadge} bg-[#0F5132] text-white rounded-full flex items-center justify-center border border-white`}
           title="WhatsApp MinSora"
         >
           <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current" viewBox="0 0 24 24">

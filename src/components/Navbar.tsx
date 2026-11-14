@@ -45,45 +45,45 @@ export const Navbar: React.FC<NavbarProps> = ({
     : 'ASASORA';
 
   return (
-    <header role="banner" className="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-2xs border-b border-emerald-900/10 transition-all">
+    <header role="banner" className="bg-white sticky top-0 z-50 border-b border-stone-200 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Left: Brand Identity & Logo */}
           <div
-            className="flex items-center space-x-3 cursor-pointer group select-none py-1"
+            className="flex items-center space-x-3 cursor-pointer group select-none py-1 shrink-0 active:scale-[0.98] transition-transform duration-150"
             onClick={() => handleNavClick('home')}
           >
             <div className="relative shrink-0">
               <img
                 src={company.logoUrl || '/logo-asasora.png'}
                 alt={`Logo ${company.name || 'PT. ASASORA BIO HEALTHORA'}`}
-                width={48}
-                height={48}
+                width={44}
+                height={44}
                 fetchPriority="high"
                 decoding="async"
-                className="h-11 w-11 sm:h-12 sm:w-12 object-contain rounded-2xl shadow-2xs border border-emerald-100 bg-white p-0.5 group-hover:scale-105 transition-transform duration-200"
+                className="h-10 w-10 sm:h-11 sm:w-11 object-contain rounded-xl border border-stone-200 bg-white p-0.5 transition-all duration-200 group-hover:border-[#0F5132]/50 group-hover:scale-[1.04]"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/logo-asasora.svg';
                 }}
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-black tracking-tight text-[#2E6F40] block leading-tight group-hover:text-emerald-800 transition-colors">
+              <span className="text-base sm:text-lg font-extrabold tracking-tight text-[#0F5132] block leading-tight transition-colors group-hover:text-[#0b3d26]">
                 {brandName}
               </span>
-              <span className="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest leading-none mt-0.5">
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-[0.14em] leading-none mt-1">
                 Bio Healthora
               </span>
             </div>
           </div>
 
-          {/* Center: Desktop Navigation Links (Cleanly spaced for xl+ screens, no overlap) */}
+          {/* Center: Desktop Navigation Links */}
           <nav className="hidden xl:flex items-center space-x-0.5 2xl:space-x-1 shrink-0">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className="px-2 2xl:px-2.5 py-1.5 rounded-xl text-xs 2xl:text-sm font-bold text-gray-700 hover:text-[#2E6F40] hover:bg-emerald-50/80 transition-all duration-150 cursor-pointer whitespace-nowrap"
+                className="nav-link-micro px-2.5 2xl:px-3 py-1.5 rounded-lg text-xs 2xl:text-[13px] font-semibold text-stone-600 hover:text-[#0F5132] hover:bg-stone-100/80 cursor-pointer whitespace-nowrap"
               >
                 {t(link.labelKey, link.defaultLabel)}
               </button>
@@ -92,31 +92,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right: Desktop Action Suite */}
           <div className="hidden xl:flex items-center space-x-2.5 shrink-0">
-            {/* Language Switcher Pill (ID | EN) */}
-            <div className="flex items-center bg-gray-100/90 border border-gray-200/80 rounded-full p-0.5 text-xs font-bold text-gray-600 shadow-2xs">
+            {/* Language Switcher (ID | EN) */}
+            <div className="flex items-center bg-stone-100 border border-stone-200 rounded-lg p-0.5 text-xs font-semibold text-stone-600">
               <button
                 type="button"
                 onClick={() => setLang('id')}
-                className={`px-2 py-0.5 rounded-full transition-all cursor-pointer flex items-center gap-0.5 text-[11px] ${
+                className={`btn-micro px-2 py-1 rounded-md cursor-pointer text-[11px] ${
                   lang === 'id'
-                    ? 'bg-[#2E6F40] text-white shadow-xs font-black'
-                    : 'hover:text-gray-900 text-gray-600'
+                    ? 'bg-[#0F5132] text-white font-bold'
+                    : 'hover:text-stone-900 text-stone-600'
                 }`}
                 title="Bahasa Indonesia"
               >
-                <span>ID</span>
+                ID
               </button>
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`px-2 py-0.5 rounded-full transition-all cursor-pointer flex items-center gap-0.5 text-[11px] ${
+                className={`btn-micro px-2 py-1 rounded-md cursor-pointer text-[11px] ${
                   lang === 'en'
-                    ? 'bg-[#2E6F40] text-white shadow-xs font-black'
-                    : 'hover:text-gray-900 text-gray-600'
+                    ? 'bg-[#0F5132] text-white font-bold'
+                    : 'hover:text-stone-900 text-stone-600'
                 }`}
                 title="English"
               >
-                <span>EN</span>
+                EN
               </button>
             </div>
 
@@ -124,13 +124,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenOrderModal}
               id="btn-nav-order-online"
-              className="bg-[#2E6F40] hover:bg-emerald-800 text-white font-extrabold px-3 py-2 2xl:px-4 2xl:py-2.5 rounded-xl text-xs 2xl:text-sm flex items-center gap-1.5 shadow-sm transition-all duration-150 cursor-pointer active:scale-95 border border-emerald-600 whitespace-nowrap"
+              className="group/order btn-micro bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold px-3.5 py-2 2xl:px-4 2xl:py-2 rounded-lg text-xs 2xl:text-sm flex items-center gap-1.5 cursor-pointer border border-[#0b3d26] whitespace-nowrap"
               title={t('order.modal_title', 'Buka Formulir Order Online & Cek Ongkir')}
             >
-              <ShoppingBag className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-[#F3C623]" />
+              <ShoppingBag
+                className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-[#F3C623] transition-transform duration-150 group-hover/order:-translate-y-0.5 group-hover/order:rotate-[-6deg]"
+                strokeWidth={1.75}
+              />
               <span>{t('nav.order_online', 'Order Online')}</span>
               {cartCount > 0 && (
-                <span className="bg-[#F3C623] text-gray-900 text-[10px] 2xl:text-[11px] font-black px-1.5 py-0.5 rounded-full leading-none animate-pulse">
+                <span className="bg-[#F3C623] text-stone-900 text-[10px] 2xl:text-[11px] font-black px-1.5 py-0.5 rounded leading-none tabular-nums transition-transform duration-150 group-hover/order:scale-110">
                   {cartCount}
                 </span>
               )}
@@ -141,9 +144,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={onOpenChatbot}
-                className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold pl-1.5 pr-3 py-1.5 rounded-full shadow-2xs transition flex items-center space-x-1.5 text-xs cursor-pointer active:scale-95 border border-[#e5b719] whitespace-nowrap"
+                className="group/chat btn-micro bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold pl-1.5 pr-3 py-1.5 rounded-lg flex items-center space-x-1.5 text-xs cursor-pointer border border-[#D9AE14] whitespace-nowrap"
               >
-                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span className="transition-transform duration-150 group-hover/chat:scale-105">
+                  <MinsoraAvatar size="xs" showWaBadge={false} />
+                </span>
                 <span className="text-xs font-bold">{t('nav.whatsapp_chat', 'Chat MinSora')}</span>
               </button>
             ) : (
@@ -151,9 +156,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold pl-1.5 pr-3 py-1.5 rounded-full shadow-2xs transition flex items-center space-x-1.5 text-xs cursor-pointer active:scale-95 border border-[#e5b719] whitespace-nowrap"
+                className="group/chat btn-micro bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold pl-1.5 pr-3 py-1.5 rounded-lg flex items-center space-x-1.5 text-xs cursor-pointer border border-[#D9AE14] whitespace-nowrap"
               >
-                <MinsoraAvatar size="xs" showWaBadge={false} />
+                <span className="transition-transform duration-150 group-hover/chat:scale-105">
+                  <MinsoraAvatar size="xs" showWaBadge={false} />
+                </span>
                 <span className="text-xs font-bold">{t('nav.whatsapp_chat', 'Chat MinSora')}</span>
               </a>
             )}
@@ -161,11 +168,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Admin Login Modal Trigger */}
             <button
               onClick={onOpenAdminModal}
-              className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-xl transition-colors cursor-pointer"
+              className="group/lock btn-micro text-stone-400 hover:text-[#0F5132] hover:bg-stone-100 p-2 rounded-lg border border-transparent hover:border-stone-200 cursor-pointer"
               title={t('general.admin_panel', 'Panel Admin')}
               aria-label={t('general.admin_panel', 'Panel Admin')}
             >
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 transition-transform duration-150 group-hover/lock:rotate-[-8deg]" strokeWidth={1.75} />
             </button>
           </div>
 
@@ -175,13 +182,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenOrderModal}
               id="btn-nav-order-online-mobile"
-              className="bg-[#2E6F40] text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-2xs active:scale-95"
+              className="group/orderm btn-micro bg-[#0F5132] hover:bg-[#0b3d26] text-white font-bold px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 cursor-pointer"
               title={t('general.order_now', 'Order Online')}
             >
-              <ShoppingBag className="w-3.5 h-3.5 text-[#F3C623]" />
-              <span className="text-xs font-extrabold">{t('general.order', 'Order')}</span>
+              <ShoppingBag className="w-3.5 h-3.5 text-[#F3C623] transition-transform duration-150 group-hover/orderm:-translate-y-0.5" strokeWidth={1.75} />
+              <span className="text-xs font-bold">{t('general.order', 'Order')}</span>
               {cartCount > 0 && (
-                <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black px-1.5 py-0.5 rounded-full">
+                <span className="bg-[#F3C623] text-stone-900 text-[10px] font-black px-1.5 py-0.5 rounded tabular-nums transition-transform duration-150 group-hover/orderm:scale-110">
                   {cartCount}
                 </span>
               )}
@@ -190,20 +197,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Language Switch Button */}
             <button
               onClick={() => setLang(lang === 'id' ? 'en' : 'id')}
-              className="bg-gray-100 hover:bg-gray-200 px-2.5 py-2 rounded-xl text-xs font-bold text-gray-700 flex items-center gap-1 transition"
+              className="group/lang btn-micro bg-stone-100 hover:bg-stone-200 border border-stone-200 px-2.5 py-2 rounded-lg text-xs font-bold text-stone-700 flex items-center gap-1 cursor-pointer"
               title={t('general.switch_lang', 'Ganti Bahasa')}
             >
-              <Globe className="w-3.5 h-3.5 text-emerald-700" />
+              <Globe className="w-3.5 h-3.5 text-[#0F5132] transition-transform duration-200 group-hover/lang:rotate-12" strokeWidth={1.75} />
               <span>{lang === 'id' ? 'ID' : 'EN'}</span>
             </button>
 
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-gray-700 hover:text-[#2E6F40] p-2 rounded-xl focus:outline-none bg-gray-50 border border-gray-200"
+              className="btn-micro text-stone-700 hover:text-[#0F5132] p-2 rounded-lg focus:outline-none bg-stone-50 border border-stone-200 cursor-pointer"
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-5 h-5" strokeWidth={1.75} /> : <Menu className="w-5 h-5" strokeWidth={1.75} />}
             </button>
           </div>
         </div>
@@ -211,18 +218,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile & Tablet Menu Dropdown */}
       {mobileOpen && (
-        <div className="xl:hidden bg-white border-b border-gray-100 px-5 pt-3 pb-5 space-y-1 shadow-lg animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto">
+        <div className="xl:hidden bg-white border-b border-stone-200 px-5 pt-3 pb-5 space-y-1 max-h-[80vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150">
           {navLinks.map((link) => (
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className="w-full text-left py-2.5 px-3.5 rounded-xl text-sm font-semibold text-gray-700 hover:text-[#2E6F40] hover:bg-emerald-50/70 transition"
+              className="w-full text-left py-2.5 px-3.5 rounded-lg text-sm font-semibold text-stone-700 hover:text-[#0F5132] hover:bg-stone-50 hover:translate-x-1 active:scale-[0.99] transition-all duration-150 cursor-pointer"
             >
               {t(link.labelKey, link.defaultLabel)}
             </button>
           ))}
 
-          <div className="pt-3 border-t border-gray-100 flex flex-col gap-2.5">
+          <div className="pt-3 border-t border-stone-200 flex flex-col gap-2.5">
             {onOpenChatbot ? (
               <button
                 type="button"
@@ -230,7 +237,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileOpen(false);
                   onOpenChatbot();
                 }}
-                className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold py-3 px-4 rounded-xl shadow-2xs transition flex items-center justify-center space-x-2 text-sm text-center cursor-pointer"
+                className="btn-micro w-full bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold py-3 px-4 rounded-lg border border-[#D9AE14] flex items-center justify-center space-x-2 text-sm text-center cursor-pointer"
               >
                 <MinsoraAvatar size="xs" showWaBadge={false} />
                 <span>{t('nav.whatsapp_chat', 'Chat WhatsApp MinSora')}</span>
@@ -240,7 +247,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href={`https://wa.me/${company.whatsapp}?text=Halo%20MinSora%20PT.%20ASASORA%20BIO%20HEALTHORA,%20saya%20ingin%20berkonsultasi`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-extrabold py-3 px-4 rounded-xl shadow-2xs transition flex items-center justify-center space-x-2 text-sm text-center"
+                className="btn-micro w-full bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold py-3 px-4 rounded-lg border border-[#D9AE14] flex items-center justify-center space-x-2 text-sm text-center"
               >
                 <MinsoraAvatar size="xs" showWaBadge={false} />
                 <span>{t('nav.whatsapp_chat', 'Chat WhatsApp MinSora')}</span>
@@ -252,9 +259,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileOpen(false);
                 onOpenAdminModal();
               }}
-              className="w-full text-center py-2 text-xs font-semibold text-gray-500 hover:text-gray-800 flex items-center justify-center gap-1.5"
+              className="btn-micro w-full text-center py-2 text-xs font-semibold text-stone-500 hover:text-stone-800 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Lock className="w-3.5 h-3.5" />
+              <Lock className="w-3.5 h-3.5" strokeWidth={1.75} />
               <span>{t('general.admin_panel', 'Panel Admin')}</span>
             </button>
           </div>

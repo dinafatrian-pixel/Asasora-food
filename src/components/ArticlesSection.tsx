@@ -11,8 +11,6 @@ import {
   Search,
   MessageCircle,
   Tag,
-  Sparkles,
-  ExternalLink,
   Send,
 } from 'lucide-react';
 import { Article, CompanyInfo } from '../types';
@@ -34,15 +32,14 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
-  // Helper to generate specific article direct URL
   const getArticleShareUrl = (art: Article) => {
     const identifier = art.slug || art.id;
     const baseUrl = `${window.location.origin}${window.location.pathname}`;
     return `${baseUrl}?article=${encodeURIComponent(identifier)}#article-${encodeURIComponent(identifier)}`;
   };
 
-  // Open specific article and update browser address bar so URL can be copied directly
   const handleOpenArticle = (art: Article) => {
     setActiveArticle(art);
     try {
@@ -56,7 +53,6 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
     }
   };
 
-  // Close article and clean URL parameter
   const handleCloseArticle = () => {
     setActiveArticle(null);
     try {
@@ -69,7 +65,6 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
     }
   };
 
-  // Auto-detect and open specific article if URL contains ?article=... or #article-...
   useEffect(() => {
     const detectArticleFromUrl = () => {
       try {
@@ -127,7 +122,6 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
     };
   }, [articles]);
 
-  // Derive unique categories
   const categories = [
     { id: 'all', label: lang === 'id' ? 'Semua Artikel' : 'All Articles' },
     { id: 'Event', label: 'Event' },
@@ -197,21 +191,20 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
     <section
       id="articles"
       aria-label="Artikel & Berita Katering Asasora"
-      className="py-16 sm:py-20 bg-gradient-to-b from-stone-50 via-white to-stone-50/70 border-t border-stone-200/70 relative scroll-mt-20"
+      className="py-16 sm:py-24 bg-white border-b border-stone-200 relative scroll-mt-20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[#2E6F40] text-xs sm:text-sm font-extrabold mb-3 shadow-2xs">
-            <BookOpen className="w-4 h-4 text-[#2E6F40]" />
-            <span>{t('articles.badge', 'Edukasi & Wawasan Katering')}</span>
-          </div>
+          <span className="text-[#0F5132] text-xs font-bold uppercase tracking-[0.14em]">
+            {t('articles.badge', 'Edukasi & Wawasan Katering')}
+          </span>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-900 mt-2 tracking-tight">
             {t('articles.title', 'Artikel & Berita Seputar Katering')}
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
+          <p className="mt-3 text-sm sm:text-base text-stone-600 leading-relaxed">
             {t(
               'articles.subtitle',
               'Panduan praktis katering makan siang kantor, standar dapur higienis halal BPJPH, serta tips memilih nasi kotak seminar & event di Tangerang.'
@@ -220,17 +213,16 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
         </div>
 
         {/* Filter & Search Toolbar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+          <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
+                className={`btn-micro px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap cursor-pointer border ${
                   selectedCategory === cat.id
-                    ? 'bg-[#2E6F40] text-white shadow-xs'
-                    : 'bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-gray-200/70'
+                    ? 'bg-[#0F5132] text-white border-[#0F5132]'
+                    : 'bg-[#FAFBF9] text-stone-700 hover:bg-stone-100 hover:border-[#0F5132]/40 border-stone-200'
                 }`}
               >
                 {cat.label}
@@ -238,22 +230,22 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
             ))}
           </div>
 
-          {/* Search Box */}
-          <div className="relative w-full sm:w-72 shrink-0">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-72 shrink-0 group">
+            <Search className="w-4 h-4 text-stone-400 group-focus-within:text-[#0F5132] group-focus-within:scale-110 transition-all duration-200 absolute left-3.5 top-1/2 -translate-y-1/2" strokeWidth={1.75} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={lang === 'id' ? 'Cari artikel atau topik...' : 'Search articles...'}
-              className="w-full pl-9.5 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2E6F40]/30 focus:border-[#2E6F40] transition"
+              className="w-full pl-9.5 pr-8 py-2 bg-[#FAFBF9] border border-stone-200 rounded-lg text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F5132]/25 focus:border-[#0F5132] transition-colors"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5"
+                className="btn-icon-only absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-0.5 cursor-pointer transition-transform active:scale-90"
+                aria-label="Hapus pencarian"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" strokeWidth={1.75} />
               </button>
             )}
           </div>
@@ -261,12 +253,12 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
 
         {/* Articles Grid */}
         {filteredArticles.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 p-8 shadow-2xs">
-            <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-gray-800">
+          <div className="text-center py-16 bg-[#FAFBF9] rounded-2xl border border-stone-200 p-8">
+            <BookOpen className="w-10 h-10 text-stone-300 mx-auto mb-3" strokeWidth={1.75} />
+            <h3 className="text-base font-bold text-stone-900">
               {lang === 'id' ? 'Artikel tidak ditemukan' : 'No articles found'}
             </h3>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-md mx-auto">
+            <p className="text-xs sm:text-sm text-stone-500 mt-1 max-w-md mx-auto">
               {lang === 'id'
                 ? 'Tidak ada artikel yang cocok dengan kata kunci atau kategori yang Anda pilih.'
                 : 'No articles match your search query or selected category.'}
@@ -276,37 +268,42 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                 setSelectedCategory('all');
                 setSearchQuery('');
               }}
-              className="mt-4 px-4 py-2 bg-emerald-50 text-[#2E6F40] text-xs font-bold rounded-xl hover:bg-emerald-100 transition"
+              className="mt-4 px-4 py-2 bg-[#0F5132] text-white text-xs font-bold rounded-lg hover:bg-[#0b3d26] transition-colors cursor-pointer"
             >
               {lang === 'id' ? 'Tampilkan Semua Artikel' : 'Show All Articles'}
             </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredArticles.map((article) => (
+            {filteredArticles.map((article) => {
+              const isImgLoaded = !!loadedImages[article.id];
+              return (
               <article
                 key={article.id}
                 id={`article-${article.slug || article.id}`}
                 onClick={() => handleOpenArticle(article)}
-                className="bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:shadow-md hover:border-emerald-300/80 transition-all duration-200 flex flex-col overflow-hidden group cursor-pointer scroll-mt-24"
+                className="card-hover bg-white rounded-xl border border-stone-200 flex flex-col overflow-hidden group cursor-pointer scroll-mt-24"
               >
                 {/* Image Cover */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
+                <div className={`relative aspect-[16/10] overflow-hidden border-b border-stone-100 ${!isImgLoaded ? 'skeleton-shimmer' : 'bg-stone-100'}`}>
                   <img
                     src={article.image}
                     alt={article.title}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onLoad={() => setLoadedImages((prev) => ({ ...prev, [article.id]: true }))}
+                    onError={() => setLoadedImages((prev) => ({ ...prev, [article.id]: true }))}
+                    className={`w-full h-full object-cover group-hover:scale-105 transition-[transform,opacity] duration-300 ${
+                      isImgLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
                   />
                   <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
-                    <span className="bg-[#2E6F40]/90 backdrop-blur-xs text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-2xs">
+                    <span className="bg-[#0F5132] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
                       {article.category}
                     </span>
                     {article.isFeatured && (
-                      <span className="bg-[#F3C623] text-gray-900 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
-                        <Sparkles className="w-2.5 h-2.5" />
-                        <span>Pilihan</span>
+                      <span className="bg-[#F3C623] text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-[#D9AE14]">
+                        Pilihan
                       </span>
                     )}
                   </div>
@@ -315,59 +312,54 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                 {/* Body Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Meta info */}
-                    <div className="flex items-center gap-3 text-[11px] text-gray-500 font-medium mb-2.5">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-emerald-700" />
-                        {article.date}
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-amber-600" />
-                        {article.readTime}
-                      </span>
+                    {/* Quiet Typographic Meta Info */}
+                    <div className="flex items-center gap-2 text-[11px] text-stone-500 font-medium mb-2.5">
+                      <span>{article.date}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{article.readTime}</span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-bold text-gray-900 group-hover:text-[#2E6F40] transition-colors line-clamp-2 leading-snug mb-2">
+                    <h3 className="text-base font-bold text-stone-900 group-hover:text-[#0F5132] transition-colors line-clamp-2 leading-snug mb-2">
                       {article.title}
                     </h3>
 
                     {/* Excerpt */}
-                    <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed mb-4">
+                    <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed mb-4">
                       {article.excerpt}
                     </p>
                   </div>
 
                   {/* Footer & Action */}
-                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2E6F40] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  <div className="pt-3 border-t border-stone-100 flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#0F5132] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                       <span>{lang === 'id' ? 'Baca Selengkapnya' : 'Read More'}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.75} />
                     </span>
 
                     <button
                       type="button"
                       onClick={(e) => handleCopyLink(article, e)}
                       title="Salin Link Spesifik Artikel"
-                      className="px-2 py-1.5 text-xs font-bold text-gray-500 hover:text-[#2E6F40] hover:bg-emerald-50 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
+                      className="btn-icon-only btn-micro px-2 py-1 text-xs font-semibold text-stone-500 hover:text-[#0F5132] hover:bg-stone-50 rounded-md flex items-center gap-1 cursor-pointer"
                     >
                       {copiedId === article.id ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-[11px] text-emerald-700 font-extrabold">Tersalin!</span>
+                          <Check className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={2} />
+                          <span className="text-[11px] text-[#0F5132] font-bold">Tersalin!</span>
                         </>
                       ) : (
                         <>
-                          <Share2 className="w-3.5 h-3.5" />
-                          <span className="text-[11px] text-gray-500 hover:text-emerald-700">Bagikan</span>
+                          <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+                          <span className="text-[11px]">Bagikan</span>
                         </>
                       )}
                     </button>
                   </div>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -378,38 +370,38 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-article-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/70 animate-in fade-in duration-150 overflow-y-auto"
           onClick={handleCloseArticle}
         >
           <div
-            className="bg-white w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-6 max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200"
+            className="bg-white w-full max-w-3xl rounded-2xl border border-stone-300 overflow-hidden my-6 max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Bar */}
-            <div className="sticky top-0 bg-white/95 backdrop-blur-md px-5 sm:px-8 py-4 border-b border-gray-100 flex items-center justify-between z-10">
-              <div className="flex items-center gap-2">
-                <span className="bg-emerald-50 text-[#2E6F40] text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-200/80">
+            <div className="sticky top-0 bg-white px-5 sm:px-8 py-4 border-b border-stone-200 flex items-center justify-between z-10">
+              <div className="flex items-center gap-2 text-xs font-semibold text-stone-600">
+                <span className="text-[#0F5132] font-bold uppercase tracking-wider">
                   {activeArticle.category}
                 </span>
-                <span className="text-xs text-gray-400">•</span>
-                <span className="text-xs font-semibold text-gray-500">{activeArticle.readTime}</span>
+                <span className="text-stone-300" aria-hidden="true">·</span>
+                <span>{activeArticle.readTime}</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => handleCopyLink(activeArticle)}
-                  className="px-3 py-1.5 bg-emerald-50 text-[#2E6F40] hover:bg-emerald-100 rounded-xl transition text-xs font-extrabold flex items-center gap-1.5 border border-emerald-200/80 cursor-pointer shadow-2xs"
+                  className="px-3 py-1.5 bg-[#F7F8F6] text-[#0F5132] hover:bg-stone-100 rounded-lg transition-colors text-xs font-bold flex items-center gap-1.5 border border-stone-200 cursor-pointer"
                   title="Salin Link Spesifik Artikel"
                 >
                   {copiedId === activeArticle.id ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <Check className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={2} />
                       <span>Link Tersalin!</span>
                     </>
                   ) : (
                     <>
-                      <Share2 className="w-3.5 h-3.5" />
+                      <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />
                       <span>Salin Link</span>
                     </>
                   )}
@@ -418,49 +410,46 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => handleShareToWhatsApp(activeArticle)}
-                  className="p-2 text-emerald-700 hover:bg-emerald-50 rounded-xl transition cursor-pointer"
+                  className="p-2 text-[#0F5132] hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
                   title="Bagikan Artikel ke WhatsApp"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" strokeWidth={1.75} />
                 </button>
 
                 <button
                   type="button"
                   onClick={handleCloseArticle}
-                  className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition cursor-pointer"
+                  className="p-2 text-stone-500 hover:text-stone-800 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
                   title="Tutup"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" strokeWidth={1.75} />
                 </button>
               </div>
             </div>
 
             {/* Modal Scrollable Body */}
             <div className="overflow-y-auto px-5 sm:px-8 py-6 space-y-6">
-              {/* Article Headline */}
               <div>
                 <h2
                   id="modal-article-title"
-                  className="text-xl sm:text-2xl sm:leading-tight font-black text-gray-900 tracking-tight"
+                  className="text-xl sm:text-2xl sm:leading-tight font-black text-stone-900 tracking-tight"
                 >
                   {activeArticle.title}
                 </h2>
 
-                {/* Author & Date metadata */}
-                <div className="mt-3 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-gray-500 border-b border-gray-100 pb-4">
-                  <div className="flex items-center gap-1.5 font-semibold text-gray-700">
-                    <User className="w-4 h-4 text-emerald-700" />
+                <div className="mt-3 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-stone-500 border-b border-stone-200 pb-4">
+                  <div className="flex items-center gap-1.5 font-semibold text-stone-700">
+                    <User className="w-4 h-4 text-[#0F5132]" strokeWidth={1.75} />
                     <span>{activeArticle.author}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-amber-600" />
+                    <Calendar className="w-4 h-4 text-stone-500" strokeWidth={1.75} />
                     <span>{activeArticle.date}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Cover Image */}
-              <div className="rounded-2xl overflow-hidden aspect-[16/9] bg-stone-100 border border-gray-200">
+              <div className="rounded-xl overflow-hidden aspect-[16/9] bg-stone-100 border border-stone-200">
                 <img
                   src={activeArticle.image}
                   alt={activeArticle.title}
@@ -468,25 +457,25 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                 />
               </div>
 
-              {/* Lead Paragraph */}
-              <div className="p-4 bg-emerald-50/60 rounded-xl border-l-4 border-[#2E6F40] text-sm sm:text-base font-medium text-emerald-950 leading-relaxed">
+              {/* Lead Paragraph (clean bordered summary block instead of border-l-4 cliché) */}
+              <div className="p-5 bg-[#F7F8F6] rounded-xl border border-stone-200 text-sm sm:text-base font-medium text-stone-800 leading-relaxed">
                 {activeArticle.excerpt}
               </div>
 
               {/* Formatted Article Content */}
-              <div className="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-line font-sans">
+              <div className="space-y-4 text-sm sm:text-base text-stone-700 leading-relaxed whitespace-pre-line font-sans">
                 {activeArticle.content}
               </div>
 
               {/* Tags */}
               {activeArticle.tags && activeArticle.tags.length > 0 && (
-                <div className="pt-4 border-t border-gray-100 flex flex-wrap items-center gap-2">
-                  <Tag className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="text-xs font-bold text-gray-500">Kata Kunci:</span>
+                <div className="pt-4 border-t border-stone-200 flex flex-wrap items-center gap-2">
+                  <Tag className="w-3.5 h-3.5 text-stone-400" strokeWidth={1.75} />
+                  <span className="text-xs font-bold text-stone-500">Kata Kunci:</span>
                   {activeArticle.tags.map((tg, i) => (
                     <span
                       key={i}
-                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-lg"
+                      className="bg-stone-100 border border-stone-200 text-stone-700 text-xs font-medium px-2.5 py-1 rounded-md"
                     >
                       #{tg}
                     </span>
@@ -495,12 +484,12 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
               )}
 
               {/* CTA Box inside Article */}
-              <div className="bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-[#0F5132] text-white rounded-xl p-6 border border-[#0b3d26] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="space-y-1 text-center sm:text-left">
                   <h4 className="text-base sm:text-lg font-bold text-[#F3C623]">
                     Konsultasi Konsumsi Kantor dengan MinSora
                   </h4>
-                  <p className="text-xs sm:text-sm text-emerald-100/90 max-w-md">
+                  <p className="text-xs sm:text-sm text-stone-200 max-w-md">
                     Dapatkan simulasi paket katering harian, nasi kotak seminar, atau menu prasmanan sesuai anggaran kantor Anda.
                   </p>
                 </div>
@@ -509,19 +498,19 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                   <button
                     type="button"
                     onClick={(e) => handleShareToWhatsApp(activeArticle, e)}
-                    className="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-95 cursor-pointer border border-emerald-500/40"
+                    className="btn-micro flex-1 sm:flex-none bg-white/10 hover:bg-white/20 text-white font-bold px-3.5 py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer border border-white/25"
                     title="Bagikan artikel ini ke WhatsApp rekan atau grup"
                   >
-                    <Share2 className="w-4 h-4" />
+                    <Share2 className="w-4 h-4" strokeWidth={1.75} />
                     <span>Bagikan Artikel</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={(e) => handleConsultWhatsApp(activeArticle, e)}
-                    className="flex-1 sm:flex-none bg-[#F3C623] hover:bg-[#D1A310] text-gray-900 font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-95 cursor-pointer"
+                    className="btn-micro flex-1 sm:flex-none bg-[#F3C623] hover:bg-[#D9AE14] text-stone-900 font-bold px-4 py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer border border-[#D9AE14]"
                   >
-                    <MessageCircle className="w-4 h-4 fill-current" />
+                    <MessageCircle className="w-4 h-4" strokeWidth={1.75} />
                     <span>Tanya MinSora</span>
                   </button>
 
@@ -532,7 +521,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({
                         handleCloseArticle();
                         onOpenOrderModal();
                       }}
-                      className="flex-1 sm:flex-none bg-white/15 hover:bg-white/25 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition border border-white/20 active:scale-95 cursor-pointer"
+                      className="btn-micro flex-1 sm:flex-none bg-white hover:bg-stone-100 text-[#0F5132] font-bold px-4 py-2.5 rounded-lg text-xs sm:text-sm cursor-pointer"
                     >
                       Pesan Menu
                     </button>

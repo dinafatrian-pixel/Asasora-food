@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Building2, CheckCircle2 } from 'lucide-react';
+import { Building2, CheckCircle2 } from 'lucide-react';
 import { ClientPartner } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedClient } from '../utils/translator';
@@ -12,18 +12,17 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
   const { t, lang } = useLanguage();
 
   return (
-    <section className="py-16 sm:py-24 bg-[#F9FDF9] border-t border-green-100" id="clients">
+    <section className="py-16 sm:py-24 bg-[#F7F8F6] border-b border-stone-200" id="clients">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <span className="text-[#4A9E60] font-bold text-xs sm:text-sm tracking-widest uppercase">
+          <span className="text-[#0F5132] font-bold text-xs tracking-[0.14em] uppercase">
             {t('clients.tag', 'Mitra & Rekanan')}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#2E6F40] mt-2">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-900 mt-2 tracking-tight">
             {t('clients.title', 'Our Client')}
           </h2>
-          <div className="w-24 h-1.5 bg-[#F3C623] mx-auto mt-4 rounded-full" />
-          <p className="text-gray-600 mt-4 text-sm sm:text-base leading-relaxed">
+          <p className="text-stone-600 mt-4 text-sm sm:text-base leading-relaxed">
             {t(
               'clients.subtitle',
               'Berbagai instansi pemerintah, perusahaan korporat, fasilitas kesehatan, dan institusi pendidikan yang telah mempercayakan kebutuhan katering & penyediaan konsumsi higienis kepada PT. Asasora Bio Healthora.'
@@ -35,13 +34,18 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" id="client-grid">
           {clients.map((rawClient) => {
             const client = getLocalizedClient(rawClient, lang);
+            const hasImageLogo =
+              client.logo.startsWith('http') ||
+              client.logo.startsWith('data:image') ||
+              client.logo.startsWith('/');
+
             return (
               <div
                 key={client.id}
-                className="bg-white rounded-2xl p-5 sm:p-6 border border-green-100 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center justify-between group hover:border-green-300"
+                className="group card-hover bg-white rounded-xl p-6 border border-stone-200 hover:border-[#0F5132]/50 flex flex-col items-center text-center justify-between"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-green-50/70 border border-green-100 flex items-center justify-center overflow-hidden mb-4 group-hover:scale-110 transition p-1">
-                  {client.logo.startsWith('http') || client.logo.startsWith('data:image') ? (
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#F7F8F6] border border-stone-200 group-hover:border-[#0F5132]/40 flex items-center justify-center overflow-hidden mb-4 p-1.5 transition-colors">
+                  {hasImageLogo ? (
                     <img
                       src={client.logo}
                       alt={client.name}
@@ -49,24 +53,24 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
                       height={64}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain transition-transform duration-200 group-hover:scale-105"
                     />
                   ) : (
-                    <span className="text-2xl sm:text-3xl">{client.logo}</span>
+                    <Building2 className="w-7 h-7 text-[#0F5132] transition-transform duration-200 group-hover:scale-105" strokeWidth={1.75} />
                   )}
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm leading-snug">
+                  <h3 className="font-bold text-stone-900 group-hover:text-[#0F5132] transition-colors text-xs sm:text-sm leading-snug">
                     {client.name}
                   </h3>
-                  <p className="text-[11px] text-gray-500 font-medium">
+                  <p className="text-[11px] text-stone-500 font-medium">
                     {client.type}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-100 w-full flex items-center justify-center gap-1 text-[10px] text-emerald-700 font-bold">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                <div className="mt-4 pt-3 border-t border-stone-100 w-full flex items-center justify-center gap-1.5 text-[11px] text-[#0F5132] font-semibold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#0F5132]" strokeWidth={1.75} />
                   <span>{t('clients.verified', 'Mitra Terverifikasi')}</span>
                 </div>
               </div>
@@ -77,4 +81,3 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ clients }) => {
     </section>
   );
 };
-
